@@ -1,0 +1,101 @@
+# skill 清单：名称、来源、适用阶段/角色 — 供 Agent 解析
+# Agent 根据 mapping 得到的 skill_name 在此解析出实际加载路径或引用
+skills:
+  # 自建：项目启动与流程裁剪
+  - id: project-initiation
+    name: project-initiation
+    source: ./project-initiation
+    phase_ids: [initiation]
+    role_ids: [project-manager]
+  # 采纳（GitHub）
+  - id: user-story
+    name: user-story
+    source: https://github.com/razbakov/skills/tree/main/skills/user-story
+    phase_ids: [requirements]
+    role_ids: [product-requirements]
+  - id: frontend-design
+    name: frontend-design
+    source: https://github.com/poko8nada/portfolio-v3/tree/main/.github/skills/frontend-design
+    phase_ids: [development]
+    role_ids: [frontend]
+  - id: frontend-style-guide
+    name: frontend-style-guide
+    source: https://github.com/lightdash/lightdash/tree/main/.claude/skills/frontend-style-guide
+    phase_ids: [development]
+    role_ids: [frontend]
+  - id: backend-development
+    name: backend-development
+    source: https://github.com/MOODMNKY-LLC/mood-mnky-command/tree/main/.cursor/skills/backend-development
+    phase_ids: [development]
+    role_ids: [backend]
+  - id: flyway-migration
+    name: flyway-migration
+    source: https://github.com/martinellich/aiup-marketplace/tree/main/aiup-vaadin-jooq/skills/flyway-migration
+    phase_ids: [design]
+    role_ids: [dba]
+  - id: technical-writer
+    name: technical-writer
+    source: https://github.com/sjungling/sjungling-claude-plugins/tree/main/plugins/technical-writer/skills/technical-writer
+    phase_ids: [development]
+    role_ids: [technical-writer]
+  - id: pytest
+    name: pytest
+    source: https://github.com/the-perfect-developer/the-perfect-opencode/tree/main/.opencode/skills/pytest
+    phase_ids: [testing]
+    role_ids: [qa]
+  - id: code-review
+    name: code-review
+    source: https://github.com/folio-org/folio-eureka-ai-dev/tree/master/skills/code-review
+    phase_ids: [design, code-review]
+    role_ids: [security, code-reviewer]
+  - id: review-pr
+    name: review-pr
+    source: https://github.com/yonatangross/orchestkit/tree/main/plugins/ork/skills/review-pr
+    phase_ids: [code-review]
+    role_ids: [code-reviewer]
+  - id: code-review-expert
+    name: code-review-expert
+    source: https://github.com/sanyuan0704/code-review-expert/tree/main
+    phase_ids: [code-review]
+    role_ids: [code-reviewer]
+  # 自建（本地路径，相对于本 manifest 所在目录）
+  - id: prd-requirements
+    name: prd-requirements
+    source: ./prd-requirements
+    phase_ids: [requirements]
+    role_ids: [product-requirements]
+  - id: requirements-review
+    name: requirements-review
+    source: ./requirements-review
+    phase_ids: [requirements-review]
+    role_ids: [requirements-reviewer]
+  - id: prd-review
+    name: prd-review
+    source: ./prd-review
+    phase_ids: [requirements-review]
+    role_ids: [requirements-reviewer]
+  - id: architecture-design
+    name: architecture-design
+    source: ./architecture-design
+    phase_ids: [design]
+    role_ids: [architect]
+  - id: architecture-review
+    name: architecture-review
+    source: ./architecture-review
+    phase_ids: [design-review]
+    role_ids: [design-reviewer]
+  - id: test-plan-review
+    name: test-plan-review
+    source: ./test-plan-review
+    phase_ids: [test-review]
+    role_ids: [test-reviewer]
+  - id: devops-cicd
+    name: devops-cicd
+    source: ./devops-cicd
+    phase_ids: [deployment]
+    role_ids: [devops]
+  - id: sre-reliability
+    name: sre-reliability
+    source: ./sre-reliability
+    phase_ids: [operations]
+    role_ids: [sre]

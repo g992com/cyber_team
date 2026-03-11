@@ -1,0 +1,53 @@
+# 项目文档索引 — 供多智能体发现各阶段产出物路径
+# 使用方式：复制到业务项目仓库根目录或约定路径，按实际产出填写/新增路径；Agent 先读此文件再按路径读取具体文档
+# 路径均为相对于本文件所在目录的相对路径；不存在的路径表示该产出尚未创建
+
+# 第一层 key 为阶段 id，与 process/phases.yaml 的 phases[].id 一致，便于 Agent 按 current_phase 查找
+initiation:
+  project_plan: docs/initiation/project-plan.md
+  process_tailoring: docs/initiation/process-tailoring.md
+  phase_activity_list: docs/initiation/phase-activity-list.md
+  charter_summary: docs/initiation/charter-summary.md  # 可选
+
+requirements:
+  prd: docs/requirements/prd.md
+  user_stories: docs/requirements/user-stories.md
+  acceptance_criteria: docs/requirements/acceptance-criteria.md
+  backlog: docs/requirements/backlog.md
+
+requirements-review:
+  review_record: docs/review/requirements-review.md
+
+design:
+  architecture: docs/design/architecture.md
+  api_spec: docs/design/api-spec.md
+  database_design: docs/design/database-design.md
+  adr_dir: docs/design/adr/
+
+design-review:
+  review_record: docs/review/design-review.md
+
+development:
+  # 代码与迁移脚本在仓库常规目录（如 src/、migrations/），此处仅列文档类产出
+  dev_guide: docs/development/dev-guide.md  # 可选
+
+code-review:
+  review_record: docs/review/code-review.md  # 或与 PR 绑定，此处为汇总/结论
+
+testing:
+  test_plan: docs/testing/plan.md
+  test_cases_dir: docs/testing/cases/
+  test_report: docs/testing/report.md
+
+test-review:
+  review_record: docs/review/test-review.md
+
+deployment:
+  release_notes: docs/deployment/release-notes.md
+  rollback_plan: docs/deployment/rollback-plan.md
+  deploy_guide: docs/deployment/deploy-guide.md
+
+operations:
+  runbook_dir: docs/operations/runbooks/
+  postmortem_dir: docs/operations/postmortems/
+  slo_report: docs/operations/slo-report.md
