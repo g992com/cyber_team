@@ -120,6 +120,11 @@
    - 各角色进行中任务的 status/summary/blockers/next；
    - project_blockers / project_risks；
    - 需要用户决策的事项清单。
+6. 当业务项目采用“任务索引表 + 任务卡 + task_board.py”机制时，请在派发任务卡时，明确要求对应角色：
+   - 在业务项目根目录终端中运行 `python scripts/task_board.py list --role <role_id> --status todo,doing,blocked` 找到自己的任务；
+   - 使用 `python scripts/task_board.py claim --task <task_id> --by <role_id>` 领取任务（todo → doing），不要直接编辑 task-index.json；
+   - 完成任务后使用 `python scripts/task_board.py update --task <task_id> --status done --add-result "<产物路径>" --by <role_id>` 更新状态与产物路径；
+   - 若本次工作产生新任务，请先用 `python scripts/task_board.py new-card --out docs/status/task-cards/<task_id>.md` 生成任务卡，再用 `python scripts/task_board.py add --task <task_id> --owner <role_id> --status todo --card docs/status/task-cards/<task_id>.md --phase <phase_id>` 写入索引。
 ```
 
 #### 3.3 示例：需求 / 产品会话 pinned prompt
@@ -139,6 +144,11 @@
    - 关键决策与取舍理由；
    - 风险与未决问题列表；
    - 建议由架构师/测试/项目经理进一步评审或确认的要点。
+5. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，每次开始工作前请在业务项目根目录终端运行：
+   - `python scripts/task_board.py list --role <你的 role_id> --status todo,doing,blocked` 找到属于你的任务；
+   - 使用 `python scripts/task_board.py claim --task <task_id> --by <你的 role_id>` 领取任务（todo → doing）；
+   - 完成后使用 `python scripts/task_board.py update --task <task_id> --status done --add-result "<PRD 路径或链接>" --by <你的 role_id>` 更新状态与结果；
+   - 如需创建后续任务，请配合项目经理，按其任务卡说明使用 `new-card` 与 `add` 命令。
 ```
 
 #### 3.4 架构师会话 pinned prompt
@@ -152,6 +162,11 @@
 2. 根据 skills/manifest.yaml 找到对应 skill 的 source，阅读 skills/architecture-design/SKILL.md 或 skills/architecture-review/SKILL.md，严格按其中 SOP 执行。
 3. 在业务项目中读写架构/设计产出物时，先读取业务项目根目录的 project-docs-index.yaml，再按索引路径读写，并遵守 process/artifact-metadata-convention.md 的 frontmatter 约定。
 4. 输出时包含：架构或评审结论主体、关键决策与理由、风险与待澄清项、对下一阶段或下一角色的建议。评审时需明确「通过 / 有条件通过 / 不通过」及理由。
+5. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开始本次架构/设计工作前：
+   - 在业务项目根目录终端运行 `python scripts/task_board.py list --role architect --status todo,doing,blocked` 找到你的任务；
+   - 使用 `python scripts/task_board.py claim --task <task_id> --by architect` 领取任务；
+   - 完成后使用 `python scripts/task_board.py update --task <task_id> --status done --add-result "<架构文档路径或链接>" --by architect` 更新状态；
+   - 若本次工作产生需由其他角色跟进的后续任务（如交给开发实现、交给测试设计用例），请用 `python scripts/task_board.py new-card --out docs/status/task-cards/<task_id>.md` 生成任务卡并填写 4.1 模板内容，再用 `python scripts/task_board.py add --task <task_id> --owner <目标 role_id> --status todo --card docs/status/task-cards/<task_id>.md --phase <phase_id>` 写入索引。
 ```
 
 #### 3.5 开发工程师会话 pinned prompt
@@ -164,6 +179,11 @@
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，确认当前阶段为 development，并读取 mapping/phase-role-skill.yaml 中 development 阶段与你 role_id 对应的 skill（如 frontend-design、backend-development），再根据 skills/manifest.yaml 与对应 SKILL.md 执行。
 2. 在业务项目中读写代码或文档时，先读取业务项目根目录的 project-docs-index.yaml（若有文档类产出），再按索引与现有代码结构进行操作。
 3. 输出时包含：实现摘要、关键设计取舍、风险与阻塞、对测试/代码评审角色的建议。
+4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开始本次开发工作前：
+   - 在业务项目根目录终端运行 `python scripts/task_board.py list --role <你的 role_id> --status todo,doing,blocked` 找到属于你的任务；
+   - 使用 `python scripts/task_board.py claim --task <task_id> --by <你的 role_id>` 领取任务；
+   - 完成后使用 `python scripts/task_board.py update --task <task_id> --status done --add-result "<代码/PR 链接>" --by <你的 role_id>` 更新状态；
+   - 若本次工作产生需由其他角色跟进的后续任务（如交给测试、交给代码评审），请用 `python scripts/task_board.py new-card --out docs/status/task-cards/<task_id>.md` 生成任务卡并填写 4.1 模板内容，再用 `python scripts/task_board.py add --task <task_id> --owner <目标 role_id> --status todo --card docs/status/task-cards/<task_id>.md --phase <phase_id>` 写入索引。
 ```
 
 #### 3.6 测试工程师会话 pinned prompt
@@ -176,6 +196,11 @@
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，确认当前阶段为 testing，并读取 mapping/phase-role-skill.yaml 中 qa 对应的 skill（如 pytest 等），再根据 skills/manifest.yaml 与对应 SKILL.md 执行。
 2. 在业务项目中读写测试计划/用例/报告时，先读取业务项目根目录的 project-docs-index.yaml，找到 testing 阶段对应路径，再按 process/artifact-metadata-convention.md 约定读写。
 3. 输出时包含：测试计划或用例摘要、覆盖范围与风险、执行结论与阻塞、对开发或项目经理的建议。
+4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开始本次测试工作前：
+   - 在业务项目根目录终端运行 `python scripts/task_board.py list --role qa --status todo,doing,blocked` 找到属于你的任务；
+   - 使用 `python scripts/task_board.py claim --task <task_id> --by qa` 领取任务；
+   - 完成后使用 `python scripts/task_board.py update --task <task_id> --status done --add-result "<测试文档/报告路径或链接>" --by qa` 更新状态；
+   - 若本次工作产生需由其他角色跟进的后续任务（如缺陷修复交给开发、发布交给 DevOps），请用 `python scripts/task_board.py new-card --out docs/status/task-cards/<task_id>.md` 生成任务卡并填写 4.1 模板内容，再用 `python scripts/task_board.py add --task <task_id> --owner <目标 role_id> --status todo --card docs/status/task-cards/<task_id>.md --phase <phase_id>` 写入索引。
 ```
 
 #### 3.7 DevOps/运维会话 pinned prompt
@@ -188,6 +213,11 @@
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，确认当前阶段为 deployment（或 operations），并读取 mapping/phase-role-skill.yaml 中 devops 对应的 skill（如 devops-cicd），再根据 skills/manifest.yaml 与对应 SKILL.md 执行。
 2. 在业务项目中涉及流水线或部署文档时，先读取业务项目根目录的 project-docs-index.yaml 中 deployment 等阶段路径，再按约定读写。
 3. 输出时包含：流水线或发布方案摘要、风险与回滚建议、对开发或 SRE 的建议。
+4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开始本次部署/运维工作前：
+   - 在业务项目根目录终端运行 `python scripts/task_board.py list --role devops --status todo,doing,blocked` 找到属于你的任务；
+   - 使用 `python scripts/task_board.py claim --task <task_id> --by devops` 领取任务；
+   - 完成后使用 `python scripts/task_board.py update --task <task_id> --status done --add-result "<流水线/发布配置路径或链接>" --by devops` 更新状态；
+   - 若本次工作产生需由其他角色跟进的后续任务（如交给开发改配置、交给测试验证），请用 `python scripts/task_board.py new-card --out docs/status/task-cards/<task_id>.md` 生成任务卡并填写 4.1 模板内容，再用 `python scripts/task_board.py add --task <task_id> --owner <目标 role_id> --status todo --card docs/status/task-cards/<task_id>.md --phase <phase_id>` 写入索引。
 ```
 
 #### 3.8 评审类角色通用 pinned prompt
@@ -209,6 +239,11 @@
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（<phase_id>）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
 2. 在业务项目中读取被评审文档时，先读业务项目根目录的 project-docs-index.yaml，再按索引路径读取具体文档。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
+4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：
+   - 在业务项目根目录终端运行 `python scripts/task_board.py list --role <role_id> --status todo,doing,blocked` 找到属于你的评审任务；
+   - 使用 `python scripts/task_board.py claim --task <task_id> --by <role_id>` 领取任务；
+   - 评审完成后使用 `python scripts/task_board.py update --task <task_id> --status done --add-result "<评审意见文档或记录链接>" --by <role_id>` 更新状态；
+   - 若评审结论需要产出方修改后复评或产生其他跟进任务，请用 `python scripts/task_board.py new-card --out docs/status/task-cards/<task_id>.md` 生成任务卡并填写 4.1 模板内容，再用 `python scripts/task_board.py add --task <task_id> --owner <目标 role_id> --status todo --card docs/status/task-cards/<task_id>.md --phase <phase_id>` 写入索引。
 ```
 
 将上述 `<角色名称>`、`<role_id>`、`<phase_id>` 替换为 requirements-reviewer / 需求评审专家、design-reviewer / 设计评审专家、code-reviewer / 代码评审专家、test-reviewer / 测试评审专家 及其对应 phase_id 即可。
@@ -223,6 +258,7 @@
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（requirements-review）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
 2. 在业务项目中读取被评审文档时，先读业务项目根目录的 project-docs-index.yaml，再按索引路径读取具体文档。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
+4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：运行 `python scripts/task_board.py list --role requirements-reviewer --status todo,doing,blocked` 找到任务，用 `claim` 领取，评审完成后用 `update --status done --add-result "<评审意见链接>" --by requirements-reviewer` 更新状态；若需产出方修改后复评或产生跟进任务，用 `new-card` 生成任务卡并填写 4.1 模板，再用 `add --owner <目标 role_id> --status todo --card ... --phase <phase_id>` 写入索引。
 ```
 
 ##### 3.8.2 设计评审专家 pinned prompt（可直接粘贴）
@@ -235,6 +271,7 @@
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（design-review）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
 2. 在业务项目中读取被评审文档时，先读业务项目根目录的 project-docs-index.yaml，再按索引路径读取具体文档。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
+4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：运行 `python scripts/task_board.py list --role design-reviewer --status todo,doing,blocked` 找到任务，用 `claim` 领取，评审完成后用 `update --status done --add-result "<评审意见链接>" --by design-reviewer` 更新状态；若需产出方修改后复评或产生跟进任务，用 `new-card` 生成任务卡并填写 4.1 模板，再用 `add --owner <目标 role_id> --status todo --card ... --phase <phase_id>` 写入索引。
 ```
 
 ##### 3.8.3 代码评审专家 pinned prompt（可直接粘贴）
@@ -247,6 +284,7 @@
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（code-review）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
 2. 在业务项目中读取被评审内容时，先读业务项目根目录的 project-docs-index.yaml 与相关索引，定位代码路径/变更范围/关联文档，再按索引路径读取具体内容。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
+4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：运行 `python scripts/task_board.py list --role code-reviewer --status todo,doing,blocked` 找到任务，用 `claim` 领取，评审完成后用 `update --status done --add-result "<评审意见链接>" --by code-reviewer` 更新状态；若需产出方修改后复评或产生跟进任务，用 `new-card` 生成任务卡并填写 4.1 模板，再用 `add --owner <目标 role_id> --status todo --card ... --phase <phase_id>` 写入索引。
 ```
 
 ##### 3.8.4 测试评审专家 pinned prompt（可直接粘贴）
@@ -259,6 +297,7 @@
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（test-review）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
 2. 在业务项目中读取被评审文档时，先读业务项目根目录的 project-docs-index.yaml，再按索引路径读取具体文档。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
+4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：运行 `python scripts/task_board.py list --role test-reviewer --status todo,doing,blocked` 找到任务，用 `claim` 领取，评审完成后用 `update --status done --add-result "<评审意见链接>" --by test-reviewer` 更新状态；若需产出方修改后复评或产生跟进任务，用 `new-card` 生成任务卡并填写 4.1 模板，再用 `add --owner <目标 role_id> --status todo --card ... --phase <phase_id>` 写入索引。
 ```
 
 ---
@@ -303,6 +342,46 @@
   - 用简洁摘要 + 链接/路径 + 风险列表的方式回复项目经理会话；
   - 明确指出自己认为是否“满足本阶段对应活动的完成标准”，以及是否需要循环一次（例如 PRD 需按评审意见再迭代一轮）。
 
+#### 4.3 （可选）用“任务索引表 + 脚本”替代人工派发（减少格式漂移与单点调度）
+
+当你希望 **不让项目经理/调度者成为单点**，并且希望各角色会话能“自助找活、领取、更新状态”时，可采用两层存储：
+
+- **任务卡（Markdown，完整字段）**：每个任务一张卡，存放在业务项目 `docs/status/task-cards/` 下（文件名建议用 task_id）。
+- **索引表（JSON，仅存引用与状态）**：业务项目 `docs/status/task-index.json` 维护“任务 → 角色 → status → 任务卡路径”的轻量映射。
+
+为降低模型漂移导致的“索引格式被写乱/字段漏写”，建议在业务项目里配一个统一脚本（由角色会话运行）来读写索引表：
+
+- **脚本模板来源（本仓库）**：
+  - `process/project-docs/status/task-board/task_board.py`
+  - `process/project-docs/status/task-board/task-index.json`
+- **复制到业务项目（推荐路径）**：
+  - `task_board.py` → `<业务项目根目录>/scripts/task_board.py`（或任意你团队约定的脚本目录）
+  - `task-index.json` → `<业务项目根目录>/docs/status/task-index.json`
+  - 创建目录：`<业务项目根目录>/docs/status/task-cards/`
+
+角色会话的最短命令流（示例，role_id 以实际会话为准）：
+
+```bash
+# 1) 初始化（只需一次）
+python scripts/task_board.py init
+
+# 2) 找到自己任务（建议筛 todo/doing/blocked）
+python scripts/task_board.py list --role <role_id> --status todo,doing,blocked
+
+# 3) 领取任务（todo -> doing）
+python scripts/task_board.py claim --task <task_id> --by <role_id>
+
+# 4) 更新状态（blocked 必须写 blocker；done 建议追加产物路径）
+python scripts/task_board.py update --task <task_id> --status blocked --blocker "<原因>" --by <role_id>
+python scripts/task_board.py update --task <task_id> --status done --add-result "docs/..." --by <role_id>
+
+# 5) 产生新任务（先生成任务卡，再写入索引）
+python scripts/task_board.py new-card --out docs/status/task-cards/<task_id>.md
+python scripts/task_board.py add --task <task_id> --owner <role_id> --status todo --card docs/status/task-cards/<task_id>.md --phase <phase_id>
+```
+
+> 约束建议：角色会话只更新索引表中 **owner_role 等于自己** 的任务行；脚本会对 status/blocked 等字段做最小校验，并以“锁文件 + 原子替换写入”降低并发写入导致的索引损坏风险。
+
 ### 五、典型工作流示例
 
 下面以一个简化的“从零开始的功能需求”示例多会话协作流程，结合 Mermaid 图说明。
@@ -342,7 +421,7 @@ flowchart LR
 
 ### 6.0 在实际项目中的部署结构
 
-多会话协作时，规范仓库（cyber_team）与业务项目通过**多根工作区**一起打开，业务项目侧需具备文档索引与规则复制件。结构关系如下：
+多会话协作时，规范仓库（cyber_team）与业务项目通过**多根工作区**一起打开，业务项目侧需具备文档索引、规则复制件与任务板（任务索引表 + 任务卡 + 脚本），三者共同支撑本方案中各角色 pinned prompt 的行为约定。结构关系如下：
 
 ```mermaid
 flowchart LR
@@ -362,7 +441,12 @@ flowchart LR
   index -->|"按阶段列出"| docs
 ```
 
-- **业务项目根目录**：需有 `project-docs-index.yaml`（从本仓库 `process/project-docs/project-docs-index.yaml` 复制并填写）、`.cursor/rules/`（至少放入从本仓库复制的文档发现规则）、`docs/`（按阶段分子目录，与索引路径一致）。
+- **业务项目根目录**：需有：
+  - `project-docs-index.yaml`：从本仓库 `process/project-docs/project-docs-index.yaml` 复制并填写，用于按阶段索引各类文档；
+  - `.cursor/rules/`：至少放入从本仓库复制的文档发现规则（`rules/project-docs-discovery.md` 等）；
+  - `docs/`：按阶段分子目录，与索引路径一致；
+  - `docs/status/task-index.json` + `docs/status/task-cards/`：任务索引表与任务卡目录，用于在多会话间共享任务状态与任务卡指针；
+  - `scripts/task_board.py`：从本仓库 `process/project-docs/status/task-board/task_board.py` 复制，用于以稳定 schema 读写 `task-index.json` 并生成任务卡（命令约定见第 4.3 节）。
 - **规范仓库**：与业务项目**同时加入同一 Cursor 工作区**（多根）。使用前请复制本仓库 `process/project-docs/workspace-config/cursor-multi-root-workspace.code-workspace.template` 为 `xxx.code-workspace`，按同目录下的 `workspace-setup.md` 填写两个 `path` 后，用 Cursor「文件 → 打开工作区来自文件」打开，即可得到「业务项目 + 规范仓库」多根工作区。
 
 #### Rules 与 Skills 与实际项目的关联方式
@@ -379,8 +463,9 @@ flowchart LR
    - 在引用 PRD、架构、测试计划等阶段产出物时，必须先读取项目根目录的 `project-docs-index.yaml`；
    - 再按索引路径读写具体文档。
 3. **文档元数据约定**：各阶段产出物需在顶部使用 YAML frontmatter，字段遵守 `process/artifact-metadata-convention.md`。
+4. **任务板与脚本约定**：业务项目必须启用任务索引表与 `task_board.py` 脚本（见第 4.3 节）。各角色会话除遵守“先读索引、再读文档”外，还需按各自 pinned prompt 中的说明，通过 `task_board.py list/claim/update/new-card/add` 获取、更新与创建任务，而不是直接手改 `task-index.json`。
 
-在此基础上，多会话协作时，各角色会话只需遵守其 pinned prompt 中的“先读索引，再读文档”约定，即可在不同项目间复用同一套工作方式。
+在此基础上，多会话协作时，各角色会话只需遵守其 pinned prompt 中的“先读索引，再读文档”与任务板脚本约定，即可在不同项目间复用同一套工作方式。
 
 ### 七、实践步骤建议（如何开始用）
 

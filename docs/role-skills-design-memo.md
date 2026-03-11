@@ -425,3 +425,44 @@
 ### 遗留与后续（Next）
 - 如后续增加更多评审角色（如安全评审），建议沿用通用骨架并追加“可直接粘贴”的实例块，保持用户操作一致性。
 
+---
+
+## 变更备忘（2026-03-11）：任务卡索引表 + 脚本化更新（降低单点调度与格式漂移）
+
+### 背景/触发（Context）
+- 用户在 Cursor 多会话协作中，期望各角色会话能**自助获取任务并更新状态**，避免项目经理/调度者成为索引更新的单点瓶颈。
+- 同时希望通过**脚本约束**读写行为，尽量减小模型漂移导致的“任务格式不一致、索引表被写乱、字段漏写”等问题。
+
+### 关键判断（Why）
+- **两层结构更稳**：将“完整任务信息”沉到任务卡文件（Markdown），将“可筛选/可路由字段”沉到索引表（JSON），角色会话先查索引再读卡，既易用也便于自动化。
+- **用脚本代替自由文本编辑**：对 status、blocked 必填 blocker、原子写入等做最小校验，可显著降低多人会话对同一索引文件的误改风险。
+- **模板放规范仓库、运行在业务项目**：规范仓库提供可复制的模板与脚本，业务项目按约定路径落地，便于跨项目复用。
+
+### 备选方案与取舍（Options）
+- 方案 A：单文件时间倒序累积任务卡（append-only）。未选原因：角色会话难以按 role/status 快速筛选；文件膨胀后读取成本上升；状态更新不直观。
+- 方案 B（采用）：任务卡文件 + 索引表 + 脚本化更新。采用原因：既保留任务卡的完整上下文，又提供稳定的索引与状态机，并可通过脚本减少漂移与并发破坏。
+
+### 最终方案（What）
+- 在规范仓库新增“任务板模板”：
+  - `process/project-docs/status/task-board/task_board.py`：提供 `init/list/claim/update/add/new-card` 命令
+  - `process/project-docs/status/task-board/task-index.json`：索引表空模板
+  - `process/project-docs/status/task-board/task-cards/.gitkeep`：任务卡目录占位
+- 在 `docs/Cursor-多会话协作落地方案.md` 第 4 章新增 `4.3` 小节，说明复制到业务项目的推荐路径与最短命令流。
+
+### 影响范围（Where）
+- 变更文件：
+ - 新增：`process/project-docs/status/task-board/task_board.py`、`process/project-docs/status/task-board/task-index.json`、`process/project-docs/status/task-board/task-cards/.gitkeep`
+ - 修改：`docs/Cursor-多会话协作落地方案.md`、`docs/role-skills-design-memo.md`
+ - 删除/重命名：无
+- 受影响的映射/契约/索引（如有）：无（仅新增可选落地机制，不改变现有 phases/roles/mapping/skills 契约）。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`task-index.json`、`task_board.py`、`task-board`
+- 已检查的清单/索引/映射：`docs/Cursor-多会话协作落地方案.md`（4.3 代码块闭合）、新增模板目录路径
+- 已运行的诊断：`python -m py_compile process/project-docs/status/task-board/task_board.py`（通过）
+
+### 遗留与后续（Next）
+- 若未来确实出现多人并发频繁冲突，可考虑：
+  - 进一步增强锁策略（更强的文件锁或引入轻量数据库/服务端存储）
+  - 或改为“每任务独立 JSON + 总索引生成”的写入模型，进一步降低写冲突面
+
