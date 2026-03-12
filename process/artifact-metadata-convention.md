@@ -92,13 +92,13 @@ title: "ADR-001 服务拆分策略"
 
 ## Agent 使用方式
 
-1. **发现当前阶段产出**：根据 `state.yaml` 的 `current_phase`，在项目文档索引（`project-docs-index.yaml`）中找到对应路径，读取文档并解析 frontmatter 的 `phase`、`type`、`status`。
+1. **发现当前阶段产出**：根据**业务项目** `state.yaml` 的 `current_phase`，在项目文档索引（`docs/project-docs-index.yaml`）中找到对应路径，读取文档并解析 frontmatter 的 `phase`、`type`、`status`。
 2. **判断是否可消费**：若下游阶段依赖该产出，可检查 `status == approved` 再继续。
 3. **责任角色**：`owner_role` 可用于提示应由哪类角色维护或评审该文档。
 
 ## 与项目文档索引的关系
 
 - **元数据**：写在单篇文档内部，描述该文档自身。
-- **项目文档索引**：写在项目仓库根目录或约定路径的 `project-docs-index.yaml`，列出各阶段产出物的**路径**，供 Agent 快速定位文档，再结合文档内元数据解析状态与角色。
+- **项目文档索引**：写在项目 **docs 目录**或约定路径的 `project-docs-index.yaml`（默认 `docs/project-docs-index.yaml`），列出各阶段产出物的**路径**，供 Agent 快速定位文档，再结合文档内元数据解析状态与角色。
 
 两者配合使用：先查索引获路径，再读文档取元数据。

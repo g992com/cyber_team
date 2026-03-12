@@ -442,7 +442,6 @@
 ```
 规范根目录/
 ├── README.md                    # 总览、使用约定、与 Agent 的接口说明
-├── state.yaml                   # 或 .agent/state.yaml：当前阶段与进展，供 Agent 读写（见下文）
 ├── process/
 │   ├── phases.yaml              # 阶段定义（id、名称、产出、顺序）— Agent 解析
 │   └── process.md               # 流程说明（人读）
@@ -479,7 +478,7 @@
 
 **规范根目录的放置位置**：规范根目录的**放置位置**由项目/团队约定，例如：当前仓库下的子目录（如 `./team-norms/`）、独立仓库、或与代码库平级的目录。约定后应在 README 或配置中写明，便于 Agent 与人工统一定位。
 
-**进展/状态的表示与存储**：为实现「Agent 决定并记录当前阶段与进展」，需定义**进展/状态的表示方式与存储位置**，供 Agent 读写。建议：在规范根目录或约定路径下提供**状态文件**（如 `state.yaml` 或 `.agent/state.yaml`，已列入上方案例目录树），字段可包含：`current_phase`（当前阶段 id，与 phases.yaml 的 id 一致，建议与第 3 节「英文标识」一致）、`completed_phases`（已完成阶段列表）、`current_role`（当前启用的角色，可选）、`updated_at`（最后更新时间）。Agent 在阶段切换或活动完成时更新该文件；读取时据此与 mapping 结合，决定应启用的 skill。具体 schema 与并发/多 Agent 下的写入策略在落地时约定。
+**进展/状态的表示与存储**：为实现「Agent 决定并记录当前阶段与进展」，需定义**进展/状态的表示方式与存储位置**，供 Agent 读写。建议：将运行态状态文件放在**业务项目仓库**（如根目录 `state.yaml` 或 `.agent/state.yaml`），字段可包含：`current_phase`（当前阶段 id，与 phases.yaml 的 id 一致，建议与第 3 节「英文标识」一致）、`completed_phases`（已完成阶段列表）、`current_role`（当前启用的角色，可选）、`updated_at`（最后更新时间）。规范仓库侧仅提供 schema 与初始化模板（如 `process/state.yaml`），避免在多根工作区中误写到规范库。
 
 **阶段转换规则**：何时进入下一阶段（如验收满足、用户确认、产出物就绪等）**待落地时约定**；约定后可在 process 或 README 中写明，供 Agent 与人工一致执行。
 

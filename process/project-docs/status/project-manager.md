@@ -1,6 +1,6 @@
 # 项目经理进展日志模板（project-manager）
 
-> 使用方式：将本文件复制到业务项目 `docs/status/project-manager.md`（或团队约定路径）。每次项目经理介入（启动裁剪、进展汇总、触发式处置）后追加一条记录，并在 `state.yaml.role_updates.project-manager` 写入最新摘要与 artifacts 指针。
+> 使用方式：将本文件复制到业务项目 `docs/status/project-manager.md`（或团队约定路径）。每次项目经理介入（启动裁剪、进展汇总、触发式处置）后追加一条记录，并在**业务项目** `state.yaml.role_updates.project-manager` 写入最新摘要与 artifacts 指针。
 
 ## 当前状态 / Current
 

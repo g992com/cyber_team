@@ -29,7 +29,9 @@
 
 ## 业务项目侧仍需准备
 
-- **project-docs-index.yaml**：从本规范仓库 `process/project-docs/project-docs-index.yaml` 复制到业务项目根目录，并按阶段填写各产出物路径。
+- **project-docs-index.yaml**：从本规范仓库 `process/project-docs/project-docs-index.yaml` 复制到业务项目 **docs 目录**（即 `docs/project-docs-index.yaml`），并按阶段填写各产出物路径。
+- **state.yaml（业务项目根目录）**：从本规范仓库 `process/state.yaml` 复制到业务项目仓库根目录为 `state.yaml`（或团队约定路径）。多根工作区下更新进展时，务必写入业务项目的 `state.yaml`，不要写错仓库。
+- **可选：用脚本更新 state**：将本规范仓库 `process/project-docs/status/update_state.py` 复制到业务项目（例如 `scripts/update_state.py`），并在业务项目根目录终端运行它来更新 `state.yaml`（脚本会基于 git root 做防越界校验，减少更新错仓库的风险）。
 - **.cursor/rules/**：至少将本规范仓库的 `rules/project-docs-discovery.md` 复制到业务项目的 `.cursor/rules/` 下，使智能体在业务项目中先读索引再读文档。
 
 详见《Cursor-多会话协作落地方案》中「在实际项目中的部署结构」与「Rules 与 Skills 的关联」。

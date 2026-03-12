@@ -1,6 +1,6 @@
 # 角色进展日志模板（role status log template）
 
-> 使用方式：将本文件复制到业务项目的 `docs/status/{role_id}.md`（或团队约定路径），并由角色智能体按 **per-session** 频率追加记录。项目经理汇总进展时可结合 `state.yaml.role_updates[*].artifacts` 指针读取。
+> 使用方式：将本文件复制到业务项目的 `docs/status/{role_id}.md`（或团队约定路径），并由角色智能体按 **per-session** 频率追加记录。项目经理汇总进展时可结合**业务项目** `state.yaml.role_updates[*].artifacts` 指针读取。
 
 ## 当前状态 / Current
 

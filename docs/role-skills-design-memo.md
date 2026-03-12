@@ -332,7 +332,7 @@
 
 ### 最终方案（What）
 - 将 `process/templates` 目录重命名为 `process/project-docs`，原目录下文件迁移至新目录后删除旧目录。
-- 新目录结构保持不变：`project-docs-index.yaml`、`cursor-rule-project-docs-discovery.md`、`status/project-manager.md`、`status/role-status-template.md`。
+- 新目录结构保持不变：`project-docs-index.yaml`、`cursor-rule-project-docs-discovery.md`、`status/project-manager.md`、`status/role-status.md`。
 - 全工程内所有 `process/templates` 及 `templates/`（在 process 语境下）的引用改为 `process/project-docs` 或 `project-docs/`。
 
 ### 影响范围（Where）
@@ -465,4 +465,223 @@
 - 若未来确实出现多人并发频繁冲突，可考虑：
   - 进一步增强锁策略（更强的文件锁或引入轻量数据库/服务端存储）
   - 或改为“每任务独立 JSON + 总索引生成”的写入模型，进一步降低写冲突面
+
+---
+
+## 变更备忘（2026-03-11）：多会话方案补充「会话丢失与恢复」与记忆持久化说明
+
+### 背景/触发（Context）
+- 用户询问：在实际业务项目中实施多会话协作方案时，是否存在**记忆方面的问题**；例如会话丢失后重新建立会话、使用 pinned prompt 后是否能继续之前的工作。
+
+### 关键判断（Why）
+- 本方案在设计上已将「可恢复的上下文」放在持久化文件中（state.yaml、task-index + 任务卡、project-docs-index + 文档、规范仓库的 process/roles/mapping/skills），而非依赖对话历史；但文档中未显式说明，易引发“会话丢了是否要重来”的疑虑。
+- 明确写出「记忆在文件、不在对话」及恢复步骤，可降低落地时的困惑，并促使团队养成「关键决策写进任务卡/文档」的习惯，减少仅存于对话中的隐性约定。
+
+### 备选方案与取舍（Options）
+- 方案 A：仅在 FAQ 或实践建议中简单提一句“会话丢失后可重新粘贴 pinned prompt 并读 state/task”。未选原因：未说清哪些记忆可恢复、哪些不能，以及具体恢复步骤。
+- 方案 B（采用）：在落地方案中新增独立章节「七、会话丢失与恢复（记忆与持久化）」，用表格列出记忆类型与持久化位置、恢复方式，并给出 pinned prompt 持久化建议与新会话恢复步骤、明确写出无法通过文件恢复的局限。采用原因：一次性说清设计意图、操作步骤与边界，便于实施与后续迭代。
+
+### 最终方案（What）
+- 在 `docs/Cursor-多会话协作落地方案.md` 中，在「六、与具体业务项目的对接方式」与「实践步骤建议」之间新增 **第七节「会话丢失与恢复（记忆与持久化）」**，包含：
+  - 7.1 设计原则：记忆在文件、不在对话（表格：记忆类型 / 持久化位置 / 新会话如何恢复）；
+  - 7.2 Pinned prompt 的持久化与恢复（建议将各角色 pinned prompt 存入规范仓库或业务项目文档，便于新会话复制）；
+  - 7.3 新会话恢复的推荐步骤（多根工作区、粘贴 pinned prompt、task_board list/claim、项目经理读 state + 任务分布）；
+  - 7.4 无法通过文件恢复的部分（仅存于对话的临时约定、多轮细微上下文；建议关键决策写进任务卡/阶段产出物）。
+- 原「七、实践步骤建议」顺延为「八」；在步骤 2「为每个会话配置 pinned prompt」中增加：建议将实际使用的 pinned prompt 保存到仓库（见第七节 7.2），便于会话丢失后快速恢复。
+
+### 影响范围（Where）
+- 变更文件：
+ - 修改：`docs/Cursor-多会话协作落地方案.md`、`docs/role-skills-design-memo.md`
+ - 新增/删除/重命名：无
+- 受影响的映射/契约/索引：无。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`会话`、`state.yaml`、`task_board`、`pinned prompt`、`恢复`
+- 已检查的清单/索引/映射：文档内章节编号（六→七→八）、交叉引用（7.2、第八节步骤 2）
+- 已运行的诊断：Markdown lint（无报错）
+
+### 遗留与后续（Next）
+- 若团队采纳「pinned prompt 清单」建议，可在规范仓库中新增 `process/pinned-prompts/` 或 `docs/cursor-prompts.md` 存放各角色最终版 pinned prompt，便于复制与版本管理。
+
+---
+
+## 变更备忘（2026-03-11）：「做过哪些处理」与「最终切片」的记录策略
+
+### 背景/触发（Context）
+- 用户询问：做过哪些处理是否需要记录，还是只需要记录最终工作情况的切片信息？
+
+### 关键判断（Why）
+- **会话恢复与接续**只依赖“当前在哪、任务状态、产物在哪”，即切片信息；不需要完整处理历史即可让新会话接上工作。
+- **处理记录**（谁何时做了哪一步、决策如何形成）对审计、复盘有用，但会增加维护成本和上下文噪声；本方案当前不依赖其实现恢复，故定为可选。
+
+### 备选方案与取舍（Options）
+- 方案 A：要求同时维护「处理历史」与「切片」。未选原因：多会话下由各角色会话自发维护历史成本高，且恢复场景不强制需要。
+- 方案 B（采用）：明确「切片信息」为必须且已有设计支撑；「做过哪些处理」为可选，按团队审计/复盘需求再引入（轻量做法：关键决策写进任务卡/文档；显式做法：活动日志或状态变更历史）。采用原因：优先保证恢复与接续，再按需扩展追溯。
+
+### 最终方案（What）
+- 在 `docs/Cursor-多会话协作落地方案.md` 第七节新增 **7.5 是否需要记录「做过哪些处理」与「最终工作情况切片」**：说明只需切片即可恢复；处理记录为可选，并给出轻量/显式两种可选做法及建议（优先切片，按需历史）。
+
+### 影响范围（Where）
+- 变更文件：修改 `docs/Cursor-多会话协作落地方案.md`、`docs/role-skills-design-memo.md`；无新增/删除/重命名。
+- 受影响的映射/契约/索引：无。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`做过哪些处理`、`切片`、`处理记录`、`state.yaml`、`task-index`
+- 已检查：第七节与 7.1 表格、task_board 当前能力（仅当前状态）表述一致。
+
+### 遗留与后续（Next）
+- 若后续团队需要审计轨迹，可再约定 task_index 的 history 字段或独立活动日志的 schema 与存放位置。
+
+---
+
+## 变更备忘（2026-03-12）：project-docs-index.yaml 由谁、依据什么初始化
+
+### 背景/触发（Context）
+- 用户询问：`project-docs-index.yaml` 应该由谁、根据什么依据先初始化？落地方案中仅写“从本仓库复制并填写”，未明确责任人与依据。
+
+### 关键判断（Why）
+- 项目启动阶段（initiation）由项目总控/项目经理负责，且 `skills/project-initiation` 已约定“若项目使用 project-docs-index.yaml，可在索引中登记上述文档路径”，故 PM 是索引初始化与 initiation 段登记的自然责任人。
+- 索引结构必须与 `process/phases.yaml` 的阶段 id 一致，路径以规范仓库模板为默认，再按实际产出填写或调整。
+
+### 备选方案与取舍（Options）
+- 方案 A：不写“由谁”，只写“依据模板与 phases 填写”。未选原因：落地时易出现无人负责或重复初始化。
+- 方案 B（采用）：在落地方案「六、与具体业务项目的对接方式」中补充：由项目总控/项目经理在接入或 initiation 时初始化；可由接入实施者先复制模板、PM 再登记核对；依据为模板、phases 阶段 id、实际/计划产出路径。采用原因：与 project-initiation 职责一致，且兼容“先复制后填写”的两种分工。
+
+### 最终方案（What）
+- 在 `docs/Cursor-多会话协作落地方案.md` 第六节「项目文档索引」下增加「project-docs-index.yaml 由谁、依据什么初始化」说明：由谁（PM/接入实施者）、依据（模板、phases 阶段 id、路径填写规则）。
+
+### 影响范围（Where）
+- 变更文件：修改 `docs/Cursor-多会话协作落地方案.md`、`docs/role-skills-design-memo.md`；无新增/删除/重命名。
+- 受影响的映射/契约/索引：无（仅文档澄清，与 process/project-docs/project-docs-index.yaml、phases.yaml、project-initiation 现有约定一致）。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`project-docs-index`、`初始化`、`project-initiation`
+- 已检查：落地方案第六节与 project-docs-discovery、workspace-setup 中“复制并填写”表述一致，并与之互补（补充责任与依据）。
+
+### 遗留与后续（Next）
+- 若团队希望“各角色产出时自行登记索引”，可在后续在 artifact-metadata-convention 或各角色 pinned prompt 中补充“产出新文档后更新 docs/project-docs-index.yaml 对应条目”的约定。
+
+---
+
+## 变更备忘（2026-03-12）：project-docs-index 路径改为 docs/ 与拷贝责任明确为用户
+
+### 背景/触发（Context）
+- 用户要求：（1）从规范库拷贝到业务项目可由用户完成；（2）project-docs-index.yaml 在业务库中不放在根目录，改为放在业务库 docs 目录下，使文档更集中。
+
+### 关键判断（Why）
+- 索引放 docs/ 与“路径相对于本文件所在目录”一致：模板内路径改为相对 docs/，去掉 `docs/` 前缀。
+- 拷贝责任明确为用户，与“接入实施者/PM”脱钩，简化落地说明。
+
+### 最终方案（What）
+- **业务项目中索引路径**：由根目录 `project-docs-index.yaml` 改为 **`docs/project-docs-index.yaml`**；所有引用处统一为“docs 目录下的 project-docs-index.yaml”或“docs/project-docs-index.yaml”。
+- **模板** [process/project-docs/project-docs-index.yaml]：头部注释改为“复制到业务项目 docs 目录”；所有条目路径去掉 `docs/` 前缀，改为相对 docs/（如 `requirements/prd.md`）。
+- **拷贝责任**：落地方案第六节「由谁」改为：从规范库拷贝到业务项目由**用户**完成（复制到业务项目 docs/）；索引内容的填写与登记可由 PM 或用户完成。
+
+### 影响范围（Where）
+- 修改：`process/project-docs/project-docs-index.yaml`、`rules/project-docs-discovery.md`、`docs/Cursor-多会话协作落地方案.md`、`docs/workspace-config/workspace-setup.md`、`process/artifact-metadata-convention.md`、`README.md`、`docs/多智能体蜂群编排落地方案.md`、`skills/project-initiation/SKILL.md`、`docs/role-skills-design-memo.md`。
+- 多会话方案内各角色 pinned prompt、部署结构、记忆表、切片信息等凡提及索引路径处均已改为 docs 目录。
+
+### 一致性检查（Check）
+- 全工程搜索：`project-docs-index`、`根目录.*project-docs`，确认无遗漏“根目录”与旧路径。
+- 模板内路径已全部相对 docs/，与“本文件所在目录”约定一致。
+
+### 遗留与后续（Next）
+- 无。已按计划完成路径与责任调整。
+
+---
+
+## 变更备忘（2026-03-12）：进展回复字段引用 README 歧义消除
+
+### 背景/触发（Context）
+- 《Cursor-多会话协作落地方案》中项目经理 pinned prompt 第 5 条写「请按 README 中建议的字段结构回复」，未指明是哪个仓库的 README，在多根工作区（规范库 + 业务项目）场景下可能被理解为业务项目 README，造成歧义。
+
+### 关键判断（Why）
+- 进展回复的字段结构（current_phase、completed_phases、status/summary/blockers/next、project_blockers/project_risks、需决策项）仅在**本规范仓库根目录 README.md** 的「进展回复的输出契约（建议字段）」中定义；业务项目 README 通常不包含该契约。
+
+### 备选方案与取舍（Options）
+- 方案 A：保持「README」不指定；未选原因：多根工作区下存在规范库与业务库两个根，易歧义。
+- 方案 B（采用）：显式写「本规范仓库根目录 README.md」并带上小节名「进展回复的输出契约（建议字段）」；采用原因：与文档前文「cyber_team 规范仓库」一致，且便于 Agent/人精确定位。
+
+### 最终方案（What）
+- 将「请按 README 中建议的字段结构回复」改为「请按**本规范仓库根目录 README.md**中「进展回复的输出契约（建议字段）」回复」。
+
+### 影响范围（Where）
+- 变更文件：修改 `docs/Cursor-多会话协作落地方案.md`（项目经理 pinned prompt 第 5 条）；追加 `docs/role-skills-design-memo.md`。
+- 无新增/删除/重命名；无映射/索引变更。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`README`（在落地方案中仅此一处引用进展字段）；已确认 README.md 第 39–45 行为对应契约。
+
+### 遗留与后续（Next）
+- 无。若后续在业务项目侧也希望约定进展回复格式，可在业务项目 README 或规则中引用规范库 README 该小节或复制契约说明。
+
+---
+
+## 变更备忘（2026-03-12）：明确 state.yaml 作用域，避免误写规范库
+
+### 背景/触发（Context）
+- 规范库是通用规则/流程内核，`state.yaml` 在这里应当只是 schema 示例/模板；但在多根工作区对接业务项目时，出现了智能体把**业务项目进展**误写回规范库根目录 `state.yaml` 的情况。
+
+### 关键判断（Why）
+- `state.yaml` 属于**运行态进展快照**（高频更新、项目特有），应以业务项目为“单一事实源”；规范库只提供 schema 与初始化模板，不能承载任何具体业务项目的真实状态。
+- 多根工作区下存在同名文件歧义，若文档/规则写成“读取 state.yaml”而不注明“业务项目”，就会诱发误读/误写。
+
+### 备选方案与取舍（Options）
+- 方案 A：删除规范库根目录 `state.yaml` 或强制改名为 `state.template.yaml`；未选原因：会破坏既有文档与既有使用习惯，迁移成本高且容易引入更多引用未更新。
+- 方案 B（采用）：保留规范库 `state.yaml` 作为示例，但在关键入口（README/规则/多会话说明）明确“业务项目为准”，并提供 `process/state.yaml` 作为初始化来源；采用原因：改动小、兼容强、能显著降低误写概率。
+
+### 最终方案（What）
+- 增加业务项目 `state.yaml` 的初始化模板：`process/state.yaml`。
+- 文档与规则统一强调：读取/更新的 `state.yaml` 指**业务项目根目录**的文件；规范库根目录的 `state.yaml` 仅作示例/模板，避免写入业务项目真实进展。
+
+### 影响范围（Where）
+- 变更文件：
+  - 新增：`process/state.yaml`
+  - 修改：`README.md`、`docs/Cursor-多会话协作落地方案.md`、`docs/workspace-config/workspace-setup.md`、`rules/project-docs-discovery.md`、`process/artifact-metadata-convention.md`、`process/project-docs/status/project-manager.md`、`process/project-docs/status/role-status.md`、`docs/多智能体蜂群编排落地方案.md`
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`state.yaml`、`读取 state.yaml`、`读写 state.yaml`、`规范仓库或业务项目中的`
+- 已检查的清单/索引/映射：`rules/project-docs-discovery.md`、`docs/workspace-config/workspace-setup.md`、`docs/Cursor-多会话协作落地方案.md`、`README.md`
+- 已运行的诊断：对变更的 Markdown 运行诊断（无 lint 报错）。
+
+### 遗留与后续（Next）
+- 仍存在少量文档段落（如 `docs/role-skills-design.md`）从“概念”层面描述 `state.yaml` 可能放在规范根目录或 `.agent/`，如需更严格隔离，可后续统一为“业务项目侧 state + 规范库侧模板”单一路径约定。
+- 为进一步降低“更新错仓库”的概率，后续可在业务项目侧引入 `update_state.py`（类似 `task_board.py` 的写入护栏），并在任务卡/总控 prompt 中约定“更新 state 必须通过脚本”。
+
+### 补充（Superseded）
+- 该备忘中的“方案 B（保留规范库根目录 `state.yaml` 示例）”已被后续调整替代：规范库已删除根目录 `state.yaml`，统一以 `process/state.yaml` 作为初始化模板，进一步降低多根工作区下同名文件歧义与误写概率。
+
+---
+
+## 变更备忘（2026-03-12）：模板去 template 命名 + 独立 update_state.py 脚本
+
+### 背景/触发（Context）
+- 用户希望“复制即用”，减少对接业务项目时的认知成本与操作步骤；同时希望将更新业务项目 `state.yaml` 的脚本从 `task-board/` 中分离，避免被误认为任务卡相关工具。
+
+### 关键判断（Why）
+- **template 后缀降低可用性**：实际使用时总需要“复制并改名”，增加摩擦且容易漏改引用。
+- **脚本需要语义隔离**：`task-board/` 语义聚焦任务卡；状态更新脚本应放在 `status/` 层级并改名为 `update_state.py`，更符合“项目状态工具”的定位。
+
+### 备选方案与取舍（Options）
+- 方案 A：保留 `*-template` 命名，要求使用者复制后自行改名；未选原因：重复操作多、容易出错。
+- 方案 B（采用）：规范仓库直接提供最终文件名（`process/state.yaml`、`process/project-docs/status/role-status.md`），业务项目只需复制；同时提供 `process/project-docs/status/update_state.py`，从目录结构上避免混淆。
+
+### 最终方案（What）
+- 将状态模板文件从 `process/state-template.yaml` 调整为 `process/state.yaml`。
+- 将角色状态日志模板从 `process/project-docs/status/role-status-template.md` 调整为 `process/project-docs/status/role-status.md`。
+- 将状态更新脚本从 `process/project-docs/status/task-board/state_board.py` 迁移并更名为 `process/project-docs/status/update_state.py`。
+
+### 影响范围（Where）
+- 变更文件：
+  - 新增：`process/state.yaml`、`process/project-docs/status/update_state.py`
+  - 修改：`README.md`、`docs/Cursor-多会话协作落地方案.md`、`docs/workspace-config/workspace-setup.md`、`docs/role-skills-design.md`、`docs/role-skills-design-memo.md`
+  - 删除/重命名：`process/project-docs/status/role-status-template.md` → `process/project-docs/status/role-status.md`；删除 `process/state-template.yaml`；删除 `process/project-docs/status/task-board/state_board.py`
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`state-template.yaml`、`role-status-template.md`、`state_board.py`、`task-board/state_board.py`、`update_state.py`
+- 已检查的清单/索引/映射：`docs/workspace-config/workspace-setup.md`（复制指引路径）、`README.md`（初始化模板路径）
+- 已运行的诊断：对 `process/project-docs/status/update_state.py` 与相关 Markdown 文件运行诊断；并运行 `python process/project-docs/status/update_state.py --help` 验证脚本可用。
+
+### 遗留与后续（Next）
+- 如需进一步强约束“只准写业务项目 state”，可在业务项目侧约定：更新 state 必须通过 `scripts/update_state.py`（并在任务卡/总控 prompt 中固化）。
 

@@ -2,7 +2,7 @@
 
 ### 一、背景与目标
 
-- **背景**：本仓库已经通过 `process/`、`roles/`、`mapping/`、`skills/`、`state.yaml` 等文件，定义了软件开发流程、阶段、角色职责与 skill 映射。但在实际开发中，用户更多是通过 Cursor IDE 与单个大模型对话，难以直接体现“多角色智能体协作”的价值。
+- **背景**：本仓库已经通过 `process/`、`roles/`、`mapping/`、`skills/` 等文件定义了软件开发流程、阶段、角色职责与 skill 映射，并提供 `process/state.yaml` 作为业务项目 `state.yaml` 的初始化模板。但在实际开发中，用户更多是通过 Cursor IDE 与单个大模型对话，难以直接体现“多角色智能体协作”的价值。
 - **目标**：在 **不引入额外后端服务** 的前提下，利用 Cursor 的**多会话（多对话 tab）能力**，模拟“项目经理 + 各角色专家”协作：
   - 让不同会话长期扮演不同角色，并 **遵守本规范仓库的流程与 skill 映射**；
   - 通过统一的“任务卡”与“pinned prompt 模板”，让多会话之间协作可复现、可分享；
@@ -60,7 +60,7 @@
 - **角色定义**：读取 `roles/roles.yaml`，按其中的 `role_id` 与 `phase_ids` 对齐职责边界
 - **阶段-角色-skill 映射**：读取 `mapping/phase-role-skill.yaml`，确认在当前阶段应加载哪些 skill
 - **技能清单**：读取 `skills/manifest.yaml` 与对应 `skills/*/SKILL.md`
-- **进展状态**：读取/参考 `state.yaml`（在多会话场景下通常由“项目总控会话”负责维护或解释）
+- **进展状态**：读取/参考**业务项目** `state.yaml`（在多会话场景下通常由“项目总控会话”负责维护或解释；避免误改规范仓库的示例 `state.yaml`）
 
 ### 三、各角色 pinned prompt 模板
 
@@ -71,18 +71,19 @@
 ```text
 你是软件开发团队中的「<角色名称>」角色（role_id: <role_id>）。
 
-本项目的活动规范位于一个单独的规范仓库（cyber_team），根目录包含 process/、roles/、mapping/、skills/、state.yaml 等。
+本项目的活动规范位于一个单独的规范仓库（cyber_team），根目录包含 process/、roles/、mapping/、skills/ 等。
+业务项目的运行态进展状态存放在**业务项目仓库根目录**的 `state.yaml`（可从 cyber_team 的 `process/state.yaml` 初始化）。
 
 请遵守以下约定：
 
 1. 在处理任务前，先基于规范理解当前阶段：
    - 读取 process/phases.yaml 与 process/process.md，理解阶段列表与顺序；
-   - 读取 state.yaml 的 current_phase（如可见），结合 phases.yaml 理解当前所处阶段；
+   - 读取**业务项目** `state.yaml` 的 current_phase（如存在），结合 phases.yaml 理解当前所处阶段（避免在多根工作区中误读/误写 cyber_team 的示例 state.yaml）；
    - 读取 roles/roles.yaml 中与你的 role_id 对应的职责与参与阶段。
 2. 根据 mapping/phase-role-skill.yaml 中 (phase_id, role_id) 的映射关系，确定当前阶段你应加载的 skill 列表；
    再根据 skills/manifest.yaml 找到每个 skill 的 source，并在需要时阅读对应 SKILL.md，严格按其中的 SOP 执行。
 3. 当需要在「具体业务项目」中读写阶段产出物（PRD、架构设计、测试计划等）时：
-   - 始终先读取业务项目根目录的 project-docs-index.yaml；
+   - 始终先读取业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`）；
    - 再按索引中的路径读取或更新具体文档，并遵守 process/artifact-metadata-convention.md 中的 frontmatter 约定；
    - 确保在文档元数据中正确标注 phase、type、status、owner_role、updated_at 等字段。
 4. 输出内容时，尽量采用结构化格式，包含：
@@ -103,19 +104,19 @@
 - roles/roles.yaml 定义了角色列表与各阶段参与关系；
 - mapping/phase-role-skill.yaml 将阶段与角色映射到具体 skill；
 - skills/manifest.yaml 与各 skills/*/SKILL.md 定义了可用技能的行为；
-- state.yaml 记录当前阶段（current_phase）、已完成阶段（completed_phases）与最近更新时间等。
+- **业务项目**的 state.yaml 记录当前阶段（current_phase）、已完成阶段（completed_phases）与最近更新时间等；cyber_team 规范仓库提供 `process/state.yaml` 作为初始化模板。
 
 你与用户是主要沟通窗口，需遵守以下约定：
 
 1. 接收用户需求或问题时，先用自然语言澄清目标、范围、约束与优先级，并据此在脑中映射到规范中的阶段序列。
-2. 基于 process/phases.yaml 与 state.yaml 判断当前阶段：
-   - 若是新项目，创建或初始化 state（在本多会话场景中，可以用文字显式说明“当前视为 <phase_id> 阶段”）；
-   - 若是进行中的项目，尊重 existing state.yaml 所示的 current_phase 与 completed_phases。
+2. 基于 process/phases.yaml 与**业务项目** state.yaml 判断当前阶段：
+   - 若是新项目，在业务项目仓库根目录创建/初始化 `state.yaml`（可从 `process/state.yaml` 复制；在多会话场景中也可用文字显式说明“当前视为 <phase_id> 阶段”作为临时状态）；
+   - 若是进行中的项目，尊重业务项目 `state.yaml` 所示的 current_phase 与 completed_phases。
 3. 结合 roles/roles.yaml 与 mapping/phase-role-skill.yaml，确定在当前阶段应激活的角色与技能；
    再将任务拆分为若干「任务卡」，分配给对应的角色会话（产品、架构、开发、测试等）。
 4. 任何任务卡都应包含：任务类型、当前阶段、输入材料（含已有文档/链接）、输出要求、验收标准；
    你负责将用户意图翻译成任务卡，并在适当时机回收结果、组织评审，并判断是否可以推进到下一阶段。
-5. 当用户询问项目进展时，请按 README 中建议的字段结构回复：
+5. 当用户询问项目进展时，请按**本规范仓库根目录 README.md**中「进展回复的输出契约（建议字段）」回复：
    - current_phase、completed_phases；
    - 各角色进行中任务的 status/summary/blockers/next；
    - project_blockers / project_risks；
@@ -139,7 +140,7 @@
    - process/phases.yaml 中关于该阶段的目标与产出说明；
    - roles/sop 中与你角色相关的 SOP（如存在）；
    - skills/prd-requirements/SKILL.md 与 skills/prd-review/SKILL.md，严格按其中步骤执行。
-3. 若涉及具体业务项目，先读取该项目根目录下的 project-docs-index.yaml，找到本阶段 PRD 对应的文档路径，再进行创建或更新。
+3. 若涉及具体业务项目，先读取该项目 docs 目录下的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`），找到本阶段 PRD 对应的文档路径，再进行创建或更新。
 4. 输出时，既要写好 PRD 内容本身，也要附上：
    - 关键决策与取舍理由；
    - 风险与未决问题列表；
@@ -158,9 +159,9 @@
 
 请遵守以下约定：
 
-1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，先读取 process/phases.yaml、state.yaml、roles/roles.yaml 与 mapping/phase-role-skill.yaml，确认当前阶段（design 或 design-review）及你应使用的 skill（如 architecture-design、architecture-review）。
+1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，先读取 process/phases.yaml、（业务项目）state.yaml、roles/roles.yaml 与 mapping/phase-role-skill.yaml，确认当前阶段（design 或 design-review）及你应使用的 skill（如 architecture-design、architecture-review）。
 2. 根据 skills/manifest.yaml 找到对应 skill 的 source，阅读 skills/architecture-design/SKILL.md 或 skills/architecture-review/SKILL.md，严格按其中 SOP 执行。
-3. 在业务项目中读写架构/设计产出物时，先读取业务项目根目录的 project-docs-index.yaml，再按索引路径读写，并遵守 process/artifact-metadata-convention.md 的 frontmatter 约定。
+3. 在业务项目中读写架构/设计产出物时，先读取业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`），再按索引路径读写，并遵守 process/artifact-metadata-convention.md 的 frontmatter 约定。
 4. 输出时包含：架构或评审结论主体、关键决策与理由、风险与待澄清项、对下一阶段或下一角色的建议。评审时需明确「通过 / 有条件通过 / 不通过」及理由。
 5. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开始本次架构/设计工作前：
    - 在业务项目根目录终端运行 `python scripts/task_board.py list --role architect --status todo,doing,blocked` 找到你的任务；
@@ -177,7 +178,7 @@
 请遵守以下约定：
 
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，确认当前阶段为 development，并读取 mapping/phase-role-skill.yaml 中 development 阶段与你 role_id 对应的 skill（如 frontend-design、backend-development），再根据 skills/manifest.yaml 与对应 SKILL.md 执行。
-2. 在业务项目中读写代码或文档时，先读取业务项目根目录的 project-docs-index.yaml（若有文档类产出），再按索引与现有代码结构进行操作。
+2. 在业务项目中读写代码或文档时，先读取业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`，若有文档类产出），再按索引与现有代码结构进行操作。
 3. 输出时包含：实现摘要、关键设计取舍、风险与阻塞、对测试/代码评审角色的建议。
 4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开始本次开发工作前：
    - 在业务项目根目录终端运行 `python scripts/task_board.py list --role <你的 role_id> --status todo,doing,blocked` 找到属于你的任务；
@@ -194,7 +195,7 @@
 请遵守以下约定：
 
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，确认当前阶段为 testing，并读取 mapping/phase-role-skill.yaml 中 qa 对应的 skill（如 pytest 等），再根据 skills/manifest.yaml 与对应 SKILL.md 执行。
-2. 在业务项目中读写测试计划/用例/报告时，先读取业务项目根目录的 project-docs-index.yaml，找到 testing 阶段对应路径，再按 process/artifact-metadata-convention.md 约定读写。
+2. 在业务项目中读写测试计划/用例/报告时，先读取业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`），找到 testing 阶段对应路径，再按 process/artifact-metadata-convention.md 约定读写。
 3. 输出时包含：测试计划或用例摘要、覆盖范围与风险、执行结论与阻塞、对开发或项目经理的建议。
 4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开始本次测试工作前：
    - 在业务项目根目录终端运行 `python scripts/task_board.py list --role qa --status todo,doing,blocked` 找到属于你的任务；
@@ -211,7 +212,7 @@
 请遵守以下约定：
 
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，确认当前阶段为 deployment（或 operations），并读取 mapping/phase-role-skill.yaml 中 devops 对应的 skill（如 devops-cicd），再根据 skills/manifest.yaml 与对应 SKILL.md 执行。
-2. 在业务项目中涉及流水线或部署文档时，先读取业务项目根目录的 project-docs-index.yaml 中 deployment 等阶段路径，再按约定读写。
+2. 在业务项目中涉及流水线或部署文档时，先读取业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`）中 deployment 等阶段路径，再按约定读写。
 3. 输出时包含：流水线或发布方案摘要、风险与回滚建议、对开发或 SRE 的建议。
 4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开始本次部署/运维工作前：
    - 在业务项目根目录终端运行 `python scripts/task_board.py list --role devops --status todo,doing,blocked` 找到属于你的任务；
@@ -237,7 +238,7 @@
 请遵守以下约定：
 
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（<phase_id>）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
-2. 在业务项目中读取被评审文档时，先读业务项目根目录的 project-docs-index.yaml，再按索引路径读取具体文档。
+2. 在业务项目中读取被评审文档时，先读业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`），再按索引路径读取具体文档。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
 4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：
    - 在业务项目根目录终端运行 `python scripts/task_board.py list --role <role_id> --status todo,doing,blocked` 找到属于你的评审任务；
@@ -256,7 +257,7 @@
 请遵守以下约定：
 
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（requirements-review）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
-2. 在业务项目中读取被评审文档时，先读业务项目根目录的 project-docs-index.yaml，再按索引路径读取具体文档。
+2. 在业务项目中读取被评审文档时，先读业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`），再按索引路径读取具体文档。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
 4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：运行 `python scripts/task_board.py list --role requirements-reviewer --status todo,doing,blocked` 找到任务，用 `claim` 领取，评审完成后用 `update --status done --add-result "<评审意见链接>" --by requirements-reviewer` 更新状态；若需产出方修改后复评或产生跟进任务，用 `new-card` 生成任务卡并填写 4.1 模板，再用 `add --owner <目标 role_id> --status todo --card ... --phase <phase_id>` 写入索引。
 ```
@@ -269,7 +270,7 @@
 请遵守以下约定：
 
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（design-review）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
-2. 在业务项目中读取被评审文档时，先读业务项目根目录的 project-docs-index.yaml，再按索引路径读取具体文档。
+2. 在业务项目中读取被评审文档时，先读业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`），再按索引路径读取具体文档。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
 4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：运行 `python scripts/task_board.py list --role design-reviewer --status todo,doing,blocked` 找到任务，用 `claim` 领取，评审完成后用 `update --status done --add-result "<评审意见链接>" --by design-reviewer` 更新状态；若需产出方修改后复评或产生跟进任务，用 `new-card` 生成任务卡并填写 4.1 模板，再用 `add --owner <目标 role_id> --status todo --card ... --phase <phase_id>` 写入索引。
 ```
@@ -282,7 +283,7 @@
 请遵守以下约定：
 
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（code-review）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
-2. 在业务项目中读取被评审内容时，先读业务项目根目录的 project-docs-index.yaml 与相关索引，定位代码路径/变更范围/关联文档，再按索引路径读取具体内容。
+2. 在业务项目中读取被评审内容时，先读业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`）与相关索引，定位代码路径/变更范围/关联文档，再按索引路径读取具体内容。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
 4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：运行 `python scripts/task_board.py list --role code-reviewer --status todo,doing,blocked` 找到任务，用 `claim` 领取，评审完成后用 `update --status done --add-result "<评审意见链接>" --by code-reviewer` 更新状态；若需产出方修改后复评或产生跟进任务，用 `new-card` 生成任务卡并填写 4.1 模板，再用 `add --owner <目标 role_id> --status todo --card ... --phase <phase_id>` 写入索引。
 ```
@@ -295,7 +296,7 @@
 请遵守以下约定：
 
 1. 仅在接受「任务卡」后执行；任务卡来自项目总控会话。收到任务卡后，读取 process/phases.yaml、mapping/phase-role-skill.yaml，确认当前阶段（test-review）及你应使用的 skill，再根据 skills/manifest.yaml 与对应 SKILL.md 执行评审步骤。
-2. 在业务项目中读取被评审文档时，先读业务项目根目录的 project-docs-index.yaml，再按索引路径读取具体文档。
+2. 在业务项目中读取被评审文档时，先读业务项目 docs 目录的 project-docs-index.yaml（即 `docs/project-docs-index.yaml`），再按索引路径读取具体文档。
 3. 输出必须包含：评审结论（通过 / 有条件通过 / 不通过）、理由与修改建议列表、对项目经理或产出方的具体建议。
 4. 当本项目使用“任务索引表 + 任务卡 + task_board.py”管理任务时，请在开展本次评审前：运行 `python scripts/task_board.py list --role test-reviewer --status todo,doing,blocked` 找到任务，用 `claim` 领取，评审完成后用 `update --status done --add-result "<评审意见链接>" --by test-reviewer` 更新状态；若需产出方修改后复评或产生跟进任务，用 `new-card` 生成任务卡并填写 4.1 模板，再用 `add --owner <目标 role_id> --status todo --card ... --phase <phase_id>` 写入索引。
 ```
@@ -390,12 +391,12 @@ python scripts/task_board.py add --task <task_id> --owner <role_id> --status tod
 
 1. 用户在“项目总控会话”中描述需求与目标。
 2. 项目经理会话：
-   - 读取 `process/phases.yaml` 和 `state.yaml`，判断当前为 `prd` 阶段；
+   - 读取 `process/phases.yaml` 和（业务项目）`state.yaml`，判断当前为 `prd` 阶段；
    - 结合 `mapping/phase-role-skill.yaml`，确定需要激活 Product 与 Architect 角色；
    - 根据用户输入与现有文档索引，给 Product 会话发出“PRD 编写/更新”任务卡。
 3. Product 会话：
    - 根据 `skills/prd-requirements/SKILL.md` 进行需求澄清与结构化 PRD 编写；
-   - 在业务项目中更新 PRD 文档（路径来自 `project-docs-index.yaml`）并写好 frontmatter；
+   - 在业务项目中更新 PRD 文档（路径来自 `docs/project-docs-index.yaml`）并写好 frontmatter；
    - 返回项目经理会话：PRD 摘要 + 文档路径 + 风险列表 + 建议交给 Architect/QA 评审。
 4. 项目经理会话：
    - 将“PRD 评审”任务卡分别发给 Architect 会话（架构可实现性与风险）与 QA 会话（可测试性与验收标准完备性）。
@@ -426,7 +427,7 @@ flowchart LR
 ```mermaid
 flowchart LR
   subgraph biz [业务项目根目录]
-    index[project-docs-index.yaml]
+    index[docs/project-docs-index.yaml]
     cursor_rules[.cursor/rules/]
     docs[docs/]
   end
@@ -435,14 +436,14 @@ flowchart LR
     roles[roles/]
     mapping[mapping/]
     skills[skills/]
-    state[state.yaml]
+    state[business-project/state.yaml]
   end
   norm -->|"复制规则到"| cursor_rules
   index -->|"按阶段列出"| docs
 ```
 
 - **业务项目根目录**：需有：
-  - `project-docs-index.yaml`：从本仓库 `process/project-docs/project-docs-index.yaml` 复制并填写，用于按阶段索引各类文档；
+  - `docs/project-docs-index.yaml`：从本仓库 `process/project-docs/project-docs-index.yaml` 复制到业务项目 **docs 目录**并填写，用于按阶段索引各类文档；
   - `.cursor/rules/`：至少放入从本仓库复制的文档发现规则（`rules/project-docs-discovery.md` 等）；
   - `docs/`：按阶段分子目录，与索引路径一致；
   - `docs/status/task-index.json` + `docs/status/task-cards/`：任务索引表与任务卡目录，用于在多会话间共享任务状态与任务卡指针；
@@ -458,23 +459,77 @@ flowchart LR
 
 在业务项目仓库中，要让多会话角色“看得懂项目文档”，需要满足以下前提：
 
-1. **项目文档索引**：业务仓库根目录有 `project-docs-index.yaml`，按阶段 id 列出各文档路径（可从本仓库 `process/project-docs/project-docs-index.yaml` 复制并定制）。
+1. **项目文档索引**：业务仓库 **docs 目录**有 `project-docs-index.yaml`（即 `docs/project-docs-index.yaml`），按阶段 id 列出各文档路径（可从本仓库 `process/project-docs/project-docs-index.yaml` 复制到业务项目 docs 目录并定制）。
+
+   **project-docs-index.yaml 由谁、依据什么初始化**：
+   - **由谁**：**从规范库拷贝到业务项目**由**用户**完成（将模板复制到业务项目 `docs/` 目录）；**索引内容的填写与登记**可由项目总控/项目经理在项目启动阶段完成，或由用户一并完成。
+   - **依据**：（1）**模板**：规范仓库 `process/project-docs/project-docs-index.yaml`，作为结构与默认路径；（2）**阶段 id**：与 `process/phases.yaml` 的 `phases[].id` 一致，作为第一层 key；（3）**路径**：按实际或计划产出填写/新增路径，模板已给出每阶段默认路径（路径相对 docs 目录），可保留或按团队约定修改；后续各角色产生新文档时在索引中登记，或由项目经理统一维护。
+
 2. **文档发现规则**：业务仓库的 `.cursor/rules/` 下有一条规则（通常命名为 `project-docs-discovery.md`），内容基于本仓库 `rules/project-docs-discovery.md`，约定：
-   - 在引用 PRD、架构、测试计划等阶段产出物时，必须先读取项目根目录的 `project-docs-index.yaml`；
+   - 在引用 PRD、架构、测试计划等阶段产出物时，必须先读取项目 **docs 目录**的 `project-docs-index.yaml`（即 `docs/project-docs-index.yaml`）；
    - 再按索引路径读写具体文档。
 3. **文档元数据约定**：各阶段产出物需在顶部使用 YAML frontmatter，字段遵守 `process/artifact-metadata-convention.md`。
 4. **任务板与脚本约定**：业务项目必须启用任务索引表与 `task_board.py` 脚本（见第 4.3 节）。各角色会话除遵守“先读索引、再读文档”外，还需按各自 pinned prompt 中的说明，通过 `task_board.py list/claim/update/new-card/add` 获取、更新与创建任务，而不是直接手改 `task-index.json`。
 
 在此基础上，多会话协作时，各角色会话只需遵守其 pinned prompt 中的“先读索引，再读文档”与任务板脚本约定，即可在不同项目间复用同一套工作方式。
 
-### 七、实践步骤建议（如何开始用）
+### 七、会话丢失与恢复（记忆与持久化）
+
+在实际业务项目中实施时，**会话（Session）可能因关闭 tab、换设备、清理历史等原因丢失**。本方案在设计上**不依赖对话历史作为唯一记忆**，而是把“可恢复的上下文”放在**持久化文件**里，这样新会话在重新挂上 pinned prompt 后，仍能接上之前的工作。
+
+#### 7.1 设计原则：记忆在文件，不在对话
+
+| 记忆类型           | 持久化位置                         | 会话丢失后新会话如何恢复 |
+|--------------------|------------------------------------|---------------------------|
+| 当前阶段 / 进展    | 业务项目根目录的 `state.yaml` | 新会话按 pinned prompt 约定「先读 state.yaml」即可获知 current_phase、completed_phases |
+| 任务归属与状态     | 业务项目 `task-index.json` + `docs/status/task-cards/*.md` | 新会话运行 `task_board.py list --role <role_id> --status todo,doing,blocked` 即可看到自己的任务并 claim |
+| 角色身份与行为规范 | Pinned prompt（见下 7.2）           | 在新会话中重新粘贴并固定同一段 pinned prompt |
+| 阶段产出物         | 业务项目 `docs/project-docs-index.yaml` + `docs/` 下各文档 | 新会话按「先读索引、再读文档」即可找到 PRD、架构、测试计划等 |
+| 流程与技能定义     | 规范仓库 `process/`、`roles/`、`mapping/`、`skills/` | 多根工作区打开后始终可见，与是否新会话无关 |
+
+因此：**只要重新建立会话后再次应用同一套 pinned prompt，并保持多根工作区（业务项目 + 规范仓库）打开，新会话即可通过读 state、跑 task_board、读索引与文档来延续工作**，无需依赖旧对话内容。
+
+#### 7.2 Pinned prompt 的持久化与恢复
+
+- **问题**：Pinned prompt 存在 Cursor 的会话里，会话丢失后不会自动带到新会话。
+- **做法**：把各角色的 pinned prompt 保存在**可版本管理的仓库**中，便于随时复制到新会话：
+  - 本方案文档（本文）第三节约定了各角色的完整 pinned prompt 模板，可直接从文档复制；
+  - 建议在规范仓库或业务项目中增加一份「pinned prompt 清单」文件（如 `process/pinned-prompts/` 或 `docs/cursor-prompts.md`），把团队实际使用的各角色 pinned prompt 贴进去，随规范一起维护。这样新会话恢复时只需从该文件复制对应角色段落并重新固定即可。
+
+#### 7.3 新会话恢复的推荐步骤
+
+1. 用多根工作区重新打开「业务项目 + 规范仓库（cyber_team）」。
+2. 新建一个 Cursor 对话 tab，从规范仓库或本文第三节约定的模板中，复制该角色对应的 **pinned prompt** 粘贴到新会话并固定。
+3. 若该角色需要接续任务：在业务项目根目录执行  
+   `python scripts/task_board.py list --role <role_id> --status todo,doing,blocked`  
+   查看自己的任务，再用 `claim` 领取当前要做的任务。
+4. 项目经理会话恢复时，除上述外，先读（业务项目）`state.yaml` 与 `task-index.json`（或运行 `task_board.py list` 不带 role 过滤）掌握整体阶段与任务分布，再继续派发或回收任务卡。
+
+#### 7.4 无法通过文件恢复的部分（局限）
+
+- **仅存在于对话中的临时约定**：若某次讨论中的结论（如“本期先不做 X，下个迭代再做”）没有写入 PRD、任务卡或 state，会话丢失后新会话无法自动得知，需要靠人工在任务卡或文档中补全，或在新会话中口头/粘贴说明。
+- **多轮对话的细微上下文**：例如“你刚才说的第二点我不同意，改为……”这类仅依赖上一句的上下文会丢失；重要结论应要求写入任务卡或阶段产出物，以便持久化。
+
+实践中建议：**关键决策与约定一律写进任务卡、PRD/架构/测试文档或 state 的备注**，这样会话丢失后恢复成本最低。
+
+#### 7.5 是否需要记录「做过哪些处理」与「最终工作情况切片」
+
+- **结论**：**会话恢复与接续工作只需「最终工作情况的切片信息」**；「做过哪些处理」是否记录由团队按需决定，用于审计、追溯或复盘时再考虑。
+- **切片信息（必须 / 已有）**：当前阶段（`state.yaml` 的 current_phase、completed_phases）、任务当前状态与归属（`task-index.json` + 任务卡路径）、阶段产出物路径（`docs/project-docs-index.yaml` + 文档）。新会话只需读这些即可知道“现在在哪、谁该做什么、产物在哪”，无需知道“谁在何时做过哪一步”。
+- **处理记录（可选）**：若需要“谁在何时 claim/完成/阻塞了某任务”“某决策是如何形成的”等审计或复盘信息，可以：
+  - **轻量**：在任务卡正文或 state 备注里用一两句记录关键决策与理由（与 7.4 的“关键决策写进任务卡/文档”一致），不单独建历史表；
+  - **显式历史**：由团队约定在业务项目中增加活动日志（如按任务或按日的 append-only 记录），或扩展 task_index / 脚本支持“状态变更历史”；本方案不强制，当前 task_board 只维护当前状态与结果路径。
+- **建议**：优先保证**切片信息完整、准确**（阶段、任务状态、产物路径）；在确有审计或复盘需求时，再引入「处理记录」并控制格式与粒度，避免噪声影响新会话的上下文读取。
+
+### 八、实践步骤建议（如何开始用）
 
 1. **在团队内约定角色与会话对应表**：
    - 列出本团队实际需要的角色（可参考 `roles/roles.yaml`）；
    - 为每个角色指定一个 Cursor 会话，并约定 tab 命名规则（如 `[PM] 项目总控`、`[PRD] 产品` 等）。
 2. **为每个会话配置 pinned prompt**：
    - 以本方案中的通用骨架与角色示例为基础；
-   - 可以在角色会话首次打开时，将对应 pinned prompt 粘贴进去并固定。
+   - 在角色会话首次打开时，将对应 pinned prompt 粘贴进去并固定；
+   - 建议将实际使用的各角色 pinned prompt 保存到规范仓库或业务项目文档中（见第七节 7.2），便于会话丢失后快速恢复。
 3. **从一个小需求开始试运行**：
    - 选择一个影响面有限的需求，按照本方案中“典型工作流示例”的方式，从需求澄清到 PRD、评审、下一阶段推进跑一遍；
    - 在 `docs/role-skills-design-memo.md` 中记录试运行中的问题与改动建议。

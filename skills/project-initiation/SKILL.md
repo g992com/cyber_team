@@ -29,7 +29,7 @@ description: Tailors project activities against team activity norms (process/pha
 | **流程裁剪说明** | 保留/简化/跳过的阶段与活动、裁剪理由、适用条件。 |
 | **阶段与活动清单** | 阶段 id、名称、预期产出、负责角色，可供 Agent 与人工按计划推进。 |
 
-产出可写入项目根目录或 `docs/` 下，如 `docs/project-plan.md`、`docs/process-tailoring.md`；若项目使用 `project-docs-index.yaml`，可在索引中登记上述文档路径。
+产出可写入项目根目录或 `docs/` 下，如 `docs/project-plan.md`、`docs/process-tailoring.md`；若项目使用 `docs/project-docs-index.yaml`，可在索引中登记上述文档路径。
 
 ## 与 state 的衔接
 

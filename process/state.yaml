@@ -1,0 +1,19 @@
+# 业务项目进展状态 — 供 Agent 读写
+# 使用方式：复制到业务项目仓库根目录为 `state.yaml`（或团队约定路径，如 `.agent/state.yaml`）。
+# 注意：规范仓库不应承载任何业务项目的真实进展；业务项目以其仓库内 `state.yaml` 为准。
+#
+# Schema（建议）：
+# - current_phase（与 process/phases.yaml 的 phases[].id 一致）
+# - completed_phases
+# - current_role（可选）
+# - updated_at
+# - role_updates：各角色最新摘要与指针（明细日志建议在业务项目 docs/status/{role_id}.md）
+# - project_blockers：跨角色阻塞
+# - project_risks：跨角色风险
+current_phase: initiation
+completed_phases: []
+current_role: null
+updated_at: null
+role_updates: {}
+project_blockers: []
+project_risks: []
