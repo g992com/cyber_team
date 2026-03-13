@@ -175,6 +175,7 @@ def _dump_state_canonical(data: Dict[str, Any]) -> str:
 
     keys = [
         "current_phase",
+        "tailoring_snapshot",
         "completed_phases",
         "current_role",
         "updated_at",
@@ -199,6 +200,7 @@ def cmd_init(args: argparse.Namespace) -> int:
         raise RuntimeError(f"File exists: {state_path} (use --force to overwrite)")
     data: Dict[str, Any] = {
         "current_phase": "initiation",
+        "tailoring_snapshot": [],
         "completed_phases": [],
         "current_role": None,
         "updated_at": _utc_now_iso(),

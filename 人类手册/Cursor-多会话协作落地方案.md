@@ -17,37 +17,37 @@
 - **会话 A：项目总控 / 项目经理**
   - `role_id`: `project-manager`（具体以 `roles/roles.yaml` 中配置为准）
   - 主要阶段：`initiation`（项目启动）、各阶段的跨角色协调与推进
-  - 参考文档：`roles/sop/project-manager.md`（如存在）或后续补充的项目经理 SOP
+  - 参考文档：`人类手册/roles/sop/project-manager.md`（如存在）或后续补充的项目经理 SOP
   - 主要技能：`skills/project-initiation`、后续可扩展“进展汇总/风险管理”等自建 skill
 
 - **会话 B：需求 / 产品**
   - `role_id`: 如 `product-manager` 或 `business-analyst`
   - 主要阶段：需求澄清、PRD 编写与维护
-  - 参考文档：`roles/sop/product-manager.md`（如存在）
+  - 参考文档：`人类手册/roles/sop/`（产品需求类 SOP 可待补充，可参考 skills/prd-requirements 等）
   - 主要技能：`skills/prd-requirements`、`skills/prd-review` 等
 
 - **会话 C：架构师**
   - `role_id`: 如 `architect`
   - 主要阶段：架构设计、设计评审、安全/性能/扩展性评估
-  - 参考文档：`roles/sop/architect.md`（如存在）
+  - 参考文档：`人类手册/roles/sop/`（架构师 SOP 可待补充，如存在）
   - 主要技能：`skills/architecture-review`、相关设计评审 skill
 
 - **会话 D：开发工程师**
   - `role_id`: 如 `developer` / `backend-developer` / `frontend-developer`
   - 主要阶段：详细设计、编码实现、部分技术方案落地
-  - 参考文档：`roles/sop/developer.md`（如存在）
+  - 参考文档：`人类手册/roles/sop/`（开发类 SOP 可待补充，如存在）
   - 主要技能：代码实现类 skills、单元测试 skills 等
 
 - **会话 E：测试 / 质量**
   - `role_id`: 如 `qa-engineer` / `test-engineer`
   - 主要阶段：测试计划、测试用例设计、测试执行与缺陷分析
-  - 参考文档：`roles/sop/qa-engineer.md`（如存在）
+  - 参考文档：`人类手册/roles/sop/`（测试类 SOP 可待补充，如存在）
   - 主要技能：`skills/devops-cicd` 中与测试/质量相关的部分，自建测试设计 skill 等
 
 - **会话 F（可选）：DevOps / 运维**
   - `role_id`: 如 `devops-engineer` / `sre`
   - 主要阶段：CI/CD 流水线设计与优化、部署发布、运行监控与应急
-  - 参考文档：`roles/sop/devops-engineer.md`（如存在）
+  - 参考文档：`人类手册/roles/sop/`（DevOps 类 SOP 可待补充，如存在）
   - 主要技能：`skills/devops-cicd` 等
 
 > 实际落地时，可根据 `roles/roles.yaml` 中已有角色，裁剪或增加会话，但建议至少包含“项目总控 + 产品 + 架构 + 测试”四类。
@@ -56,7 +56,7 @@
 
 每个会话（角色）与规范仓库的对应关系如下：
 
-- **流程与阶段**：读取 `process/phases.yaml`、`process/process.md`
+- **流程与阶段**：读取 `process/phases.yaml`、`人类手册/process/process.md`
 - **角色定义**：读取 `roles/roles.yaml`，按其中的 `role_id` 与 `phase_ids` 对齐职责边界
 - **阶段-角色-skill 映射**：读取 `mapping/phase-role-skill.yaml`，确认在当前阶段应加载哪些 skill
 - **技能清单**：读取 `skills/manifest.yaml` 与对应 `skills/*/SKILL.md`
@@ -77,7 +77,7 @@
 请遵守以下约定：
 
 1. 在处理任务前，先基于规范理解当前阶段：
-   - 读取 process/phases.yaml 与 process/process.md，理解阶段列表与顺序；
+   - 读取 process/phases.yaml 与 人类手册/process/process.md，理解阶段列表与顺序；
    - 读取**业务项目** `state.yaml` 的 current_phase（如存在），结合 phases.yaml 理解当前所处阶段（避免在多根工作区中误读/误写 cyber_team 的示例 state.yaml）；
    - 读取 roles/roles.yaml 中与你的 role_id 对应的职责与参与阶段。
 2. 根据 mapping/phase-role-skill.yaml 中 (phase_id, role_id) 的映射关系，确定当前阶段你应加载的 skill 列表；
@@ -100,7 +100,7 @@
 你是软件开发团队中的「项目经理」角色（role_id: project-manager），负责项目整体推进与跨角色协调。
 
 你需要遵守 cyber_team 规范仓库中的流程定义与角色/skill 映射：
-- process/phases.yaml + process/process.md 定义了阶段与顺序；
+- process/phases.yaml + 人类手册/process/process.md 定义了阶段与顺序；
 - roles/roles.yaml 定义了角色列表与各阶段参与关系；
 - mapping/phase-role-skill.yaml 将阶段与角色映射到具体 skill；
 - skills/manifest.yaml 与各 skills/*/SKILL.md 定义了可用技能的行为；
@@ -448,7 +448,7 @@ flowchart LR
   - `docs/`：按阶段分子目录，与索引路径一致；
   - `docs/status/task-index.json` + `docs/status/task-cards/`：任务索引表与任务卡目录，用于在多会话间共享任务状态与任务卡指针；
   - `scripts/task_board.py`：从本仓库 `process/project-docs/status/task-board/task_board.py` 复制，用于以稳定 schema 读写 `task-index.json` 并生成任务卡（命令约定见第 4.3 节）。
-- **规范仓库**：与业务项目**同时加入同一 Cursor 工作区**（多根）。使用前请复制本仓库 `process/project-docs/workspace-config/cursor-multi-root-workspace.code-workspace.template` 为 `xxx.code-workspace`，按同目录下的 `workspace-setup.md` 填写两个 `path` 后，用 Cursor「文件 → 打开工作区来自文件」打开，即可得到「业务项目 + 规范仓库」多根工作区。
+- **规范仓库**：与业务项目**同时加入同一 Cursor 工作区**（多根）。使用前请复制本仓库 `人类手册/workspace/workspace-config/cursor-multi-root-workspace.code-workspace.template` 为 `xxx.code-workspace`，按同目录下的 `workspace-setup.md` 填写两个 `path` 后，用 Cursor「文件 → 打开工作区来自文件」打开，即可得到「业务项目 + 规范仓库」多根工作区。
 
 #### Rules 与 Skills 与实际项目的关联方式
 
@@ -532,7 +532,7 @@ flowchart LR
    - 建议将实际使用的各角色 pinned prompt 保存到规范仓库或业务项目文档中（见第七节 7.2），便于会话丢失后快速恢复。
 3. **从一个小需求开始试运行**：
    - 选择一个影响面有限的需求，按照本方案中“典型工作流示例”的方式，从需求澄清到 PRD、评审、下一阶段推进跑一遍；
-   - 在 `docs/role-skills-design-memo.md` 中记录试运行中的问题与改动建议。
+   - 在 `人类手册/role-skills-design-memo.md` 中记录试运行中的问题与改动建议。
 4. **根据实践结果迭代 pinned prompt 与任务卡模板**：
    - 若发现某角色经常需要额外提醒（例如“先读哪个 skill”），可以在 pinned prompt 中补充；
    - 若任务卡字段不够用或太复杂，也可以在本方案与实际模板中调整。

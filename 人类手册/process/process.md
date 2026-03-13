@@ -18,8 +18,12 @@
 
 评审阶段可与主阶段并行或在其后（如需求评审在需求阶段末，代码评审在开发 PR 提交时）。
 
+## 阶段与裁剪
+
+规范库维护**阶段全集**（`process/phases.yaml`）；业务项目**不复制**阶段定义。业务项目通过**业务项目** `state.yaml` 的 **`tailoring_snapshot`**（本项目要执行的 phase_id 列表）与 **`docs/process-tailoring.md`**（裁剪理由与适用条件）表达本项目流程；Agent 读取规范库的 phases 后按 tailoring_snapshot 过滤得到本项目阶段。详见 `人类手册/norm-improvement-plan.md` 第二节（做法 B）。
+
 ## 阶段转换规则
 
-何时进入下一阶段（验收满足、用户确认、产出物就绪等）由项目/团队在落地时约定，约定后可在本目录或 README 中写明。
+何时进入下一阶段：当前阶段**出口条件**满足和/或**用户确认**后，可将 `state.current_phase` 推进到下一阶段，并把当前阶段 id 加入 `completed_phases`。出口条件（关键产出物存在、关键文档 status 为 approved 等）的机器可读定义见 **`process/exit-criteria.yaml`**；Agent/Orchestrator 可据此判断是否可推进，具体门禁由项目/团队在落地时约定。
 
 阶段定义与顺序的机器可读版本见 `phases.yaml`。

@@ -1,0 +1,59 @@
+# 阶段出口条件 — 供 Agent/Orchestrator 判断当前阶段是否可推进到下一阶段
+# 与 process/phases.yaml 的 phase id 一致；与 project-docs-index 的 key、artifact-metadata-convention 的 status 对齐
+# 业务项目须在 state.tailoring_snapshot 内且满足下列条件（或用户确认）方可推进
+
+exit_criteria:
+  initiation:
+    description: 项目计划与裁剪说明已输出；用户已确认
+    required_artifacts: []  # 可选：project_plan、process_tailoring 等存在即可，由项目约定
+    key_status: null       # 无强制 status 门禁，以用户确认为准
+
+  requirements:
+    description: 需求基线完整、可测；PRD 与用户故事/验收标准就绪
+    required_artifacts: ["prd"]  # 与 project-docs-index 的 requirements.* 对应
+    key_status: approved         # 关键文档（如 prd）status 为 approved 后可推进，或由评审结论替代
+
+  requirements-review:
+    description: 评审结论已输出；待澄清项已处理或已记录
+    required_artifacts: ["review_record"]
+    key_status: approved
+
+  design:
+    description: 架构与关键设计文档就绪
+    required_artifacts: ["architecture"]  # 至少架构文档；api_spec、database_design、adr 按项目约定
+    key_status: approved
+
+  design-review:
+    description: 设计评审结论已输出
+    required_artifacts: ["review_record"]
+    key_status: approved
+
+  development:
+    description: 代码与 PR 按项目约定完成；可无强制文档门禁
+    required_artifacts: []
+    key_status: null
+
+  code-review:
+    description: 代码评审结论已输出
+    required_artifacts: ["review_record"]
+    key_status: approved
+
+  testing:
+    description: 测试计划/用例与报告就绪；质量门禁按项目约定
+    required_artifacts: ["test_plan", "test_report"]
+    key_status: approved
+
+  test-review:
+    description: 测试评审结论已输出
+    required_artifacts: ["review_record"]
+    key_status: approved
+
+  deployment:
+    description: 发布说明与回滚预案就绪；流水线可用
+    required_artifacts: ["release_notes", "rollback_plan"]
+    key_status: approved
+
+  operations:
+    description: 运维与复盘产出按项目约定；无强制门禁
+    required_artifacts: []
+    key_status: null

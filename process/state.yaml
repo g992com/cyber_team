@@ -3,7 +3,8 @@
 # 注意：规范仓库不应承载任何业务项目的真实进展；业务项目以其仓库内 `state.yaml` 为准。
 #
 # Schema（建议）：
-# - current_phase（与 process/phases.yaml 的 phases[].id 一致）
+# - current_phase（与 process/phases.yaml 的 phases[].id 一致，且须来自 tailoring_snapshot）
+# - tailoring_snapshot：本项目要执行的 phase_id 列表，与 process/phases.yaml 的 id 一致；顺序即执行顺序；由项目启动阶段产出，业务项目不复制 phases 文件（做法 B，见 人类手册/norm-improvement-plan.md）
 # - completed_phases
 # - current_role（可选）
 # - updated_at
@@ -11,6 +12,7 @@
 # - project_blockers：跨角色阻塞
 # - project_risks：跨角色风险
 current_phase: initiation
+tailoring_snapshot: []  # 项目启动阶段产出后填写，如 [initiation, requirements, design, development, deployment]
 completed_phases: []
 current_role: null
 updated_at: null

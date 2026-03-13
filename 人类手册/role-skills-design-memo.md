@@ -272,13 +272,13 @@
   - 采用原因：结构清晰、可逐步扩展；既不绑具体技术栈，又能为实际实现提供足够细节。
 
 ### 最终方案（What）
-- 新增 `docs/Cursor-多会话协作落地方案.md`：
+- 新增 `人类手册/Cursor-多会话协作落地方案.md`（原 docs/ 下）：
   - 定义推荐会话与角色映射（项目总控/产品/架构/开发/测试/DevOps 等）；
   - 给出统一 pinned prompt 骨架与项目经理/产品角色示例；
   - 设计统一“任务卡”模板与多会话之间的流转方式；
   - 提供从需求→PRD→评审→阶段推进的端到端协作示例，并说明与业务项目 `project-docs-index.yaml` 的对接方式；
   - 给出如何在团队内启动试运行的步骤建议。
-- 新增 `docs/多智能体蜂群编排落地方案.md`：
+- 新增 `人类手册/多智能体蜂群编排落地方案.md`：
   - 定义 Orchestrator Agent 与各 Role Agent 的职责；
   - 给出 Task/Result 的数据模型（phase_id/role_id/skill_name/inputs/expected_outputs 等）；
   - 描述基于 `process/phases.yaml` + `state.yaml` 的阶段驱动与完成判定逻辑；
@@ -291,8 +291,8 @@
 
 ### 影响范围（Where）
 - 变更文件：
-  - 新增：`docs/Cursor-多会话协作落地方案.md`、`docs/多智能体蜂群编排落地方案.md`
-  - 修改：`README.md`、`docs/role-skills-design-memo.md`
+  - 新增：`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/多智能体蜂群编排落地方案.md`
+  - 修改：`README.md`、`人类手册/role-skills-design-memo.md`
   - 删除/重命名：无
 - 受影响的映射/契约/索引（如有）：
   - 概念上强化了 `process/`、`roles/`、`mapping/`、`skills/`、`state.yaml` 与 `project-docs-index.yaml` 的中心地位，但未修改这些文件本身；
@@ -304,7 +304,7 @@
   - `多智能体蜂群编排落地方案`
 - 已检查的清单/索引/映射：
   - `README.md`：确认已新增“多智能体落地参考文档”小节，并正确指向两篇 docs；
-  - `docs/role-skills-design-memo.md`：确认新增条目与既有结构一致；
+  - `人类手册/role-skills-design-memo.md`：确认新增条目与既有结构一致；
   - `docs/` 目录现有文件：`role-skills-design.md`、`role-skill-consistency-check.md` 与新增两篇文档在定位上互补，无重复或冲突。
 - 已运行的诊断：
   - 本轮改动仅涉及 Markdown 文档与 README 文本，无代码与配置 schema 更改，暂未运行额外 lint/类型检查；后续如引入执行层代码，再补充对应诊断。
@@ -313,7 +313,7 @@
 - 后续可考虑：
   - 在单独 demo 仓库中，基于本方案实现一个最小可行的多 Agent 例子（例如只覆盖 PRD 阶段的 Orchestrator + Product/QA Agents）；
   - 为多 Agent 实现增加更细粒度的 SKILL 设计（例如专门的 orchestrator skill、task-routing skill 等），并在本仓库 `skills/` 中补充对应 SKILL.md；
-  - 根据实际使用 Cursor 多会话协作的反馈，迭代 pinned prompt 模板与任务卡模板，将成熟结论同步更新到 `docs/Cursor-多会话协作落地方案.md`。
+  - 根据实际使用 Cursor 多会话协作的反馈，迭代 pinned prompt 模板与任务卡模板，将成熟结论同步更新到 `人类手册/Cursor-多会话协作落地方案.md`。
 
 ---
 
@@ -338,7 +338,7 @@
 ### 影响范围（Where）
 - 变更文件：
   - 新增：`process/project-docs/` 下 4 个文件（从原 templates 迁移）
-  - 修改：`README.md`、`docs/role-skills-design-memo.md`、`docs/多智能体蜂群编排落地方案.md`、`docs/Cursor-多会话协作落地方案.md`、`roles/sop/project-manager.md`、`state.yaml`、`process/project-docs/cursor-rule-project-docs-discovery.md`（其内部自引用路径）
+  - 修改：`README.md`、`人类手册/role-skills-design-memo.md`、`人类手册/多智能体蜂群编排落地方案.md`、`人类手册/Cursor-多会话协作落地方案.md`、`roles/sop/project-manager.md`、`state.yaml`、`process/project-docs/cursor-rule-project-docs-discovery.md`（其内部自引用路径）
   - 删除：`process/templates/` 下全部文件及目录
 - 受影响的映射/契约/索引（如有）：无独立 manifest 或索引文件列出 process 子目录；README 与各 docs 中的路径说明已全部更新。
 
@@ -375,7 +375,7 @@
 ### 影响范围（Where）
 - 新增：`rules/post-change-project-wide-review.mdc`、`rules/project-docs-discovery.md`、`process/project-docs/cursor-multi-root-workspace.code-workspace.template`、`process/project-docs/workspace-setup.md`
 - 删除：`.cursor/rules/post-change-project-wide-review.mdc`、`process/project-docs/cursor-rule-project-docs-discovery.md`
-- 修改：`README.md`、`docs/Cursor-多会话协作落地方案.md`、`docs/role-skills-design-memo.md`（本备忘）
+- 修改：`README.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/role-skills-design-memo.md`（本备忘）
 - 受影响的映射/契约：无 manifest 或 mapping 变更；README 目录结构、应用业务项目步骤、方案文档中规则与模板路径已统一。
 
 ### 一致性检查（Check）
@@ -389,7 +389,7 @@
 
 **补充（同日）**：`post-change-project-wide-review.mdc` 为本工程（cyber_team）自身的开发规则，不属于团队协作规范，已移回 `.cursor/rules/`。README 与方案文档已更新：`rules/` 仅列供业务项目复制的规则（work-execution-standards、project-docs-discovery）；本工程专用规则在 `.cursor/rules/`，不随规范复制到业务项目。
 
-**路径变更（同日）**：多根工作区配置说明与模板已单独放入目录 `process/project-docs/workspace-config/`，内含 `workspace-setup.md` 与 `cursor-multi-root-workspace.code-workspace.template`；README、Cursor-多会话协作落地方案 中相关引用已更新为该目录。
+**路径变更（同日）**：多根工作区配置说明与模板已单独放入目录（现为 `人类手册/workspace/workspace-config/`），内含 `workspace-setup.md` 与 `cursor-multi-root-workspace.code-workspace.template`；README、Cursor-多会话协作落地方案 中相关引用已更新为该目录。
 
 ---
 
@@ -407,7 +407,7 @@
 - 方案 B（采用）：通用骨架保留不动 + 追加 4 份可直接粘贴的 pinned prompt（需求/设计/代码/测试评审）。
 
 ### 最终方案（What）
-- 在 `docs/Cursor-多会话协作落地方案.md` 的 `3.8` 小节中，在通用骨架之后新增：
+- 在 `人类手册/Cursor-多会话协作落地方案.md` 的 `3.8` 小节中，在通用骨架之后新增：
   - `3.8.1` 需求评审专家 pinned prompt（role_id: requirements-reviewer, phase_id: requirements-review）
   - `3.8.2` 设计评审专家 pinned prompt（role_id: design-reviewer, phase_id: design-review）
   - `3.8.3` 代码评审专家 pinned prompt（role_id: code-reviewer, phase_id: code-review）
@@ -415,7 +415,7 @@
 
 ### 影响范围（Where）
 - 变更文件：
- - 修改：`docs/Cursor-多会话协作落地方案.md`
+ - 修改：`人类手册/Cursor-多会话协作落地方案.md`
 
 ### 一致性检查（Check）
 - 全工程搜索关键词：`<角色名称>`、`<role_id>`、`<phase_id>`、`##### 3.8.1`、`requirements-reviewer`、`design-reviewer`、`code-reviewer`、`test-reviewer`
@@ -447,18 +447,18 @@
   - `process/project-docs/status/task-board/task_board.py`：提供 `init/list/claim/update/add/new-card` 命令
   - `process/project-docs/status/task-board/task-index.json`：索引表空模板
   - `process/project-docs/status/task-board/task-cards/.gitkeep`：任务卡目录占位
-- 在 `docs/Cursor-多会话协作落地方案.md` 第 4 章新增 `4.3` 小节，说明复制到业务项目的推荐路径与最短命令流。
+- 在 `人类手册/Cursor-多会话协作落地方案.md` 第 4 章新增 `4.3` 小节，说明复制到业务项目的推荐路径与最短命令流。
 
 ### 影响范围（Where）
 - 变更文件：
  - 新增：`process/project-docs/status/task-board/task_board.py`、`process/project-docs/status/task-board/task-index.json`、`process/project-docs/status/task-board/task-cards/.gitkeep`
- - 修改：`docs/Cursor-多会话协作落地方案.md`、`docs/role-skills-design-memo.md`
+ - 修改：`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/role-skills-design-memo.md`
  - 删除/重命名：无
 - 受影响的映射/契约/索引（如有）：无（仅新增可选落地机制，不改变现有 phases/roles/mapping/skills 契约）。
 
 ### 一致性检查（Check）
 - 全工程搜索关键词：`task-index.json`、`task_board.py`、`task-board`
-- 已检查的清单/索引/映射：`docs/Cursor-多会话协作落地方案.md`（4.3 代码块闭合）、新增模板目录路径
+- 已检查的清单/索引/映射：`人类手册/Cursor-多会话协作落地方案.md`（4.3 代码块闭合）、新增模板目录路径
 - 已运行的诊断：`python -m py_compile process/project-docs/status/task-board/task_board.py`（通过）
 
 ### 遗留与后续（Next）
@@ -482,7 +482,7 @@
 - 方案 B（采用）：在落地方案中新增独立章节「七、会话丢失与恢复（记忆与持久化）」，用表格列出记忆类型与持久化位置、恢复方式，并给出 pinned prompt 持久化建议与新会话恢复步骤、明确写出无法通过文件恢复的局限。采用原因：一次性说清设计意图、操作步骤与边界，便于实施与后续迭代。
 
 ### 最终方案（What）
-- 在 `docs/Cursor-多会话协作落地方案.md` 中，在「六、与具体业务项目的对接方式」与「实践步骤建议」之间新增 **第七节「会话丢失与恢复（记忆与持久化）」**，包含：
+- 在 `人类手册/Cursor-多会话协作落地方案.md` 中，在「六、与具体业务项目的对接方式」与「实践步骤建议」之间新增 **第七节「会话丢失与恢复（记忆与持久化）」**，包含：
   - 7.1 设计原则：记忆在文件、不在对话（表格：记忆类型 / 持久化位置 / 新会话如何恢复）；
   - 7.2 Pinned prompt 的持久化与恢复（建议将各角色 pinned prompt 存入规范仓库或业务项目文档，便于新会话复制）；
   - 7.3 新会话恢复的推荐步骤（多根工作区、粘贴 pinned prompt、task_board list/claim、项目经理读 state + 任务分布）；
@@ -491,7 +491,7 @@
 
 ### 影响范围（Where）
 - 变更文件：
- - 修改：`docs/Cursor-多会话协作落地方案.md`、`docs/role-skills-design-memo.md`
+ - 修改：`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/role-skills-design-memo.md`
  - 新增/删除/重命名：无
 - 受影响的映射/契约/索引：无。
 
@@ -519,10 +519,10 @@
 - 方案 B（采用）：明确「切片信息」为必须且已有设计支撑；「做过哪些处理」为可选，按团队审计/复盘需求再引入（轻量做法：关键决策写进任务卡/文档；显式做法：活动日志或状态变更历史）。采用原因：优先保证恢复与接续，再按需扩展追溯。
 
 ### 最终方案（What）
-- 在 `docs/Cursor-多会话协作落地方案.md` 第七节新增 **7.5 是否需要记录「做过哪些处理」与「最终工作情况切片」**：说明只需切片即可恢复；处理记录为可选，并给出轻量/显式两种可选做法及建议（优先切片，按需历史）。
+- 在 `人类手册/Cursor-多会话协作落地方案.md` 第七节新增 **7.5 是否需要记录「做过哪些处理」与「最终工作情况切片」**：说明只需切片即可恢复；处理记录为可选，并给出轻量/显式两种可选做法及建议（优先切片，按需历史）。
 
 ### 影响范围（Where）
-- 变更文件：修改 `docs/Cursor-多会话协作落地方案.md`、`docs/role-skills-design-memo.md`；无新增/删除/重命名。
+- 变更文件：修改 `人类手册/Cursor-多会话协作落地方案.md`、`人类手册/role-skills-design-memo.md`；无新增/删除/重命名。
 - 受影响的映射/契约/索引：无。
 
 ### 一致性检查（Check）
@@ -548,10 +548,10 @@
 - 方案 B（采用）：在落地方案「六、与具体业务项目的对接方式」中补充：由项目总控/项目经理在接入或 initiation 时初始化；可由接入实施者先复制模板、PM 再登记核对；依据为模板、phases 阶段 id、实际/计划产出路径。采用原因：与 project-initiation 职责一致，且兼容“先复制后填写”的两种分工。
 
 ### 最终方案（What）
-- 在 `docs/Cursor-多会话协作落地方案.md` 第六节「项目文档索引」下增加「project-docs-index.yaml 由谁、依据什么初始化」说明：由谁（PM/接入实施者）、依据（模板、phases 阶段 id、路径填写规则）。
+- 在 `人类手册/Cursor-多会话协作落地方案.md` 第六节「项目文档索引」下增加「project-docs-index.yaml 由谁、依据什么初始化」说明：由谁（PM/接入实施者）、依据（模板、phases 阶段 id、路径填写规则）。
 
 ### 影响范围（Where）
-- 变更文件：修改 `docs/Cursor-多会话协作落地方案.md`、`docs/role-skills-design-memo.md`；无新增/删除/重命名。
+- 变更文件：修改 `人类手册/Cursor-多会话协作落地方案.md`、`人类手册/role-skills-design-memo.md`；无新增/删除/重命名。
 - 受影响的映射/契约/索引：无（仅文档澄清，与 process/project-docs/project-docs-index.yaml、phases.yaml、project-initiation 现有约定一致）。
 
 ### 一致性检查（Check）
@@ -578,7 +578,7 @@
 - **拷贝责任**：落地方案第六节「由谁」改为：从规范库拷贝到业务项目由**用户**完成（复制到业务项目 docs/）；索引内容的填写与登记可由 PM 或用户完成。
 
 ### 影响范围（Where）
-- 修改：`process/project-docs/project-docs-index.yaml`、`rules/project-docs-discovery.md`、`docs/Cursor-多会话协作落地方案.md`、`docs/workspace-config/workspace-setup.md`、`process/artifact-metadata-convention.md`、`README.md`、`docs/多智能体蜂群编排落地方案.md`、`skills/project-initiation/SKILL.md`、`docs/role-skills-design-memo.md`。
+- 修改：`process/project-docs/project-docs-index.yaml`、`rules/project-docs-discovery.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/workspace/workspace-config/workspace-setup.md`、`process/artifact-metadata-convention.md`、`README.md`、`人类手册/多智能体蜂群编排落地方案.md`、`skills/project-initiation/SKILL.md`、`人类手册/role-skills-design-memo.md`。
 - 多会话方案内各角色 pinned prompt、部署结构、记忆表、切片信息等凡提及索引路径处均已改为 docs 目录。
 
 ### 一致性检查（Check）
@@ -606,7 +606,7 @@
 - 将「请按 README 中建议的字段结构回复」改为「请按**本规范仓库根目录 README.md**中「进展回复的输出契约（建议字段）」回复」。
 
 ### 影响范围（Where）
-- 变更文件：修改 `docs/Cursor-多会话协作落地方案.md`（项目经理 pinned prompt 第 5 条）；追加 `docs/role-skills-design-memo.md`。
+- 变更文件：修改 `人类手册/Cursor-多会话协作落地方案.md`（项目经理 pinned prompt 第 5 条）；追加 `人类手册/role-skills-design-memo.md`。
 - 无新增/删除/重命名；无映射/索引变更。
 
 ### 一致性检查（Check）
@@ -637,15 +637,15 @@
 ### 影响范围（Where）
 - 变更文件：
   - 新增：`process/state.yaml`
-  - 修改：`README.md`、`docs/Cursor-多会话协作落地方案.md`、`docs/workspace-config/workspace-setup.md`、`rules/project-docs-discovery.md`、`process/artifact-metadata-convention.md`、`process/project-docs/status/project-manager.md`、`process/project-docs/status/role-status.md`、`docs/多智能体蜂群编排落地方案.md`
+  - 修改：`README.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/workspace/workspace-config/workspace-setup.md`、`rules/project-docs-discovery.md`、`process/artifact-metadata-convention.md`、`process/project-docs/status/project-manager.md`、`process/project-docs/status/role-status.md`、`人类手册/多智能体蜂群编排落地方案.md`
 
 ### 一致性检查（Check）
 - 全工程搜索关键词：`state.yaml`、`读取 state.yaml`、`读写 state.yaml`、`规范仓库或业务项目中的`
-- 已检查的清单/索引/映射：`rules/project-docs-discovery.md`、`docs/workspace-config/workspace-setup.md`、`docs/Cursor-多会话协作落地方案.md`、`README.md`
+- 已检查的清单/索引/映射：`rules/project-docs-discovery.md`、`人类手册/workspace/workspace-config/workspace-setup.md`、`人类手册/Cursor-多会话协作落地方案.md`、`README.md`
 - 已运行的诊断：对变更的 Markdown 运行诊断（无 lint 报错）。
 
 ### 遗留与后续（Next）
-- 仍存在少量文档段落（如 `docs/role-skills-design.md`）从“概念”层面描述 `state.yaml` 可能放在规范根目录或 `.agent/`，如需更严格隔离，可后续统一为“业务项目侧 state + 规范库侧模板”单一路径约定。
+- 仍存在少量文档段落（如 `人类手册/role-skills-design.md`）从“概念”层面描述 `state.yaml` 可能放在规范根目录或 `.agent/`，如需更严格隔离，可后续统一为“业务项目侧 state + 规范库侧模板”单一路径约定。
 - 为进一步降低“更新错仓库”的概率，后续可在业务项目侧引入 `update_state.py`（类似 `task_board.py` 的写入护栏），并在任务卡/总控 prompt 中约定“更新 state 必须通过脚本”。
 
 ### 补充（Superseded）
@@ -674,14 +674,252 @@
 ### 影响范围（Where）
 - 变更文件：
   - 新增：`process/state.yaml`、`process/project-docs/status/update_state.py`
-  - 修改：`README.md`、`docs/Cursor-多会话协作落地方案.md`、`docs/workspace-config/workspace-setup.md`、`docs/role-skills-design.md`、`docs/role-skills-design-memo.md`
+  - 修改：`README.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/workspace/workspace-config/workspace-setup.md`、`人类手册/role-skills-design.md`、`人类手册/role-skills-design-memo.md`
   - 删除/重命名：`process/project-docs/status/role-status-template.md` → `process/project-docs/status/role-status.md`；删除 `process/state-template.yaml`；删除 `process/project-docs/status/task-board/state_board.py`
 
 ### 一致性检查（Check）
 - 全工程搜索关键词：`state-template.yaml`、`role-status-template.md`、`state_board.py`、`task-board/state_board.py`、`update_state.py`
-- 已检查的清单/索引/映射：`docs/workspace-config/workspace-setup.md`（复制指引路径）、`README.md`（初始化模板路径）
+- 已检查的清单/索引/映射：`人类手册/workspace/workspace-config/workspace-setup.md`（复制指引路径）、`README.md`（初始化模板路径）
 - 已运行的诊断：对 `process/project-docs/status/update_state.py` 与相关 Markdown 文件运行诊断；并运行 `python process/project-docs/status/update_state.py --help` 验证脚本可用。
 
 ### 遗留与后续（Next）
 - 如需进一步强约束“只准写业务项目 state”，可在业务项目侧约定：更新 state 必须通过 `scripts/update_state.py`（并在任务卡/总控 prompt 中固化）。
+
+---
+
+## 变更备忘（2025-03-12）：规范改进方案精简 + 阶段全集与裁剪 + 待办文档
+
+### 背景/触发（Context）
+- 在流程管理理论与 CMMI 改进讨论基础上，用户要求：仅保留智能体协作必要项；有用项放入统一待办文档作为规范工程进展与后续工作记忆；并希望评估「规范库保留阶段全集、由 PM 裁剪形成业务项目 process」的可行性与有效性。
+
+### 关键判断（Why）
+- **必要与有用分离**：智能体协作真正依赖的只有「阶段唯一事实来源」「阶段出口条件可机读」「产出物/模板可发现」；其余（裁剪指南、state 语义、度量、改进、RACI 等）对成熟度或体验有帮助但非协作前提，放入待办便于按需实施。
+- **单一进展/待办入口**：规范工程需要一处「最新进展 + 待办」的文档，便于后续会话或人工续接时恢复上下文。
+- **阶段裁剪 = 子集**：业务项目 process 由规范库阶段全集的子集构成，不引入自定义 phase_id，可继续使用规范库的 mapping/roles，无需重复维护。
+
+### 备选方案与取舍（Options）
+- 方案 A：保留全部流程管理 + CMMI 改进项一并实施；未选原因：对智能体协作并非必要，易过度建设。
+- 方案 B（采用）：必要三项单独成方案；有用项与后置项迁入 `人类手册/norm-backlog.md`；阶段设计采用「全集 + PM 裁剪 → 业务项目 process」，并做可行性与有效性评估。
+
+### 最终方案（What）
+- 新增 `人类手册/norm-improvement-plan.md`：仅含三项必要改进 +「阶段全集 → 裁剪 → 业务项目 process」的可行性与有效性评估；并约定裁剪结果落点可选「业务项目 project-phases.yaml」或「state.tailoring_snapshot + process-tailoring.md」。
+- 新增 `人类手册/norm-backlog.md`：规范工程近期进展、待办（有用可简化 / 可后置）、使用说明；作为后续工作记忆支持。
+- 在 README 中增加「规范来源与改进」小节，指向上述两文档。
+
+### 影响范围（Where）
+- 新增：`人类手册/norm-improvement-plan.md`、`人类手册/norm-backlog.md`
+- 修改：`README.md`（规范来源与改进小节）、`人类手册/role-skills-design-memo.md`（本备忘）
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`norm-backlog`、`norm-improvement-plan`
+- 已检查：README 链接正确；backlog 与 improvement-plan 互相引用一致。
+
+### 遗留与后续（Next）
+- 按 improvement-plan 实施三项必要改进（阶段唯一来源、阶段出口条件、模板索引可选）。
+- 在 improvement-plan 或 process 中明确选定「裁剪结果落点」的推荐做法（A：project-phases.yaml / B：tailoring_snapshot + process-tailoring.md），并在 project-initiation 产出要求中写明。
+
+---
+
+## 变更备忘（2025-03-12）：文档化阶段裁剪约定（做法 B）
+
+### 背景/触发（Context）
+- 按规范改进实施计划步骤 1：在规范库内明确约定裁剪结果落点为做法 B，业务项目不复制阶段定义。
+
+### 关键判断（Why）
+- 做法 B（state.tailoring_snapshot + docs/process-tailoring.md）满足「任何内容都不会出现多个拷贝」原则；process.md 为流程说明的合适落点，README 仅补充 state 字段引用。
+
+### 备选方案与取舍（Options）
+- 在 README 中重复大段阶段与裁剪说明；未选原因：违反无多拷贝原则，与规则一致改为引用。
+- 采用：在 process/process.md 中新增「阶段与裁剪」小节并引用 norm-improvement-plan；README 在与 Agent 接口中补充 tailoring_snapshot 字段及见 process 阶段与裁剪的引用。
+
+### 最终方案（What）
+- process/process.md 新增「阶段与裁剪」：规范库维护阶段全集，业务项目通过 state.tailoring_snapshot 与 docs/process-tailoring.md 表达本项目流程，不复制 phases；详见 人类手册/norm-improvement-plan.md 第二节（做法 B）。
+- README 在与 Agent 的接口第 5 条中增加 tailoring_snapshot 字段说明及「见 process/process.md 阶段与裁剪」引用。
+
+### 影响范围（Where）
+- 修改：`process/process.md`、`README.md`
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`tailoring_snapshot`、`process-tailoring`、`做法 B`、`阶段全集`、`裁剪`
+- 已检查：README、process.md、norm-improvement-plan 对裁剪结果落点表述一致，无冲突。
+
+### 遗留与后续（Next）
+- 步骤 2：落实阶段定义唯一事实来源（role-skills-design 等改为引用 phases.yaml）。
+
+---
+
+## 变更备忘（2025-03-12）：阶段定义唯一事实来源（phases.yaml）
+
+### 背景/触发（Context）
+- 按规范改进实施计划步骤 2：规范库内阶段定义的唯一来源定为 process/phases.yaml，其他文档仅引用不重复列举。
+
+### 关键判断（Why）
+- 避免多源不一致与后续 phases 变更时的漏改；role-skills-design 第 3 节原为完整阶段表，与 phases.yaml 重复，故改为引用 + 概要说明。
+
+### 备选方案与取舍（Options）
+- 保留 role-skills-design 中的完整阶段表并加注「与 phases.yaml 一致」；未选原因：仍为重复维护，易漂移。
+- 采用：删除该表，改为「阶段定义见 process/phases.yaml，本节仅概要说明」，满足无多拷贝原则。
+
+### 最终方案（What）
+- 人类手册/role-skills-design.md 第 3 节：删除与 phases.yaml 完全一致的阶段表格，改为「阶段定义（id、name、order、outputs）的唯一定义见 process/phases.yaml；本节不重复列举」+ 对人读的概要说明。第 4、5 节仍使用阶段名称/id，与 phases.yaml 的 id 一致，无需改。
+- 其他文档（Cursor-多会话、多智能体蜂群、project-initiation SKILL）已为引用 phases.yaml，未发现重复阶段表，未修改。
+
+### 影响范围（Where）
+- 修改：`人类手册/role-skills-design.md`（第 3 节）
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`phases`、`phase_id`、`initiation`、`requirements`、阶段表、阶段定义
+- 已检查：mapping、state 模板、project-docs-index 使用的 phase id 与 phases.yaml 一致；无遗漏。
+
+### 遗留与后续（Next）
+- 步骤 3：state 增加 tailoring_snapshot，project-initiation 产出要求更新。
+
+---
+
+## 变更备忘（2025-03-12）：state 增加 tailoring_snapshot 与 project-initiation 产出约定
+
+### 背景/触发（Context）
+- 按规范改进实施计划步骤 3：业务项目 state 支持「本项目阶段集合」存储；project-initiation 明确须产出 tailoring_snapshot 与 process-tailoring.md。
+
+### 关键判断（Why）
+- 做法 B 要求裁剪结果落点在 state.tailoring_snapshot + docs/process-tailoring.md；state 模板与 project-initiation 产出须与 norm-improvement-plan 一致。update_state.py 若只序列化固定 key 会丢失新字段，故将 tailoring_snapshot 加入脚本的 keys 与 init 默认值。
+
+### 备选方案与取舍（Options）
+- 不在脚本中支持 tailoring_snapshot，由人工或他处维护；未选原因：脚本 init/show 会覆盖或未输出该字段，易丢失。
+- 采用：process/state.yaml 与 update_state.py 均增加 tailoring_snapshot；project-initiation SKILL 明确必须产出该字段与 process-tailoring.md。
+
+### 最终方案（What）
+- process/state.yaml：Schema 注释增加 tailoring_snapshot 说明；新增字段 tailoring_snapshot: []。
+- skills/project-initiation/SKILL.md：产出物约定表与「与 state 的衔接」中明确须输出 state.tailoring_snapshot 与 docs/process-tailoring.md；不复制 phases 到业务项目（做法 B）。
+- process/project-docs/status/update_state.py：_dump_state_canonical 的 keys 与 cmd_init 默认 data 中增加 tailoring_snapshot。
+
+### 影响范围（Where）
+- 修改：`process/state.yaml`、`skills/project-initiation/SKILL.md`、`process/project-docs/status/update_state.py`
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`tailoring_snapshot`、`state.yaml`、`current_phase`、`completed_phases`、project-initiation、流程裁剪
+- 已检查：state schema、project-initiation 产出、norm-improvement-plan 做法 B 描述一致；update_state.py 已兼容新字段。
+
+### 遗留与后续（Next）
+- 步骤 4：新增阶段出口条件（exit-criteria.yaml）与阶段转换规则说明。
+
+---
+
+## 变更备忘（2025-03-12）：阶段出口条件（可机读）与阶段转换规则
+
+### 背景/触发（Context）
+- 按规范改进实施计划步骤 4：Agent/Orchestrator 需可判断当前阶段是否可推进；出口条件与 project-docs-index、产出物 status 对齐。
+
+### 关键判断（Why）
+- 出口条件单独 YAML 便于解析；phase_id 与 phases.yaml、project-docs-index 一致；required_artifacts 与 index 的 key 对应，key_status 与 artifact-metadata-convention 的 status 对应。
+
+### 备选方案与取舍（Options）
+- 将出口条件写在 process.md 自然语言中；未选原因：不便于 Agent 解析。
+- 采用：独立 process/exit-criteria.yaml，process.md 与 README 引用并简述转换规则；artifact-metadata-convention 增加一句「阶段是否可推进见 exit-criteria.yaml」。
+
+### 最终方案（What）
+- 新增 process/exit-criteria.yaml：按 phase_id 列出 description、required_artifacts、key_status（与 project-docs-index、artifact 约定对齐）。
+- process/process.md「阶段转换规则」：说明出口条件满足或用户确认后可推进，引用 exit-criteria.yaml。
+- process/artifact-metadata-convention.md：Agent 使用方式中增加「阶段是否可推进见 process/exit-criteria.yaml」。
+- README：阶段转换规则改为引用 process.md 与 exit-criteria.yaml。
+
+### 影响范围（Where）
+- 新增：`process/exit-criteria.yaml`
+- 修改：`process/process.md`、`process/artifact-metadata-convention.md`、`README.md`
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`exit_criteria`、`exit-criteria`、阶段转换、出口条件、approved
+- 已检查：exit-criteria 的 phase_id 与 phases.yaml 一致；required_artifacts 与 project-docs-index 的 key 对应。
+
+### 遗留与后续（Next）
+- 步骤 5（可选）：process 下增加模板与清单索引。
+
+---
+
+## 变更备忘（2025-03-12）：process 模板与清单索引
+
+### 背景/触发（Context）
+- 按规范改进实施计划步骤 5（可选）：便于业务项目初始化时发现需引用的模板及复制目标路径。
+
+### 关键判断（Why）
+- 索引仅列「规范库路径 → 业务项目落点」，不复制规范定义全文，符合无多拷贝原则；独立 templates-index.md 便于单独维护与发现。
+
+### 最终方案（What）
+- 新增 process/templates-index.md：表格式列出 state.yaml、project-docs-index.yaml、status 模板、process-tailoring、rules 等规范库路径及在业务项目中的落点；并注明阶段/角色/映射不复制、通过引用规范库使用。
+- README「应用到业务项目」小节增加一句：业务项目初始化时可参考 process/templates-index.md。
+
+### 影响范围（Where）
+- 新增：`process/templates-index.md`
+- 修改：`README.md`
+
+### 一致性检查（Check）
+- 关键词：templates-index、模板索引、project-docs-index、state.yaml
+- 已检查：索引中的规范库路径与现有 process 下文件一致，无死链接。
+
+### 遗留与后续（Next）
+- 无。规范改进实施计划步骤 1–5 已完成。
+
+---
+
+## 变更备忘（2026-03-13）：人类手册目录重构与文档迁移
+
+### 背景/触发（Context）
+- 将规范库中「仅供人类阅读、智能体不需要直接消费」的文档与机器可读规范分离，集中收纳到统一目录，并通过目录名表达人类导向；目录名采用「人类手册」。
+- 业务项目仍沿用 `docs/` 作为项目文档根（如 `docs/project-docs-index.yaml`、`docs/process-tailoring.md`），不随规范库改名。
+
+### 关键判断（Why）
+- 仅迁移无机器强依赖的文档，保持 process/phases.yaml、roles、mapping、rules、skills 等 Agent 接口路径稳定。
+- 单一事实来源：不复制内容，仅移动 + 全工程更新引用；`.cursor/rules/post-change-project-wide-review.mdc` 中备忘路径同步改为 `人类手册/role-skills-design-memo.md`。
+- project-initiation 等 skill 执行仅依赖 YAML 与 manifest，不依赖 `process/process.md`、`stages/*.md`，故可将二者归入人类手册。
+
+### 备选方案与取舍（Options）
+- 方案 A：保留 `docs/` 名，仅在其下建 `human/` 子目录。未选原因：用户要求将 docs 改为「人类手册」目录名。
+- 方案 B（采用）：规范库根目录下将 `docs/` 物理重命名为 `人类手册/`，并在其下按主题分子目录（stages、roles/sop、process、norm、workspace），全工程更新规范库内部引用。
+
+### 最终方案（What）
+- 规范库：`docs/` 重命名为 `人类手册/`；原 `stages/`、`roles/sop/`、`process/process.md`、原 `docs/workspace-config/*` 及原 `docs/` 下规范工程文档迁入 `人类手册/` 对应子目录。
+- 全工程引用：凡指向规范库自身人类文档的路径由 `docs/...` 改为 `人类手册/...`；业务项目侧「docs 目录」约定不变。
+- 规则：`.cursor/rules/post-change-project-wide-review.mdc` 中备忘写入路径更新为 `人类手册/role-skills-design-memo.md`。
+
+### 影响范围（Where）
+- 变更文件：
+  - 重命名/移动：`docs/` → `人类手册/`；`stages/` → `人类手册/stages/`；`roles/sop/` → `人类手册/roles/sop/`；`process/process.md` → `人类手册/process/process.md`；原 `docs/workspace-config` → `人类手册/workspace/workspace-config`。
+  - 修改：`README.md`、`.cursor/rules/post-change-project-wide-review.mdc`、`人类手册/role-skills-design-memo.md`、`人类手册/norm-improvement-execution-plan.md`、`人类手册/norm-backlog.md`、`人类手册/norm-improvement-plan.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/process/process.md`、`process/state.yaml`、`skills/project-initiation/SKILL.md`。
+- 受影响的映射/契约/索引：无 manifest 或 phase-role-skill 变更；README 目录结构、规则中的备忘路径、各人类手册内交叉引用已统一。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`docs/role-skills-design-memo`、`docs/norm-improvement-plan`、`docs/Cursor-多会话`、`docs/多智能体`、`docs/role-skills-design`、`docs/workspace-config`（规范库语境）；业务项目 `docs/` 路径保留。
+- 已检查的清单/索引/映射：README、process/templates-index.md、.cursor/rules、人类手册内互引。
+- 已运行的诊断：`update_state.py --help` 通过；未改动脚本逻辑。
+
+### 遗留与后续（Next）
+- 若后续需在「向人类解释」时引用人类手册中的阶段/流程说明，可在对应 skill 或规则中按需增加「可选阅读」说明并指向 `人类手册/` 路径。
+- 计划文件（如 .cursor/plans 下）中若仍含 `docs/human/` 等旧表述，可在一轮文档整理时统一改为 `人类手册/`。
+
+---
+
+## 变更备忘（2026-03-13）：全工程回顾路径与引用修正
+
+### 背景/触发（Context）
+- 按 `.cursor/rules/post-change-project-wide-review.mdc` 对工程做只读检查，发现人类手册重构后仍有若干路径错误或未统一，需修正以避免引用悬空与执行歧义。
+
+### 关键判断（Why）
+- 备忘中 `人类手册/workspace/workspace-setup.md` 与真实路径 `人类手册/workspace/workspace-config/workspace-setup.md` 不一致，属引用悬空，必须改。
+- 人类手册内文档引用规范库 SOP、流程说明时，应统一使用 `人类手册/roles/sop/`、`人类手册/process/process.md`，与当前目录结构一致；执行计划类文档中「涉及文件」应指向实际位置，便于执行时定位。
+
+### 最终方案（What）
+- 将 `人类手册/role-skills-design-memo.md` 中全部 `人类手册/workspace/workspace-setup.md` 改为 `人类手册/workspace/workspace-config/workspace-setup.md`。
+- `人类手册/Cursor-多会话协作落地方案.md`：各角色参考文档由 `roles/sop/xxx.md` 改为 `人类手册/roles/sop/` 并注明可待补充，避免指向不存在的文件名。
+- `人类手册/多智能体蜂群编排落地方案.md`：`roles/sop/*.md` 改为 `人类手册/roles/sop/*.md`。
+- `人类手册/norm-improvement-execution-plan.md`：步骤 1、4 中「涉及文件」及动作中的 `process/process.md` 改为 `人类手册/process/process.md`。
+
+### 影响范围（Where）
+- 修改：`人类手册/role-skills-design-memo.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/多智能体蜂群编排落地方案.md`、`人类手册/norm-improvement-execution-plan.md`；无新增/删除/重命名。
+
+### 一致性检查（Check）
+- 全工程搜索：`人类手册/workspace/workspace-setup`、`roles/sop/`（人类手册内）、`process/process.md`（执行计划内）；已确认修正后无悬空路径。
+- 已检查：README、templates-index、规则文件未因本轮修改受影响。
+
+### 遗留与后续（Next）
+- 无。路径与引用已与当前人类手册结构一致。
 
