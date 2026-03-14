@@ -5,6 +5,8 @@ description: Reviews test plans, test cases, and test strategy for coverage, bou
 
 # 测试计划/用例评审
 
+角色边界与意图/需求确认见 `skills/_common/role-boundary-and-intent-confirmation.md`；本角色须特别注意：不猜测业务规则，以需求/设计文档为准。
+
 ## 评审维度
 
 | 维度 | 检查要点 |

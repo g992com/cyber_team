@@ -5,6 +5,8 @@ description: Reviews user stories and acceptance criteria for completeness, cons
 
 # 用户故事与验收标准评审
 
+角色边界与意图/需求确认见 `skills/_common/role-boundary-and-intent-confirmation.md`；本角色须特别注意：不猜测通过标准，以约定或确认为准。
+
 ## 评审清单
 
 按以下维度检查，输出通过/待澄清/须补充及建议优先级：

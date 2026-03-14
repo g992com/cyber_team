@@ -1,5 +1,6 @@
 # 阶段→角色→活动→skill 映射 — Agent 必读，用于自动启用 skill
 # 给定 phase_id（及可选 role_id）可查得应加载的 skill_name；skill_name 与 skills/manifest.yaml 对应
+# 产出归属：各 phase 的正式产出仅由本 mapping 中标注的 role_id 负责，其他角色（含 project-manager）不得代做；例：testing 阶段产出由 qa 负责。详见 skills/_common/role-boundary-and-intent-confirmation.md
 mappings:
   - phase_id: initiation
     role_id: project-manager

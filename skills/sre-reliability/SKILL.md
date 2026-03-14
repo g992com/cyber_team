@@ -5,6 +5,8 @@ description: Guides reliability objectives (SLO/SLI), monitoring and alerting, i
 
 # SRE 与可靠性
 
+角色边界与意图/需求确认见 `skills/_common/role-boundary-and-intent-confirmation.md`；本角色仅负责 mapping 规定的本角色产出，不得代做其他角色产出。
+
 ## 关键概念
 
 | 概念 | 要点 |

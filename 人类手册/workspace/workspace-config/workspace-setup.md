@@ -43,6 +43,6 @@
    - 将规范仓库 `process/state.yaml` 复制到业务项目根目录为 `state.yaml`。多根工作区下**更新**业务项目 state **必须**通过 `scripts/update_state.py`，不得直接编辑 `state.yaml`。
    - 将规范仓库 `process/project-docs/status/update_state.py` 复制到业务项目 `scripts/update_state.py`（**必须**），在业务项目根目录运行该脚本以更新 `state.yaml`（子命令见方案 4.3 与 project-initiation SKILL）。
 4. **.cursor/rules/**
-   - 至少将规范仓库 `rules/project-docs-discovery.md` 复制到业务项目 `.cursor/rules/` 下。
+   - 至少将规范仓库 `rules/project-docs-discovery.md` 复制到业务项目 `.cursor/rules/` 下。若希望业务项目遵守角色边界与意图/需求确认约定，可再复制 `rules/role-boundary-and-intent-confirmation.md`。
 
 详见《Cursor-多会话协作落地方案》中「在实际项目中的部署结构」「Rules 与 Skills 的关联」及 4.3 节任务板命令约定。

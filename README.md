@@ -15,7 +15,7 @@
 - **skills/** — `manifest.yaml` 列出 skill 名称、来源（GitHub 或本地路径）、适用阶段/角色；自建 skill 位于本目录下同名子目录（如 `skills/prd-requirements/`）。
 - **state（运行态）** — 本规范仓库不在根目录维护 `state.yaml`；提供业务项目初始化模板 `process/state.yaml` 与更新脚本 `process/project-docs/status/update_state.py`。业务项目的真实进展应写入**业务项目仓库根目录**的 `state.yaml`，且**更新必须**通过业务项目中的 `scripts/update_state.py`（从规范库复制），不得直接编辑 state.yaml，避免在多根工作区中写错仓库。
 -- **人类手册/** — **本工程（cyber_team）的开发文档与规范说明**（如规范建设方案、设计说明、多智能体落地方案等，人读）；不存放流程规范中的预期产出物定义。原 `docs/` 目录已整体重命名为 `人类手册/`。
-- **rules/** — 团队协作规范用规则（供业务项目复制到 `.cursor/rules/`）：`work-execution-standards.md`、`project-docs-discovery.md`。本工程自身的 Cursor 规则（如修改后全工程回顾）在 **`.cursor/rules/`** 下，不随规范复制到业务项目。
+- **rules/** — 团队协作规范用规则（供业务项目复制到 `.cursor/rules/`）：`work-execution-standards.md`、`project-docs-discovery.md`、`role-boundary-and-intent-confirmation.md`。本工程自身的 Cursor 规则（如修改后全工程回顾）在 **`.cursor/rules/`** 下，不随规范复制到业务项目。
 
 ## 与 Agent 的接口
 

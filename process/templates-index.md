@@ -11,5 +11,6 @@
 | `process/project-docs/status/project-manager.md` | 业务项目 `docs/status/project-manager.md` | 项目经理进展日志模板 |
 | `docs/process-tailoring.md` | 业务项目 `docs/process-tailoring.md` | 由项目启动阶段产出，记录裁剪理由与适用条件（不复制规范库内容） |
 | `rules/project-docs-discovery.md` | 业务项目 `.cursor/rules/` 下 | 文档发现规则，供智能体先读 project-docs-index 再按路径读文档 |
+| `rules/role-boundary-and-intent-confirmation.md` | 业务项目 `.cursor/rules/` 下 | 角色边界与意图/需求确认，执行任何角色时须遵守 |
 
 **说明**：阶段定义、角色、映射等见规范库 `process/phases.yaml`、`roles/roles.yaml`、`mapping/phase-role-skill.yaml`；业务项目通过引用规范库（如多根工作区）使用，不复制上述文件。规范库人类向说明文档（流程说明、阶段说明、角色 SOP 等）见 `人类手册/` 目录。

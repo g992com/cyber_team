@@ -1060,3 +1060,113 @@
 ### 遗留与后续（Next）
 - 可选：新增 `rules/role-boundary.md` 供业务项目复制至 .cursor/rules/，并在 README/模板索引中说明。本次未实施，可按需后续补充。
 
+---
+
+## 变更备忘（2025-03-14）：PM 代做测试用例根因与规范库优化实施
+
+### 背景/触发（Context）
+- 项目经理会话在同一会话内直接编写功能测试用例并交付用户，未派发任务给测试工程师（qa）或提示用户创建 qa 会话，构成 PM 越界代做 qa 交付物。用户追问依据何种规则可代做，暴露规范中角色边界与代做条款不完整、智能体实际依赖的规则（project-initiation SKILL）无角色边界表述、且存在「用户可指定是否代做」与「未确认的意图猜测」等漏洞。
+- 目标：在规范库中优先修改智能体所依赖的规则（skills、.cursor/rules、YAML），人类手册与改进方向统一；采用单一事实源 + 引用方式（skills/_common/）避免重复维护；实施后按 post-change-project-wide-review 必做清单与沉淀备忘。
+
+### 关键判断（Why）
+- 人类手册仅供人读、不驱动智能体，故约束须写入 skills/project-initiation/SKILL.md、skills/_common/*.md、.cursor/rules；人类手册仅作人读一致。
+- 通用约定（角色边界 + 意图/需求确认）集中放在 skills/_common/role-boundary-and-intent-confirmation.md，规则与各 SKILL 仅引用该文档，符合「单一定义 + 引用」。
+- 用户不指定流程执行方式；禁止未与用户确认即根据对用户意图的猜测做流程或角色决策；PM 不得代做任何其他角色产出，无对应角色会话时仅可派发并提示创建该角色会话。
+
+### 备选方案与取舍（Options）
+- 方案 A：仅在人类手册中扩展 PM 不负责清单。未选原因：人类手册不驱动智能体，实际约束缺失。
+- 方案 B（采用）：优先改 project-initiation SKILL、新增 skills/_common 通用约定文档、新增 .cursor 规则引用该文档、YAML 注释强化产出归属、人类手册与 process 同步统一；各自建 SKILL 内仅引用 _common + 本角色一句提醒。采用原因：智能体依赖的规则全覆盖，单一定义 + 引用减少重复维护。
+
+### 最终方案（What）
+- **A1+A2**：skills/project-initiation/SKILL.md 新增「角色边界」与「禁止未确认的意图猜测」；规范来源改为引用 skills/_common/role-boundary-and-intent-confirmation.md，移除对人类手册路径的引用。
+- **A4**：新增 skills/_common/role-boundary-and-intent-confirmation.md（角色边界 + 意图/需求确认，适用所有角色）；新增 rules/role-boundary-and-intent-confirmation.md（引用该文档 + 摘要）；prd-requirements、architecture-design、requirements-review、prd-review、architecture-review、test-plan-review、devops-cicd、sre-reliability 各自建 SKILL 内增加对 _common 文档的引用与本角色一句提醒。
+- **A3**：process/phases.yaml、mapping/phase-role-skill.yaml、roles/roles.yaml 顶部注释增加阶段产出与负责角色唯一对应、其他角色不得代做的说明及 _common 文档路径。
+- **B1–B3**：人类手册/roles/sop/sop/project-manager.md 扩展「不负责」为评审类+非评审类、删除「用户可指定代做」、明确无对应角色会话时仅派发与提示、流程由 PM 按规范决定用户不指定、增加禁止未确认的意图猜测；人类手册/process/process.md 补充各阶段正式产出由 mapping 规定角色负责、项目经理不代写；人类手册/process/process.md 新增「意图/需求确认（通用约定，人类侧检查清单）」。
+- **B4**：意图/需求确认通用约定与各阶段排查要点已写入 process.md 上节。
+
+### 影响范围（Where）
+- 新增：`skills/_common/role-boundary-and-intent-confirmation.md`、`rules/role-boundary-and-intent-confirmation.md`
+- 修改：`skills/project-initiation/SKILL.md`、`skills/prd-requirements/SKILL.md`、`skills/architecture-design/SKILL.md`、`skills/requirements-review/SKILL.md`、`skills/prd-review/SKILL.md`、`skills/architecture-review/SKILL.md`、`skills/test-plan-review/SKILL.md`、`skills/devops-cicd/SKILL.md`、`skills/sre-reliability/SKILL.md`、`process/phases.yaml`、`mapping/phase-role-skill.yaml`、`roles/roles.yaml`、`人类手册/roles/sop/sop/project-manager.md`、`人类手册/process/process.md`
+- 受影响的映射/契约：无；mapping、manifest 未改结构，仅 YAML 注释与 SKILL 引用补充。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`role-boundary`、`意图确认`、`_common`、`phase-role-skill`、`人类手册`（确认智能体依赖文档中已无引用人类手册路径）
+- 已检查的清单/索引/映射：mapping、phases、roles 注释与 _common 文档路径一致；各自建 SKILL 引用路径为 skills/_common/role-boundary-and-intent-confirmation.md
+- 已运行的诊断：未运行自动化 lint；建议后续执行 post-change 必做清单全项
+
+### 遗留与后续（Next）
+- 建议执行一次全工程搜索与 README/索引检查，确认无遗漏引用或断链。若业务项目采用本规范，可复制 rules/role-boundary-and-intent-confirmation.md 或依赖规范库规则在 multi-root 下生效。
+
+---
+
+## 变更备忘（2026-03-14）：角色边界规则从 .cursor/rules 迁至 rules/
+
+### 背景/触发（Context）
+- 角色边界与意图/需求确认规则原放在规范库专用目录 `.cursor/rules/`（仅用于本工程开发），但该规则约束的是在业务项目中执行各角色时的行为，属于团队协作规范，应在业务项目中生效。
+- 目标：将该规则迁至 `rules/`，与 `project-docs-discovery.md`、`work-execution-standards.md` 一致，作为供业务项目复制到其 `.cursor/rules/` 的规则。
+
+### 关键判断（Why）
+- `rules/` 为团队协作规范用规则存放处，供业务项目复制到 `.cursor/rules/`；`.cursor/rules/` 仅用于规范库自身开发的 Cursor 规则，不随规范复制到业务项目（见 README 与 Cursor-多会话协作落地方案）。
+- 规则内容与引用（skills/_common/role-boundary-and-intent-confirmation.md）不变，仅存放位置与扩展名（.mdc → .md）变更，单一事实源仍为 skills/_common 文档。
+
+### 备选方案与取舍（Options）
+- 方案 A：保留在 .cursor/rules/，仅在文档中说明业务项目可从规范库复制。未选原因：与现有约定（rules/ 供业务项目复制）不一致，易混淆。
+- 方案 B（采用）：规则文件迁至 rules/（.md），删除 .cursor/rules/ 下原文件；README、模板索引、方案文档、workspace-setup、setup_business_project.py、role-skills-design-memo 全量更新；实施后按 post-change 做全工程回顾并沉淀完整变更备忘。采用原因：与 project-docs-discovery、work-execution-standards 一致，业务项目通过复制 rules/ 或运行 setup 脚本即可获得该规则。
+
+### 最终方案（What）
+- 新增 `rules/role-boundary-and-intent-confirmation.md`（内容与原 .mdc 一致，含 frontmatter 与正文）。
+- 删除 `.cursor/rules/role-boundary-and-intent-confirmation.mdc`。
+- README、process/templates-index.md、人类手册/Cursor-多会话协作落地方案.md、人类手册/workspace/workspace-config/workspace-setup.md 中「供业务项目复制的规则」列举与复制说明均增加 `role-boundary-and-intent-confirmation.md`。
+- setup_business_project.py 在「5) rules」中增加拷贝 `rules/role-boundary-and-intent-confirmation.md` 至业务项目 `.cursor/rules/`。
+- role-skills-design-memo 中历史表述由 `.cursor/rules/role-boundary-and-intent-confirmation.mdc` 改为 `rules/role-boundary-and-intent-confirmation.md`。
+
+### 影响范围（Where）
+- 新增：`rules/role-boundary-and-intent-confirmation.md`
+- 删除：`.cursor/rules/role-boundary-and-intent-confirmation.mdc`
+- 修改：`README.md`、`process/templates-index.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/workspace/workspace-config/workspace-setup.md`、`人类手册/workspace/workspace-config/setup_business_project.py`、`人类手册/role-skills-design-memo.md`
+- 受影响的映射/契约/索引：无结构变更；README 与 templates-index 的规则列举、方案文档与 workspace-setup 的复制说明、setup 脚本的拷贝列表已同步。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`role-boundary-and-intent-confirmation`、`.cursor/rules/role-boundary`、`role-boundary-and-intent-confirmation\.mdc`、`rules/role-boundary`
+- 已检查的清单/索引/映射：README、process/templates-index.md、人类手册/Cursor-多会话协作落地方案.md、人类手册/workspace/workspace-config/workspace-setup.md、人类手册/role-skills-design-memo.md、setup_business_project.py
+- 已运行的诊断：无（仅文档与脚本变更）；可选对修改过的 .md/.py 运行 markdown lint 或 Python lint。
+
+### 遗留与后续（Next）
+- 无。若业务项目采用本规范，复制 `rules/role-boundary-and-intent-confirmation.md` 到业务项目 `.cursor/rules/` 或运行 setup_business_project.py 即可获得该规则。
+
+---
+
+## 变更备忘（2026-03-14）：Pinned prompts 增加遵守业务项目 rules 要求
+
+### 背景/触发（Context）
+- 项目经理仍会越界、代替测试工程师等工作；仅靠规范库 skills 与业务项目已复制的 `.cursor/rules/` 仍不足，智能体可能未显式「关注」这些规则。
+- 目标：在《Cursor-多会话协作落地方案》中为所有角色的 pinned prompt 增加「遵守业务项目 .cursor/rules/ 下已配置规则」的约定，使粘贴到 Cursor 会话的 pinned 内容直接提醒智能体查阅并遵守业务项目侧规则（含角色边界与意图确认）。
+
+### 关键判断（Why）
+- 人类手册仅供人读，不直接驱动智能体；但 pinned prompt 是用户粘贴到会话的固定说明，可显式要求智能体「先查阅并遵守业务项目 .cursor/rules/」，作为对 Cursor 已加载规则的补充提醒。
+- 写作约定：文档中须使用「业务项目」而非「本项目」；本次修改时已将方案文档第三节内「当本项目」统一改为「当**业务项目**」。
+
+### 备选方案与取舍（Options）
+- 方案 A：仅依赖业务项目 .cursor/rules/ 与规范库 skills，不改人类手册。未选原因：智能体可能未主动查阅 rules，pinned prompt 中显式加入「遵守业务项目规则」可强化关注。
+- 方案 B（采用）：在《Cursor-多会话协作落地方案》第三节约定的通用骨架与所有角色 pinned prompt（3.1、3.2–3.7、3.8、3.8.1–3.8.4）中增加一条「遵守业务项目 .cursor/rules/」的约定；并将「当本项目」改为「当**业务项目**」；在「其他角色可按上述模式自定义」处补充自定义时须包含该约定；在第三节开头与第七节 7.2 增加一句说明。采用原因：与 post-change 写作约定一致，且覆盖全部 11 处 pinned 块与自定义说明。
+
+### 最终方案（What）
+- 3.1 通用骨架：在「请遵守以下约定」后新增「0. **遵守业务项目规则**：…」；通用骨架中「本项目的活动规范」改为「业务项目的活动规范」。
+- 3.2 项目经理：新增第 1 条遵守业务项目规则且不得代做、以 mapping 与 rules 为准；原 1–9 顺延为 2–10；（第 7、8 条→第 8、9 条）与 process 一致说明已更新。
+- 3.3–3.7、3.8、3.8.1–3.8.4：均在「请遵守以下约定」后增加「1. **遵守业务项目规则**：…」，原条款顺延；各段内「当本项目使用」改为「当**业务项目**使用」。
+- 第三节开头增加说明：各角色 pinned prompt 已包含「遵守业务项目 .cursor/rules/」的约定。
+- 「其他角色可按上述模式自定义」处增加一条：自定义时须包含「遵守业务项目 .cursor/rules/ 下已配置规则」的约定。
+- 第七节 7.2 做法中补充：各模板已包含「遵守业务项目 .cursor/rules/」的约定。
+
+### 影响范围（Where）
+- 修改：`人类手册/Cursor-多会话协作落地方案.md`（第三节全部 pinned 块、第三节开头、322 行附近自定义说明、第七节 7.2）
+- 受影响的映射/契约/索引：无；仅人类手册内文案变更。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`当本项目`（该文档第三节内已无残留）、`遵守业务项目`、`.cursor/rules`
+- 已检查的清单/索引/映射：Cursor-多会话协作落地方案.md 内 3.1、3.2、3.3、3.4、3.5、3.6、3.7、3.8、3.8.1–3.8.4 共 11 处 pinned 块均含「遵守业务项目 .cursor/rules/」或等价表述
+- 已运行的诊断：无（仅人类手册 .md 变更）
+
+### 遗留与后续（Next）
+- 无。用户将各角色 pinned prompt 从本文档复制到 Cursor 会话并固定后，智能体会在约定中看到「遵守业务项目 .cursor/rules/」的要求，便于主动关注角色边界与意图确认等规则。
+

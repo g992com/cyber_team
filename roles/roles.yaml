@@ -1,5 +1,6 @@
 # 角色列表与职责摘要、与阶段对应 — 供 Agent 解析
 # phase_ids 为该角色参与的阶段 id，与 mapping 对应
+# 产出归属：各阶段正式产出仅由 mapping/phase-role-skill.yaml 中规定的 role_id 负责，其他角色（含项目经理）不得代为撰写；测试计划/用例由 qa 负责等。见 skills/_common/role-boundary-and-intent-confirmation.md
 roles:
   - id: project-manager
     name: 项目经理

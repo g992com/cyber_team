@@ -5,6 +5,8 @@ description: Designs system and module structure, technology selection, scalabil
 
 # 架构与 ADR
 
+角色边界与意图/需求确认见 `skills/_common/role-boundary-and-intent-confirmation.md`；本角色须特别注意：不猜测技术选型前提或业务约束，须以需求或确认为准。
+
 ## 产出要点
 
 - **项目分层与边界**：模块划分、接口与契约、依赖方向。
