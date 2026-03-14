@@ -1,4 +1,8 @@
-# 规范改进实施计划
+# 规范改进实施计划（已完成）
+
+> **状态**：本计划已实施完成。步骤 1～4 及可选步骤 5 已落地，详见 `人类手册/role-skills-design-memo.md` 中相关变更备忘。本文档保留为实施记录与追溯用。依据的方案见 [规范改进方案（精简版）](norm-improvement-plan.md)。
+
+---
 
 本计划依据 [规范改进方案（精简版）](norm-improvement-plan.md) 与 [修改后全工程回顾](.cursor/rules/post-change-project-wide-review.mdc) 规则编制。执行每步时须遵守**原则**（任何内容都不会出现多个拷贝，使用引用来建立关系），并在该步完成后按规则做**全工程回顾**并将结论**沉淀到备忘**。
 
@@ -15,7 +19,7 @@
 **目标**：在规范库内明确约定裁剪结果落点为做法 B（state.tailoring_snapshot + docs/process-tailoring.md），且业务项目不复制阶段定义。
 
 **动作**：
-- 在 `人类手册/process/process.md` 或 `README.md` 中增加「阶段与裁剪」小节（或补充现有说明）：规范库维护阶段全集；业务项目通过 state 的 `tailoring_snapshot` 与 `docs/process-tailoring.md` 表达本项目流程，不复制 phases 文件。可引用 `人类手册/norm-improvement-plan.md` 第二节。
+- 在 `人类手册/process/process.md` 或 `README.md` 中增加「阶段与裁剪」小节（或补充现有说明）：规范库维护阶段全集；业务项目通过 state 的 `tailoring_snapshot` 与 `docs/process-tailoring.md` 表达本项目流程，不复制 phases 文件。可引用 `人类手册/plan/norm-improvement-plan.md` 第二节。
 - 若 README 已有类似表述，则改为**引用** norm-improvement-plan 的「二、阶段设计」并做一句话概括，避免在 README 中重复大段阶段设计内容（遵守无多拷贝原则）。
 
 **涉及文件**：`人类手册/process/process.md`、`README.md`（二选一或分工：process 写流程与裁剪约定，README 引用）
@@ -116,4 +120,4 @@
 
 - 按步骤 1 → 2 → 3 → 4 → 5（可选）顺序执行；每步完成后立即做该步的「全工程回顾」并「沉淀备忘」。
 - 若某步发现与原则冲突（如某处存在阶段定义的重复拷贝），应在该步内修正并记入备忘。
-- 全部步骤完成后，在 `人类手册/norm-backlog.md` 的「近期进展」中追加一条：规范改进实施计划（步骤 1–4，及可选步骤 5）已完成，并注明日期。
+- 全部步骤完成后，在 `人类手册/plan/norm-backlog.md` 的「近期进展」中追加一条：规范改进实施计划（步骤 1–4，及可选步骤 5）已完成，并注明日期。

@@ -5,7 +5,7 @@ description: Tailors project activities against team activity norms (process/pha
 
 # 项目启动与流程裁剪
 
-在用户提出问题或需求后，根据团队活动规范（process、phases、roles、mapping）对项目活动进行**裁剪**，确定本项目适用的流程与计划，产出项目计划、流程裁剪说明及阶段与活动清单。依据 PMBOK「按上下文裁剪」及 ISO/IEC/IEEE 16326 项目管理计划实践。
+在用户提出问题或需求后，根据团队活动规范（process、phases、roles、mapping）对项目活动进行**裁剪**，确定业务项目适用的流程与计划，产出项目计划、流程裁剪说明及阶段与活动清单。依据 PMBOK「按上下文裁剪」及 ISO/IEC/IEEE 16326 项目管理计划实践。
 
 ## 输入与前置
 
@@ -27,15 +27,15 @@ description: Tailors project activities against team activity norms (process/pha
 |------|------|
 | **项目计划** | 阶段顺序、每阶段产出与角色、与规范的对应；可选含项目章程摘要。 |
 | **流程裁剪说明** | 保留/简化/跳过的阶段与活动、裁剪理由、适用条件；须写入业务项目 **`docs/process-tailoring.md`**。 |
-| **阶段与活动清单** | 阶段 id、名称、预期产出、负责角色，可供 Agent 与人工按计划推进；须同步写入业务项目 **`state.yaml` 的 `tailoring_snapshot`**（本项目要执行的 phase_id 列表，顺序即执行顺序）。 |
+| **阶段与活动清单** | 阶段 id、名称、预期产出、负责角色，可供 Agent 与人工按计划推进；须同步写入业务项目 **`state.yaml` 的 `tailoring_snapshot`**（业务项目要执行的 phase_id 列表，顺序即执行顺序）。 |
 
-**必须产出**：① 业务项目 **`state.tailoring_snapshot`**（写入业务项目 `state.yaml`）；② 业务项目 **`docs/process-tailoring.md`**（裁剪理由、保留/省略/简化的阶段与活动、适用条件）。不复制规范库 `process/phases.yaml` 到业务项目（做法 B，见 `人类手册/norm-improvement-plan.md`）。
+**必须产出**：① 业务项目 **`state.tailoring_snapshot`**（**必须**通过运行业务项目中的 `python scripts/update_state.py set-tailoring --phases "id1,id2,..."` 写入，不得直接编辑 state.yaml）；② 业务项目 **`docs/process-tailoring.md`**（裁剪理由、保留/省略/简化的阶段与活动、适用条件）。业务项目不复制规范库 `process/phases.yaml`，以 `state.tailoring_snapshot` 与 `docs/process-tailoring.md` 表达该业务项目的流程。
 
 产出可写入项目根目录或 `docs/` 下，如 `docs/project-plan.md`、`docs/process-tailoring.md`；若项目使用 `docs/project-docs-index.yaml`，可在索引中登记上述文档路径。
 
 ## 与 state 的衔接
 
 - 项目启动阶段对应 `state.current_phase: initiation`。
-- **须将裁剪结果写入业务项目 `state.tailoring_snapshot`**：本项目要执行的 phase_id 列表（与 `process/phases.yaml` 的 id 一致），顺序即执行顺序；`current_phase` 与 `completed_phases` 的取值必须来自 tailoring_snapshot。
-- 完成本阶段并用户确认后，将 `current_phase` 更新为下一阶段（通常为 `requirements`），并将 `initiation` 加入 `completed_phases`。
+- **须将裁剪结果写入业务项目 `state.tailoring_snapshot`**：业务项目要执行的 phase_id 列表（与 `process/phases.yaml` 的 id 一致），顺序即执行顺序；**必须**通过 `python scripts/update_state.py` 完成，不得直接编辑 state.yaml。示例：`python scripts/update_state.py set-tailoring --phases "requirements,architecture,design,development,testing"`；若 state 尚未初始化，先运行 `python scripts/update_state.py init`。
+- 完成本阶段并用户确认后，通过 `python scripts/update_state.py set-phase --phase requirements` 与 `python scripts/update_state.py add-completed --phase initiation` 更新 `current_phase` 与 `completed_phases`。
 - 阶段与活动清单中的阶段 id 应与 `process/phases.yaml` 的 `id` 一致，便于 Agent 解析与状态推进。

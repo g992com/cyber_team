@@ -29,9 +29,20 @@
 
 ## 业务项目侧仍需准备
 
-- **project-docs-index.yaml**：从本规范仓库 `process/project-docs/project-docs-index.yaml` 复制到业务项目 **docs 目录**（即 `docs/project-docs-index.yaml`），并按阶段填写各产出物路径。
-- **state.yaml（业务项目根目录）**：从本规范仓库 `process/state.yaml` 复制到业务项目仓库根目录为 `state.yaml`（或团队约定路径）。多根工作区下更新进展时，务必写入业务项目的 `state.yaml`，不要写错仓库。
-- **可选：用脚本更新 state**：将本规范仓库 `process/project-docs/status/update_state.py` 复制到业务项目（例如 `scripts/update_state.py`），并在业务项目根目录终端运行它来更新 `state.yaml`（脚本会基于 git root 做防越界校验，减少更新错仓库的风险）。
-- **.cursor/rules/**：至少将本规范仓库的 `rules/project-docs-discovery.md` 复制到业务项目的 `.cursor/rules/` 下，使智能体在业务项目中先读索引再读文档。
+可使用本目录下的 **`setup_business_project.py`** 自动完成以下拷贝与目录创建：在规范仓库（cyber_team）根目录或本目录下执行 `python setup_business_project.py <业务项目绝对路径>`（或 `python 人类手册/workspace/workspace-config/setup_business_project.py <业务项目绝对路径>`）。
 
-详见《Cursor-多会话协作落地方案》中「在实际项目中的部署结构」与「Rules 与 Skills 的关联」。
+在业务项目根目录完成以下准备（路径均相对于业务项目根）：
+
+1. **文档索引与目录**
+   - 将规范仓库 `process/project-docs/project-docs-index.yaml` 复制到业务项目 **docs** 下，得到 `docs/project-docs-index.yaml`，并按阶段填写各产出物路径。
+   - 在业务项目下建立 `docs/`，按阶段分子目录，目录与索引中的路径一致。
+2. **任务板（多会话共享任务状态）**
+   - 在业务项目下建立 `docs/status/task-index.json`（任务索引表）和 `docs/status/task-cards/`（任务卡目录）。可由 `task_board.py` 初始化或按方案 4.3 节约定创建。
+   - 将规范仓库 `process/project-docs/status/task-board/task_board.py` 复制到业务项目 `scripts/task_board.py`。在业务项目根目录执行 `python scripts/task_board.py` 进行任务查看与维护（命令约定见方案 4.3 节）。
+3. **state.yaml**
+   - 将规范仓库 `process/state.yaml` 复制到业务项目根目录为 `state.yaml`。多根工作区下**更新**业务项目 state **必须**通过 `scripts/update_state.py`，不得直接编辑 `state.yaml`。
+   - 将规范仓库 `process/project-docs/status/update_state.py` 复制到业务项目 `scripts/update_state.py`（**必须**），在业务项目根目录运行该脚本以更新 `state.yaml`（子命令见方案 4.3 与 project-initiation SKILL）。
+4. **.cursor/rules/**
+   - 至少将规范仓库 `rules/project-docs-discovery.md` 复制到业务项目 `.cursor/rules/` 下。
+
+详见《Cursor-多会话协作落地方案》中「在实际项目中的部署结构」「Rules 与 Skills 的关联」及 4.3 节任务板命令约定。

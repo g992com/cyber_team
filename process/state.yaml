@@ -4,7 +4,7 @@
 #
 # Schema（建议）：
 # - current_phase（与 process/phases.yaml 的 phases[].id 一致，且须来自 tailoring_snapshot）
-# - tailoring_snapshot：本项目要执行的 phase_id 列表，与 process/phases.yaml 的 id 一致；顺序即执行顺序；由项目启动阶段产出，业务项目不复制 phases 文件（做法 B，见 人类手册/norm-improvement-plan.md）
+# - tailoring_snapshot：业务项目要执行的 phase_id 列表，与 process/phases.yaml 的 id 一致；顺序即执行顺序；由项目启动阶段产出，业务项目不复制 phases 文件
 # - completed_phases
 # - current_role（可选）
 # - updated_at

@@ -4,7 +4,8 @@
 
 | 规范库路径 | 业务项目落点 | 说明 |
 |------------|--------------|------|
-| `process/state.yaml` | 业务项目**根目录** `state.yaml` | 进展状态模板；复制后按本项目填写 current_phase、tailoring_snapshot、completed_phases 等 |
+| `process/state.yaml` | 业务项目**根目录** `state.yaml` | 进展状态模板；复制后**更新必须**通过业务项目 `scripts/update_state.py`（见下），不可直接编辑 |
+| `process/project-docs/status/update_state.py` | 业务项目 `scripts/update_state.py` | 更新 state 的脚本（init / set-phase / add-completed / set-tailoring / add-blocker / add-risk）；业务项目**必须**配置，所有对 state.yaml 的写入均通过此脚本 |
 | `process/project-docs/project-docs-index.yaml` | 业务项目 `docs/project-docs-index.yaml` | 项目文档索引；复制后按实际产出填写各阶段文档路径 |
 | `process/project-docs/status/role-status.md` | 业务项目 `docs/status/{role_id}.md` | 角色进展日志模板；按角色复制并重命名 |
 | `process/project-docs/status/project-manager.md` | 业务项目 `docs/status/project-manager.md` | 项目经理进展日志模板 |

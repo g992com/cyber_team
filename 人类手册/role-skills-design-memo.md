@@ -699,15 +699,15 @@
 
 ### 备选方案与取舍（Options）
 - 方案 A：保留全部流程管理 + CMMI 改进项一并实施；未选原因：对智能体协作并非必要，易过度建设。
-- 方案 B（采用）：必要三项单独成方案；有用项与后置项迁入 `人类手册/norm-backlog.md`；阶段设计采用「全集 + PM 裁剪 → 业务项目 process」，并做可行性与有效性评估。
+- 方案 B（采用）：必要三项单独成方案；有用项与后置项迁入 `人类手册/plan/norm-backlog.md`；阶段设计采用「全集 + PM 裁剪 → 业务项目 process」，并做可行性与有效性评估。
 
 ### 最终方案（What）
-- 新增 `人类手册/norm-improvement-plan.md`：仅含三项必要改进 +「阶段全集 → 裁剪 → 业务项目 process」的可行性与有效性评估；并约定裁剪结果落点可选「业务项目 project-phases.yaml」或「state.tailoring_snapshot + process-tailoring.md」。
-- 新增 `人类手册/norm-backlog.md`：规范工程近期进展、待办（有用可简化 / 可后置）、使用说明；作为后续工作记忆支持。
+- 新增 `人类手册/plan/norm-improvement-plan.md`：仅含三项必要改进 +「阶段全集 → 裁剪 → 业务项目 process」的可行性与有效性评估；并约定裁剪结果落点可选「业务项目 project-phases.yaml」或「state.tailoring_snapshot + process-tailoring.md」。
+- 新增 `人类手册/plan/norm-backlog.md`：规范工程近期进展、待办（有用可简化 / 可后置）、使用说明；作为后续工作记忆支持。
 - 在 README 中增加「规范来源与改进」小节，指向上述两文档。
 
 ### 影响范围（Where）
-- 新增：`人类手册/norm-improvement-plan.md`、`人类手册/norm-backlog.md`
+- 新增：`人类手册/plan/norm-improvement-plan.md`、`人类手册/plan/norm-backlog.md`
 - 修改：`README.md`（规范来源与改进小节）、`人类手册/role-skills-design-memo.md`（本备忘）
 
 ### 一致性检查（Check）
@@ -733,7 +733,7 @@
 - 采用：在 process/process.md 中新增「阶段与裁剪」小节并引用 norm-improvement-plan；README 在与 Agent 接口中补充 tailoring_snapshot 字段及见 process 阶段与裁剪的引用。
 
 ### 最终方案（What）
-- process/process.md 新增「阶段与裁剪」：规范库维护阶段全集，业务项目通过 state.tailoring_snapshot 与 docs/process-tailoring.md 表达本项目流程，不复制 phases；详见 人类手册/norm-improvement-plan.md 第二节（做法 B）。
+- process/process.md 新增「阶段与裁剪」：规范库维护阶段全集，业务项目通过 state.tailoring_snapshot 与 docs/process-tailoring.md 表达该业务项目的流程，不复制 phases；详见 人类手册/plan/norm-improvement-plan.md 第二节（做法 B）。
 - README 在与 Agent 的接口第 5 条中增加 tailoring_snapshot 字段说明及「见 process/process.md 阶段与裁剪」引用。
 
 ### 影响范围（Where）
@@ -884,7 +884,7 @@
 ### 影响范围（Where）
 - 变更文件：
   - 重命名/移动：`docs/` → `人类手册/`；`stages/` → `人类手册/stages/`；`roles/sop/` → `人类手册/roles/sop/`；`process/process.md` → `人类手册/process/process.md`；原 `docs/workspace-config` → `人类手册/workspace/workspace-config`。
-  - 修改：`README.md`、`.cursor/rules/post-change-project-wide-review.mdc`、`人类手册/role-skills-design-memo.md`、`人类手册/norm-improvement-execution-plan.md`、`人类手册/norm-backlog.md`、`人类手册/norm-improvement-plan.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/process/process.md`、`process/state.yaml`、`skills/project-initiation/SKILL.md`。
+  - 修改：`README.md`、`.cursor/rules/post-change-project-wide-review.mdc`、`人类手册/role-skills-design-memo.md`、`人类手册/plan/norm-improvement-execution-plan.md`、`人类手册/plan/norm-backlog.md`、`人类手册/plan/norm-improvement-plan.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/process/process.md`、`process/state.yaml`、`skills/project-initiation/SKILL.md`。
 - 受影响的映射/契约/索引：无 manifest 或 phase-role-skill 变更；README 目录结构、规则中的备忘路径、各人类手册内交叉引用已统一。
 
 ### 一致性检查（Check）
@@ -911,10 +911,10 @@
 - 将 `人类手册/role-skills-design-memo.md` 中全部 `人类手册/workspace/workspace-setup.md` 改为 `人类手册/workspace/workspace-config/workspace-setup.md`。
 - `人类手册/Cursor-多会话协作落地方案.md`：各角色参考文档由 `roles/sop/xxx.md` 改为 `人类手册/roles/sop/` 并注明可待补充，避免指向不存在的文件名。
 - `人类手册/多智能体蜂群编排落地方案.md`：`roles/sop/*.md` 改为 `人类手册/roles/sop/*.md`。
-- `人类手册/norm-improvement-execution-plan.md`：步骤 1、4 中「涉及文件」及动作中的 `process/process.md` 改为 `人类手册/process/process.md`。
+- `人类手册/plan/norm-improvement-execution-plan.md`：步骤 1、4 中「涉及文件」及动作中的 `process/process.md` 改为 `人类手册/process/process.md`。
 
 ### 影响范围（Where）
-- 修改：`人类手册/role-skills-design-memo.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/多智能体蜂群编排落地方案.md`、`人类手册/norm-improvement-execution-plan.md`；无新增/删除/重命名。
+- 修改：`人类手册/role-skills-design-memo.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/多智能体蜂群编排落地方案.md`、`人类手册/plan/norm-improvement-execution-plan.md`；无新增/删除/重命名。
 
 ### 一致性检查（Check）
 - 全工程搜索：`人类手册/workspace/workspace-setup`、`roles/sop/`（人类手册内）、`process/process.md`（执行计划内）；已确认修正后无悬空路径。
@@ -922,4 +922,141 @@
 
 ### 遗留与后续（Next）
 - 无。路径与引用已与当前人类手册结构一致。
+
+---
+
+## 变更备忘（2025-03-14）：阶段转换严格按裁剪顺序自动推进
+
+### 背景/触发（Context）
+- 项目实践中项目经理在需求阶段完成后向用户呈现“先需求评审还是直接进设计”两种选项由用户选择，与“严格按裁剪后流程执行”的预期不符。
+- 约束：仅修改规范库（cyber_team），不修改业务项目（my_portal）；通过规范统一行为，使下一阶段由 tailoring_snapshot 顺序唯一确定、出口条件满足后直接推进，不提供路径选择。
+
+### 关键判断（Why）
+- 下一阶段应由业务项目 state.tailoring_snapshot 顺序唯一确定，避免任务卡或局部表述带来“多路径可选”的歧义；process.md 作为阶段转换规则的唯一定义处，其余文件引用或简短提醒，符合“任何内容只在一处维护”原则。
+- “用户确认”保留为出口条件未满足时的例外放行手段，不解释为“每阶段边界让用户在多条路径中择一”。
+
+### 备选方案与取舍（Options）
+- 方案 A：在业务库修改任务卡（req-001、req-002）的后续流转建议为唯一下一步，并在业务库 process-tailoring 中写阶段推进策略。未选原因：用户明确要求不修改业务库。
+- 方案 B（采用）：仅在规范库中统一阶段转换规则与项目经理约定，使 process.md 为唯一定义、exit-criteria/artifact-metadata-convention/Cursor 落地方案/SOP 引用或补充执行约定；所有采用该规范的项目（含 my_portal）默认严格按裁剪顺序推进。采用原因：满足“只改规范库”约束，且行为由规范唯一决定。
+
+### 最终方案（What）
+- **人类手册/process/process.md**：重写「阶段转换规则」— 下一阶段由 tailoring_snapshot 顺序唯一确定；出口条件满足后直接推进并派发任务，不向用户提供路径选择；用户确认仅用于例外推进。
+- **process/exit-criteria.yaml**：顶部注释补充“下一阶段由 tailoring_snapshot 顺序唯一确定、条件满足后直接推进”，并引用 process.md。
+- **process/artifact-metadata-convention.md**：「阶段是否可推进」改为引用 process.md 阶段转换规则，并保留简短提醒（唯一下一阶段、不提供路径选择、用户确认仅例外）。
+- **人类手册/Cursor-多会话协作落地方案.md**：项目经理 pinned prompt 新增第 6 条（确定下一阶段以 tailoring_snapshot 为准、直接推进、不提供路径选择），原 6、7 条顺延为 7、8，并注明与 process.md 一致。
+- **人类手册/roles/sop/sop/project-manager.md**：新增「阶段推进」小节，写明下一阶段由 tailoring_snapshot 唯一确定、直接推进、不提供路径选择，并引用 process.md。
+
+### 影响范围（Where）
+- 修改：`人类手册/process/process.md`、`process/exit-criteria.yaml`、`process/artifact-metadata-convention.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/roles/sop/sop/project-manager.md`；无新增/删除/重命名。
+- 受影响的引用：README 已引用 process.md 阶段转换规则，无需改；project-initiation SKILL 中“用户确认后”针对 initiation 出口条件，与本次规则不冲突。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`用户确认`、`下一阶段`、`tailoring_snapshot`、`阶段转换`、`路径选择`、`先需求评审还是直接进设计`；确认无遗留“由用户选择先评审还是直接进设计”等旧表述；README、skills/project-initiation/SKILL.md、norm-improvement-execution-plan.md 等引用 process.md 处无需反向修改。
+- 已检查：process.md 为阶段转换规则唯一定义处，exit-criteria、artifact-metadata-convention、Cursor 落地方案、project-manager SOP 均为引用或简短提醒，无重复定义冲突。
+
+### 遗留与后续（Next）
+- 无。采用本规范的项目在需求阶段完成后将自动进入 requirements-review 并派发评审任务，不再出现路径选择交互。
+
+---
+
+## 变更备忘（2025-03-14）：阶段推进取消“用户确认例外”、未满足时迭代或中止
+
+### 背景/触发（Context）
+- 阶段出口条件未满足时，不应存在“经用户确认可例外推进”；应改为：要么持续尝试修改/补齐产出直至满足出口条件，要么在判断无法达成时中止工作并向用户通报；通报时给出推荐方案供用户选择；推荐方案由被阻塞阶段活动的负责人提出，经项目经理再通报用户。
+
+### 关键判断（Why）
+- 不设“用户确认放行”的核心理由：阶段门禁若可被用户一句话绕过，则出口条件失去约束力，可追溯性与流程一致性难以保证。
+- 推荐方案由阶段负责人提出再经 PM 通报用户：负责人最了解当前阶段阻塞原因与可行选项，由 PM 汇总后通报用户可避免信息失真并保持单一对接入口。
+
+### 备选方案与取舍（Options）
+- 方案 A：保留“用户确认可例外推进”，仅明确“不用于路径选择”。未选原因：用户明确要求不存在需用户确认的例外情况。
+- 方案 B（采用）：取消例外推进；未满足时仅能迭代满足条件或中止并通报；通报时由阶段负责人提供推荐方案，PM 通报用户供选择。采用原因：满足“无用户确认例外”且保留用户决策点（在推荐方案中选择）。
+
+### 最终方案（What）
+- **人类手册/process/process.md**：删除“用户确认仅用于……例外推进”整句；补充“当出口条件未满足时，不得推进”；未满足时应继续尝试满足条件或判断无法达成时中止并通报；推荐方案由被阻塞阶段活动负责人提出并通报 PM，PM 再向用户通报及推荐方案供选择。
+- **process/exit-criteria.yaml**：顶部注释改为“未满足时不得推进；应继续满足条件，或判断无法达成时由阶段活动负责人向项目经理通报（含推荐方案），项目经理再通报用户”，并引用 process.md。
+- **process/artifact-metadata-convention.md**：「阶段是否可推进」删除“（或用户确认）仅用于例外放行”，改为未满足时不得推进及负责人→PM→用户通报链路。
+- **人类手册/Cursor-多会话协作落地方案.md**：项目经理 pinned prompt 第 6 条补充“出口条件未满足时不得推进”及由被阻塞阶段活动负责人向 PM 通报、PM 再向用户通报供选择。
+- **人类手册/roles/sop/sop/project-manager.md**：「阶段推进」小节补充出口条件未满足时不得推进、推荐方案由阶段负责人提出经 PM 通报用户。
+
+### 影响范围（Where）
+- 变更文件：`人类手册/process/process.md`、`process/exit-criteria.yaml`、`process/artifact-metadata-convention.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/roles/sop/sop/project-manager.md`；无新增/删除/重命名。
+- 受影响的引用：README 仍引用 process.md 阶段转换规则，无需改；initiation 阶段“以用户确认为准”为该阶段出口条件定义，非“例外放行”，未改。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`例外推进`、`例外放行`、`经用户确认可例外`；确认 process.md、exit-criteria、artifact-metadata-convention 中已无上述废弃表述；role-skills-design-memo 中既往备忘为历史记录保留。
+- 已检查：process.md 为阶段转换规则唯一定义处，其余文件为引用或简短提醒。
+
+### 遗留与后续（Next）
+- 无。出口条件未满足时仅能迭代或中止并通报，推荐方案由阶段负责人→PM→用户链路传递供选择。
+
+---
+
+## 变更备忘（2025-03-14）：规范 plan 文件移动与引用同步、智能体文档解耦及规则沉淀
+
+### 背景/触发（Context）
+- 已将 5 个文件（阶段推进无例外规则-已实施.md、norm-backlog.md、norm-improvement-execution-plan-已完成.md、norm-improvement-execution-plan.md、norm-improvement-plan.md）从 `人类手册/` 移动到 `人类手册/plan/`，需同步全工程引用并满足 post-change 全工程回顾规则。
+- 要求：智能体依赖的文档（SKILL、state 模板）与人类手册解耦，不引用人类手册路径；文档中不使用「本项目」等模糊指代；将「智能体文档不引用人类手册」「写作约定不用本项目」两条要求沉淀到 post-change-project-wide-review.mdc。
+
+### 关键判断（Why）
+- 智能体文档解耦：Agent/Skill 仅能稳定读取规范库中 skills、process 等路径，引用人类手册会导致死链或上下文错位；必要信息应内联或总结在各自文档内。
+- 明确指代：「本项目」在规范库与业务项目双语境下易歧义；统一改为「业务项目」「该业务项目」或「规范库」便于执行与追溯。
+
+### 备选方案与取舍（Options）
+- 方案 A：仅更新路径，SKILL/state 仍引用人类手册。未选原因：与「智能体文档与人类手册解耦」目标不符。
+- 方案 B（采用）：路径更新 + SKILL/state 去掉人类手册引用并自包含说明 + 规则文件新增两条原则 + 备忘按模板完整填写。采用原因：满足解耦、明确指代与规则可延续。
+
+### 最终方案（What）
+- **路径更新**：README、人类手册/process/process.md、人类手册/plan/*.md、role-skills-design-memo 中 `人类手册/norm-improvement-plan.md`、`人类手册/norm-improvement-execution-plan.md`、`人类手册/norm-backlog.md` 改为 `人类手册/plan/...`。
+- **解耦**：skills/project-initiation/SKILL.md 删除对 `人类手册/norm-improvement-plan.md` 的引用，改为自包含「业务项目不复制规范库 process/phases.yaml，以 state.tailoring_snapshot 与 docs/process-tailoring.md 表达该业务项目的流程」；全文「本项目」改为「业务项目」或「该业务项目」。process/state.yaml 注释删除人类手册引用，「本项目」改为「业务项目」。
+- **人类手册/process/process.md**：路径改为 `人类手册/plan/norm-improvement-plan.md`；「本项目」改为「业务项目」「该业务项目」。
+- **规则沉淀**：.cursor/rules/post-change-project-wide-review.mdc 的「原则」中新增两条：智能体依赖的文档不得引用人类手册路径；写作约定不使用「本项目」等模糊指代。
+- **执行计划已完成文档**：norm-improvement-plan-已完成.md 不存在，引用改为 norm-improvement-plan.md。
+
+### 影响范围（Where）
+- 修改：`README.md`、`人类手册/process/process.md`、`人类手册/plan/norm-improvement-execution-plan.md`、`人类手册/plan/norm-improvement-execution-plan-已完成.md`、`人类手册/role-skills-design-memo.md`、`skills/project-initiation/SKILL.md`、`process/state.yaml`、`.cursor/rules/post-change-project-wide-review.mdc`。
+- 无新增/删除/重命名文件（移动已在先前完成）。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`人类手册/norm-improvement-plan`、`人类手册/norm-improvement-execution-plan`、`人类手册/norm-backlog`、`人类手册/阶段`、`norm-improvement-plan.md`、`norm-backlog.md`、`本项目`（智能体文档中已消除）。
+- 已检查的清单/索引/映射：cyber_team 内无 manifest、mapping、索引引用上述旧路径。
+- 已运行的诊断：对修改过的 .md/.yaml/.mdc 做人工检查（链接与表述），无自动化 lint 运行。
+
+### 遗留与后续（Next）
+- 无。后续若新增智能体可见文档，须遵守「不引用人类手册」「不用本项目指代」两条原则。
+
+---
+
+## 变更备忘（2025-03-14）：规范库角色边界 — PM 不代做评审与防越界机制
+
+### 背景/触发（Context）
+- 项目经理会话在无单独「需求评审专家」会话时代写了 `docs/review/requirements-review.md` 及评审结论，并推进到 design，与「评审结论由评审角色产出」的预期不符。
+- 规范库未在 PM 职责与约定中明确「不得亲自撰写评审结论/评审记录」，且「组织评审」表述含糊，易被理解为可代做。需明确角色边界并在各角色 pinned prompt、README、artifact-metadata 等处一致体现，并建立防「角色擅自替代其他角色完成任务」的通用机制。
+
+### 关键判断（Why）
+- 单一事实来源：角色边界完整表述在一处（README 或落地方案 §3.1），其余引用或简短复述；供 Agent 使用的文档（README、process/artifact-metadata-convention.md）不得引用 `人类手册/` 路径。
+- 各角色 pinned prompt 中显式加入「角色边界」一条，因会话启动时可见性高，能第一时间约束行为。
+
+### 备选方案与取舍（Options）
+- 方案 A：仅在 project-manager.md 与 PM pinned prompt 中禁止 PM 代写评审。未选原因：其他角色也可能越界代做，需通用原则。
+- 方案 B（采用）：在 README、artifact-metadata、落地方案 §3.1 与各角色 pinned prompt 中统一加入角色边界/不得代做；PM 处额外明确「组织评审」含义及无评审会话时的处理。采用原因：兼顾 PM 与评审边界与全局防越界，且符合 post-change 原则。
+
+### 最终方案（What）
+- 人类手册/roles/sop/sop/project-manager.md：新增「角色边界」小节，明确项目经理不负责撰写评审结论/记录，由对应评审角色完成；多会话/单会话时的处理方式。
+- 人类手册/Cursor-多会话协作落地方案.md：PM pinned prompt 中将「组织评审」定义为派发评审任务、回收评审产出、不得亲自撰写；增加「角色边界」一条；§4.2 任务流转建议中明确评审结论与文档由评审角色产出、PM 不代写；§3.1 通用约定增加角色边界第 6 条；§3.2–§3.8 各角色 pinned prompt 均增加「不得代其他角色完成其职责内产出；若属其他角色，应交由该角色会话或项目经理派发」。
+- README「与 Agent 的接口」：增加第 7 条「角色边界」，引用 mapping/phase-role-skill.yaml、roles/roles.yaml（不引用人类手册路径）。
+- process/artifact-metadata-convention.md：责任角色处明确 owner_role 表示负责撰写/维护该文档的角色，其他角色不得代写，应通过派发任务由该角色产出。
+- 人类手册/process/process.md：阶段转换规则后增加一句，评审阶段评审结论与评审记录由该阶段对应评审角色产出，项目经理不代写。
+
+### 影响范围（Where）
+- 变更文件：
+  - 修改：`人类手册/roles/sop/sop/project-manager.md`、`人类手册/Cursor-多会话协作落地方案.md`、`README.md`、`process/artifact-metadata-convention.md`、`人类手册/process/process.md`、`人类手册/role-skills-design-memo.md`。
+- 无新增/删除/重命名文件。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`组织评审`、`角色边界`、`不得代写`、`owner_role`；确认「组织评审」仅在落地方案中已定义处出现；README、artifact-metadata 未引用人类手册路径。
+- 已检查：README、mapping、落地方案 §3.1–§3.8 与 §4.2、artifact-metadata-convention、project-manager SOP、process.md 表述一致。
+
+### 遗留与后续（Next）
+- 可选：新增 `rules/role-boundary.md` 供业务项目复制至 .cursor/rules/，并在 README/模板索引中说明。本次未实施，可按需后续补充。
 

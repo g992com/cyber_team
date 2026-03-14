@@ -283,6 +283,22 @@ def cmd_add_risk(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_set_tailoring(args: argparse.Namespace) -> int:
+    """Set tailoring_snapshot to a comma-separated list of phase ids (order = execution order)."""
+    lock_path = f"{args._state_path}.lock"
+    phases_raw = args.phases.strip()
+    if not phases_raw:
+        raise RuntimeError("--phases must be non-empty (comma-separated phase ids)")
+    phases_list = [p.strip() for p in phases_raw.split(",") if p.strip()]
+    with _Lock(lock_path):
+        data = _load_state_minimal(args._state_path)
+        data["tailoring_snapshot"] = phases_list
+        data["updated_at"] = _utc_now_iso()
+        _write_text_atomic(args._state_path, _dump_state_canonical(data))
+    print(f"OK: tailoring_snapshot -> {phases_list}")
+    return 0
+
+
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="update_state.py",
@@ -323,6 +339,10 @@ def _build_parser() -> argparse.ArgumentParser:
     sp = sub.add_parser("add-risk", help="Append a project-level risk text")
     sp.add_argument("--text", required=True, help="Risk text (one line)")
     sp.set_defaults(func=cmd_add_risk)
+
+    sp = sub.add_parser("set-tailoring", help="Set tailoring_snapshot (comma-separated phase ids, order = execution order)")
+    sp.add_argument("--phases", required=True, help="Comma-separated phase ids, e.g. requirements,architecture,design")
+    sp.set_defaults(func=cmd_set_tailoring)
 
     return p
 

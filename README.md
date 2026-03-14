@@ -13,7 +13,7 @@
 -- **stages/** — 按阶段汇总的职责、活动、验收（人读）。【目录已迁移至 `人类手册/stages/`，此处保留历史说明，实际人类手册见下文。】
 - **mapping/** — `phase-role-skill.yaml` 为核心映射，Agent 据此在给定阶段/角色下加载对应 skill。
 - **skills/** — `manifest.yaml` 列出 skill 名称、来源（GitHub 或本地路径）、适用阶段/角色；自建 skill 位于本目录下同名子目录（如 `skills/prd-requirements/`）。
-- **state（运行态）** — 本规范仓库不在根目录维护 `state.yaml`；提供业务项目初始化模板 `process/state.yaml`。业务项目的真实进展应写入**业务项目仓库根目录**的 `state.yaml`（或团队约定路径），避免在多根工作区中写错仓库。
+- **state（运行态）** — 本规范仓库不在根目录维护 `state.yaml`；提供业务项目初始化模板 `process/state.yaml` 与更新脚本 `process/project-docs/status/update_state.py`。业务项目的真实进展应写入**业务项目仓库根目录**的 `state.yaml`，且**更新必须**通过业务项目中的 `scripts/update_state.py`（从规范库复制），不得直接编辑 state.yaml，避免在多根工作区中写错仓库。
 -- **人类手册/** — **本工程（cyber_team）的开发文档与规范说明**（如规范建设方案、设计说明、多智能体落地方案等，人读）；不存放流程规范中的预期产出物定义。原 `docs/` 目录已整体重命名为 `人类手册/`。
 - **rules/** — 团队协作规范用规则（供业务项目复制到 `.cursor/rules/`）：`work-execution-standards.md`、`project-docs-discovery.md`。本工程自身的 Cursor 规则（如修改后全工程回顾）在 **`.cursor/rules/`** 下，不随规范复制到业务项目。
 
@@ -23,10 +23,12 @@
 2. **角色与阶段**：读取 `roles/roles.yaml` 的 `roles[].phase_ids`。
 3. **阶段/角色 → skill**：读取 `mapping/phase-role-skill.yaml` 的 `mappings`，按 `phase_id`（及可选 `role_id`）得到 `skill_name`。
 4. **skill 来源**：根据 `skill_name` 在 `skills/manifest.yaml` 的 `skills[]` 中查找 `source`（GitHub URL 或本地相对路径）。
-5. **进展状态（业务项目）**：读写**业务项目仓库根目录**的 `state.yaml`（可从 `process/state.yaml` 初始化），字段包括 `current_phase`（与 phases.yaml 的 id 一致）、`completed_phases`、`tailoring_snapshot`（本项目执行的阶段 id 列表，见 `人类手册/process/process.md` 阶段与裁剪）、`current_role`、`updated_at`。
+5. **进展状态（业务项目）**：**读**取业务项目仓库根目录的 `state.yaml`（可从 `process/state.yaml` 初始化）；**写**入/更新必须通过业务项目中的 `scripts/update_state.py`（从规范库 `process/project-docs/status/update_state.py` 复制），不得直接编辑 state.yaml。字段包括 `current_phase`、`completed_phases`、`tailoring_snapshot`（见 `人类手册/process/process.md` 阶段与裁剪）、`current_role`、`updated_at`。
 6. **产出物发现（多智能体协作）**：业务项目内维护 `docs/project-docs-index.yaml`（可从本规范仓库 `process/project-docs/project-docs-index.yaml` 复制到业务项目 docs 目录），按阶段 id 列出各产出物路径；关键文档建议带 YAML frontmatter 元数据（`phase`、`type`、`status`、`owner_role`、`updated_at`），约定见 `process/artifact-metadata-convention.md`。
 
 阶段转换规则（何时进入下一阶段）见 `人类手册/process/process.md`；出口条件的机器可读定义见 `process/exit-criteria.yaml`。具体门禁由项目/团队在落地时约定。
+
+7. **角色边界**：各阶段评审结论与评审记录由 mapping 中该阶段对应评审角色（如 requirements-reviewer）产出，项目经理负责派发任务与回收结果，不代写评审文档；各角色仅产出本角色职责内交付物（见 `mapping/phase-role-skill.yaml`、`roles/roles.yaml`）。
 
 ## 如何询问项目进展（给人类阅读）
 
@@ -74,6 +76,6 @@
 
 本规范依据 `人类手册/role-skills-design.md` 建设方案生成。自建 skill 开发时须遵循 Cursor 的 **create-skill** 技能指引。
 
-- **规范改进方案（精简版）**：`人类手册/norm-improvement-plan.md` — 仅保留智能体协作必要改进项，及「阶段全集 → PM 裁剪 → 业务项目 process」的可行性与有效性评估。
-- **规范改进实施计划**：`人类手册/norm-improvement-execution-plan.md` — 按全工程回顾规则拆分的可执行步骤，每步含动作、涉及文件、回顾要点与备忘要求。
-- **规范工程进展与待办**：`人类手册/norm-backlog.md` — 本规范工程的最新进展与待办事项，作为后续工作的记忆支持。
+- **规范改进方案（精简版）**：`人类手册/plan/norm-improvement-plan.md` — 仅保留智能体协作必要改进项，及「阶段全集 → PM 裁剪 → 业务项目 process」的可行性与有效性评估。
+- **规范改进实施计划**：`人类手册/plan/norm-improvement-execution-plan.md` — 按全工程回顾规则拆分的可执行步骤，每步含动作、涉及文件、回顾要点与备忘要求。
+- **规范工程进展与待办**：`人类手册/plan/norm-backlog.md` — 本规范工程的最新进展与待办事项，作为后续工作的记忆支持。

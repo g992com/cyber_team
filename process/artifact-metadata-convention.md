@@ -94,8 +94,8 @@ title: "ADR-001 服务拆分策略"
 
 1. **发现当前阶段产出**：根据**业务项目** `state.yaml` 的 `current_phase`，在项目文档索引（`docs/project-docs-index.yaml`）中找到对应路径，读取文档并解析 frontmatter 的 `phase`、`type`、`status`。
 2. **判断是否可消费**：若下游阶段依赖该产出，可检查 `status == approved` 再继续。
-3. **阶段是否可推进**：阶段出口条件见 `process/exit-criteria.yaml`；满足该阶段 required_artifacts 与 key_status（或用户确认）后可推进到下一阶段。
-4. **责任角色**：`owner_role` 可用于提示应由哪类角色维护或评审该文档。
+3. **阶段是否可推进**：阶段转换规则见 `人类手册/process/process.md`；出口条件见 `process/exit-criteria.yaml`。满足出口条件后推进到 tailoring_snapshot 确定的唯一下一阶段，不向用户提供路径选择；未满足时不得推进，应继续满足条件或判断无法达成时由阶段活动负责人向项目经理通报（含推荐方案），项目经理再向用户通报供选择。
+4. **责任角色**：`owner_role` 表示**负责撰写/维护该文档的角色**；其他角色**不得代写**该文档，应通过派发任务由该角色产出。可用于提示应由哪类角色维护或评审该文档。
 
 ## 与项目文档索引的关系
 

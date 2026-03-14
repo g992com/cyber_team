@@ -20,10 +20,14 @@
 
 ## 阶段与裁剪
 
-规范库维护**阶段全集**（`process/phases.yaml`）；业务项目**不复制**阶段定义。业务项目通过**业务项目** `state.yaml` 的 **`tailoring_snapshot`**（本项目要执行的 phase_id 列表）与 **`docs/process-tailoring.md`**（裁剪理由与适用条件）表达本项目流程；Agent 读取规范库的 phases 后按 tailoring_snapshot 过滤得到本项目阶段。详见 `人类手册/norm-improvement-plan.md` 第二节（做法 B）。
+规范库维护**阶段全集**（`process/phases.yaml`）；业务项目**不复制**阶段定义。业务项目通过**业务项目** `state.yaml` 的 **`tailoring_snapshot`**（业务项目要执行的 phase_id 列表）与 **`docs/process-tailoring.md`**（裁剪理由与适用条件）表达该业务项目的流程；Agent 读取规范库的 phases 后按 tailoring_snapshot 过滤得到该业务项目的阶段。state 的**更新**须通过业务项目内的 `update_state.py` 脚本（规范库仅提供模板 `process/state.yaml` 与脚本来源 `process/project-docs/status/update_state.py`），不得直接编辑 state.yaml。详见 `人类手册/plan/norm-improvement-plan.md` 第二节（做法 B）。
 
 ## 阶段转换规则
 
-何时进入下一阶段：当前阶段**出口条件**满足和/或**用户确认**后，可将 `state.current_phase` 推进到下一阶段，并把当前阶段 id 加入 `completed_phases`。出口条件（关键产出物存在、关键文档 status 为 approved 等）的机器可读定义见 **`process/exit-criteria.yaml`**；Agent/Orchestrator 可据此判断是否可推进，具体门禁由项目/团队在落地时约定。
+**下一阶段**由业务项目 `state.tailoring_snapshot` 的顺序唯一确定，即该列表中紧接 `current_phase` 的那一阶段（例如 requirements 之后即为 requirements-review）。
+
+**何时进入下一阶段**：当前阶段**出口条件**满足后，应**直接推进**到该下一阶段并派发任务，不向用户提供“跳过某阶段”或“在多种下一步中选择”的选项。出口条件（关键产出物存在、关键文档 status 为 approved 等）的机器可读定义见 **`process/exit-criteria.yaml`**；Agent/Orchestrator 可据此判断是否可推进，具体门禁由项目/团队在落地时约定。**当出口条件未满足时，不得推进**；应继续尝试修改或补齐产出以满足出口条件，若判断无法达成则中止工作并通报用户。推荐方案由**被阻塞阶段活动的负责人**提出并通报项目经理，项目经理再向用户通报当前状况（当前阶段、未满足项、阻塞原因）及推荐方案，供用户选择（如调整范围、回退补齐、或记录为后续项等）。
+
+各评审阶段（如 requirements-review、design-review）的评审结论与评审记录由该阶段对应评审角色（见 mapping/phase-role-skill.yaml 与各角色 SOP）产出，项目经理不代写，仅派发任务、回收产出并据出口条件推进。
 
 阶段定义与顺序的机器可读版本见 `phases.yaml`。

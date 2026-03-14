@@ -1,6 +1,6 @@
 # 阶段出口条件 — 供 Agent/Orchestrator 判断当前阶段是否可推进到下一阶段
 # 与 process/phases.yaml 的 phase id 一致；与 project-docs-index 的 key、artifact-metadata-convention 的 status 对齐
-# 业务项目须在 state.tailoring_snapshot 内且满足下列条件（或用户确认）方可推进
+# 业务项目须在 state.tailoring_snapshot 内；满足下列条件后直接推进到 tailoring_snapshot 确定的下一阶段，未满足时不得推进；应继续满足条件，或判断无法达成时由阶段活动负责人向项目经理通报（含推荐方案），项目经理再通报用户。完整规则见人类手册/process/process.md 阶段转换规则
 
 exit_criteria:
   initiation:
