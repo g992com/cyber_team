@@ -1170,3 +1170,77 @@
 ### 遗留与后续（Next）
 - 无。用户将各角色 pinned prompt 从本文档复制到 Cursor 会话并固定后，智能体会在约定中看到「遵守业务项目 .cursor/rules/」的要求，便于主动关注角色边界与意图确认等规则。
 
+---
+
+## 变更备忘（2026-03-14）：意图与规则冲突时先询问 + 规则归 rules、技能归 skills
+
+### 背景/触发（Context）
+- 项目经理仍会越界（如代写测试用例）；根因之一是对用户意图的理解（如「在本会话内交付」）若照此执行会与角色边界/流程规则冲突，但智能体未在行动前主动询问用户。
+- 目标：将「当发现理解的意图与规则冲突时，应第一时间向用户询问」写为显式、全员适用的规则，并在 PM 场景下补充可操作话术；同时按「规则归 rules、技能归 skills」将角色边界与意图/需求确认的完整约定从 skills/_common 提升到 rules，单一事实源改为 rules/role-boundary-and-intent-confirmation.md，删除 skills/_common/role-boundary-and-intent-confirmation.md。
+
+### 关键判断（Why）
+- 角色边界与意图/需求确认为通用规则而非技能，应置于 rules/，供业务项目复制到 .cursor/rules/ 后生效；规范库内 skills 仅保留角色技能，不保留通用规则文档。
+- 冲突→询问条款与全文仅在 rules 中维护，各 SKILL、pinned prompt 通过引用 rules 或简短概括建立关联；智能体依赖文档不引用人类手册路径，写作使用「业务项目」「规范库」等明确指代。
+
+### 备选方案与取舍（Options）
+- 方案 A：保留 skills/_common 为单一事实源，仅在 _common 中新增冲突→询问条款。未选原因：与「规则归 rules、技能归 skills」一致性原则不符。
+- 方案 B（采用）：将 _common 的完整正文迁入 rules/role-boundary-and-intent-confirmation.md，在 rules 中新增冲突→询问条款及可选 PM 示例；删除 skills/_common/role-boundary-and-intent-confirmation.md；所有原引用 _common 的 YAML、SKILL、规则均改为引用 rules；PM SKILL 补充具体问法，PM pinned prompt 中增加对规则与 SKILL 的引用并强调冲突时先询问。采用原因：单一事实源在 rules，引用链清晰，且与 post-change 原则一致。
+
+### 最终方案（What）
+- rules/role-boundary-and-intent-confirmation.md：承载原 _common 完整正文（角色边界、意图/需求确认及按角色示例），新增「意图与规则冲突时须先向用户说明并询问」条款及摘要句，并增加项目经理示例问法；frontmatter 更新为本文即完整约定，不再引用外部路径。
+- 删除：skills/_common/role-boundary-and-intent-confirmation.md。
+- process/phases.yaml、roles/roles.yaml、mapping/phase-role-skill.yaml：注释中「见 skills/_common/...」改为「见 rules/role-boundary-and-intent-confirmation.md」。
+- 各 SKILL（project-initiation、prd-requirements、architecture-design、requirements-review、prd-review、architecture-review、test-plan-review、devops-cicd、sre-reliability）：引用由 skills/_common/role-boundary-and-intent-confirmation.md 改为 rules/role-boundary-and-intent-confirmation.md。
+- skills/project-initiation/SKILL.md：在角色边界段落增加「意图与规则冲突时先询问」及具体问法（先说明归属与规范要求，再询问「您是否希望我按规范派发给该角色并回收产出？还是因故坚持在本会话内由我代做（将注明越界）？」）。
+- 人类手册/Cursor-多会话协作落地方案.md：3.2 项目经理 pinned prompt 第 1 条中增加「意图与规则冲突时须先向用户说明并询问，再执行；具体问法见业务项目 .cursor/rules/ 中角色边界与意图确认规则及规范库 skills/project-initiation/SKILL.md」。
+
+### 影响范围（Where）
+- 新增/修改：`rules/role-boundary-and-intent-confirmation.md`（合并全文并新增条款与 PM 示例）
+- 删除：`skills/_common/role-boundary-and-intent-confirmation.md`
+- 修改：`process/phases.yaml`、`roles/roles.yaml`、`mapping/phase-role-skill.yaml`（注释）；`skills/project-initiation/SKILL.md`（引用 + 具体问法）、`skills/prd-requirements/SKILL.md`、`skills/architecture-design/SKILL.md`、`skills/requirements-review/SKILL.md`、`skills/prd-review/SKILL.md`、`skills/architecture-review/SKILL.md`、`skills/test-plan-review/SKILL.md`、`skills/devops-cicd/SKILL.md`、`skills/sre-reliability/SKILL.md`（引用）；`人类手册/Cursor-多会话协作落地方案.md`（3.2 PM pinned prompt）；`人类手册/role-skills-design-memo.md`（本备忘）
+- 受影响的映射/契约/索引：无结构变更；README、process/templates-index.md、workspace-setup.md、setup_business_project.py 已指向 rules/，无需修改。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`意图与规则冲突`、`冲突点并询问`、`role-boundary-and-intent-confirmation`、`理解用户输入`（SKILL 内）；`skills/_common/role-boundary`、`_common/role-boundary`（确认无残留引用）
+- 已检查的清单/索引/映射：README、process/templates-index.md、人类手册/workspace/workspace-config/workspace-setup.md、setup_business_project.py（无 _common 引用）；各 SKILL、YAML、Cursor-多会话 3.2 中引用均为 rules
+- 已运行的诊断：无（仅 .md/.yaml 文档变更）；可选对修改过的 .md 运行 markdown lint
+
+### 遗留与后续（Next）
+- 无。单一事实源现为 rules/role-boundary-and-intent-confirmation.md；业务项目复制该规则到 .cursor/rules/ 后即可获得完整约定（含冲突→询问条款与 PM 示例）。人类手册/过程改进/项目经理-角色边界与测试用例派发流程.md 作为原始文档保留，未修改。
+
+---
+
+## 变更备忘（2026-03-14）：全角色 pinned 补充意图与规则冲突时先询问（批判收敛）
+
+### 背景/触发（Context）
+- 在 3.2 项目经理 pinned prompt 已补充「意图与规则冲突时须先向用户说明并询问」及具体问法引用后，需在**所有角色**的 pinned prompt 中补充同类约定，以便与 rules 中「任何角色」条款一致；同时按批判意见控制维护成本、避免人类手册与 rules/SKILL 三处不同步。
+
+### 关键判断（Why）
+- 单一事实源在 rules + 各角色 SKILL，人类手册仅做**简短通用句 + 引用**，不写长段角色化说明，避免三处维护易过时。
+- 明确**生效前提**（业务项目已复制规则、用户已粘贴 pinned）与**适用范围**（多根/单仓库、规范库路径何时可用），避免误以为人类手册直接驱动智能体。
+- 多 SKILL 角色（如开发）：pinned 中「本角色对应 SKILL」改为「本阶段本角色在 mapping 中对应的 skill 及该 skill 的 SKILL.md」，避免歧义。
+- 仅 PM 在 rules + SKILL 中已有具体问法；其他角色以 rules 通用条款 + 各自 SKILL 为准，不在人类手册中抄写角色化长段。
+
+### 备选方案与取舍（Options）
+- 方案 A：为每个角色在人类手册中写一段差异化说明（如「本角色尤须避免…」）。未选原因：与 rules/SKILL 重复，易过时，违背单一事实源。
+- 方案 B（采用）：所有角色共用一句标准句 +「详见业务项目 .cursor/rules/ 及本角色对应 SKILL」；第三节开头增加生效前提与适用范围；3.5 开发单独用 mapping 表述。采用原因：人类手册仅引用、不复制细节，维护成本低，与 post-change 一致。
+
+### 最终方案（What）
+- 人类手册/Cursor-多会话协作落地方案.md **第三节开头**：在「以下各角色 pinned prompt 已包含…」段落后增加「生效前提」（业务项目已复制规则、用户已粘贴 pinned；人类手册仅为操作指引）与「适用范围」（规范库 skills 路径在多根或已打开规范库时可用；单仓库仅业务项目时以 .cursor/rules/ 及任务卡为准）。
+- **3.1 通用骨架**：第 0 条「并严格遵守。」后追加标准句「**意图与规则冲突时须先向用户说明并询问，再执行**；详见业务项目 `.cursor/rules/` 中角色边界与意图确认规则及本角色对应 SKILL。」
+- **3.2 项目经理**：已有长句，保留现状（已含冲突时先询问及具体问法引用）。
+- **3.3、3.4、3.6、3.7、3.8、3.8.1～3.8.4**：各段第 1 条「并严格遵守。」后追加上述标准句（本角色对应 SKILL 保持通用表述）。
+- **3.5 开发工程师**：第 1 条后追加标准句，但将「本角色对应 SKILL」写为「本阶段本角色在 mapping 中对应的 skill 及该 skill 的 SKILL.md」。
+
+### 影响范围（Where）
+- 修改：`人类手册/Cursor-多会话协作落地方案.md`（第三节开头：生效前提与适用范围；3.1、3.3、3.4、3.5、3.6、3.7、3.8、3.8.1、3.8.2、3.8.3、3.8.4 共 10 处 pinned 追加标准句；3.2 已具备故未改）；`人类手册/role-skills-design-memo.md`（本备忘）
+- 受影响的映射/契约/索引：无
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`意图与规则冲突`、`详见业务项目 .cursor/rules/`、`生效前提`、`适用范围`
+- 已检查的清单/索引/映射：Cursor-多会话协作落地方案.md 第三节 3.1～3.8.4 共 11 处（3.2 已有、其余 10 处已补标准句），第三节开头已含生效前提与适用范围
+- 已运行的诊断：无（仅人类手册 .md 变更）
+
+### 遗留与后续（Next）
+- 无。各角色 SKILL 中若缺「意图与规则冲突时」可操作话术，可按需后续补一句与本角色职责相符的示例，不做强制。
+

@@ -10,14 +10,15 @@ description: Tailors project activities against team activity norms (process/pha
 ## 输入与前置
 
 - **用户输入**：用户描述的问题、目标或需求（可含业务背景、约束、期望产出）。
-- **规范来源**：读取规范根目录下的 `process/phases.yaml`、`roles/roles.yaml`、`mapping/phase-role-skill.yaml`。角色边界与意图/需求确认的通用约定见 `skills/_common/role-boundary-and-intent-confirmation.md`。
+- **规范来源**：读取规范根目录下的 `process/phases.yaml`、`roles/roles.yaml`、`mapping/phase-role-skill.yaml`。角色边界与意图/需求确认的通用约定见 `rules/role-boundary-and-intent-confirmation.md`。
 
 ## 角色边界
 
-角色边界与意图/需求确认的完整约定见 `skills/_common/role-boundary-and-intent-confirmation.md`。项目经理 additionally：
+角色边界与意图/需求确认的完整约定见 `rules/role-boundary-and-intent-confirmation.md`。项目经理 additionally：
 
 - **仅可**：拆任务、派发任务卡、回收各角色产出、根据出口条件推进阶段；**不得**亲自撰写任何阶段交付物。
 - **无对应角色会话时**：必须将任务派发给对应角色并**提示用户创建该角色会话**（或由该会话领取任务并产出）；**不得**代做该角色产出。流程执行方式（是否单会话、由谁产出等）由项目经理根据规范库规则与用户目的决定，**用户不指定**。
+- **意图与规则冲突时先询问**：当用户表述可被理解为「在本会话内直接产出某交付物」而该交付物归属其他角色时，先说明归属与规范要求，再询问「您是否希望我按规范派发给该角色并回收产出？还是因故坚持在本会话内由我代做（将注明越界）？」根据用户明确选择再执行；与 `rules/role-boundary-and-intent-confirmation.md` 一致。
 
 ## 执行要点
 

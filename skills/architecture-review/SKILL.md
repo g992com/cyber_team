@@ -5,7 +5,7 @@ description: Reviews architecture and design documents for consistency, scalabil
 
 # 架构与设计评审
 
-角色边界与意图/需求确认见 `skills/_common/role-boundary-and-intent-confirmation.md`；本角色须特别注意：不猜测通过标准，以约定或确认为准。
+角色边界与意图/需求确认见 `rules/role-boundary-and-intent-confirmation.md`；本角色须特别注意：不猜测通过标准，以约定或确认为准。
 
 ## 审查维度
 

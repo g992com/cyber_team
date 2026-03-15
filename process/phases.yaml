@@ -1,7 +1,7 @@
 # 软件开发流程阶段定义 — 供 Agent 解析
 # id 与 mapping、state.current_phase 一致；order 用于阶段顺序与推进判断
 # 参考：PMBOK 项目启动与裁剪、ISO/IEC 12207 生命周期与 ISO/IEC/IEEE 16326 项目管理
-# 阶段产出归属：各阶段 outputs 的正式产出仅由 mapping/phase-role-skill.yaml 中规定的 role_id 负责，其他角色不得代为撰写；见 skills/_common/role-boundary-and-intent-confirmation.md
+# 阶段产出归属：各阶段 outputs 的正式产出仅由 mapping/phase-role-skill.yaml 中规定的 role_id 负责，其他角色不得代为撰写；见 rules/role-boundary-and-intent-confirmation.md
 phases:
   - id: initiation
     name: 项目启动

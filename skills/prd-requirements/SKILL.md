@@ -5,7 +5,7 @@ description: Drafts and clarifies PRD and product requirements through iterative
 
 # PRD / 产品需求文档
 
-角色边界与意图/需求确认见 `skills/_common/role-boundary-and-intent-confirmation.md`；本角色须特别注意：不猜测需求细节、优先级与范围，须澄清或列入待澄清/可选澄清。
+角色边界与意图/需求确认见 `rules/role-boundary-and-intent-confirmation.md`；本角色须特别注意：不猜测需求细节、优先级与范围，须澄清或列入待澄清/可选澄清。
 
 ## 文档结构
 

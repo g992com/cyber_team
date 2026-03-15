@@ -5,7 +5,7 @@ description: Designs and guides CI/CD pipeline setup, GitHub Actions/GitLab CI, 
 
 # CI/CD 与发布
 
-角色边界与意图/需求确认见 `skills/_common/role-boundary-and-intent-confirmation.md`；本角色仅负责 mapping 规定的本角色产出，不得代做其他角色产出。
+角色边界与意图/需求确认见 `rules/role-boundary-and-intent-confirmation.md`；本角色仅负责 mapping 规定的本角色产出，不得代做其他角色产出。
 
 ## 流水线结构
 
