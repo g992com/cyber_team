@@ -126,13 +126,11 @@ def main() -> int:
     if update_state_src.exists():
         copy2(update_state_src, target / "scripts" / "update_state.py")
 
-    # 5) rules：规范库 rules/*.md 拷贝到业务项目 .cursor/rules/ 时使用 .mdc 后缀，符合 Cursor 规则约定
-    rule_src = norm / "rules" / "project-docs-discovery.md"
-    if rule_src.exists():
-        copy2(rule_src, target / ".cursor" / "rules" / "project-docs-discovery.mdc")
-    rule_src_rb = norm / "rules" / "role-boundary-and-intent-confirmation.md"
-    if rule_src_rb.exists():
-        copy2(rule_src_rb, target / ".cursor" / "rules" / "role-boundary-and-intent-confirmation.mdc")
+    # 5) rules：规范库 rules/*.md 全部拷贝到业务项目 .cursor/rules/，目标使用 .mdc 后缀，符合 Cursor 规则约定
+    rules_dir = norm / "rules"
+    if rules_dir.is_dir():
+        for rule_src in rules_dir.glob("*.md"):
+            copy2(rule_src, target / ".cursor" / "rules" / f"{rule_src.stem}.mdc")
 
     print("完成。请按 workspace-setup.md 与多会话方案在业务项目中继续配置。")
     return 0
