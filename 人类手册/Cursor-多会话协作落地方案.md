@@ -17,37 +17,37 @@
 - **会话 A：项目总控 / 项目经理**
   - `role_id`: `project-manager`（具体以 `roles/roles.yaml` 中配置为准）
   - 主要阶段：`initiation`（项目启动）、各阶段的跨角色协调与推进
-  - 参考文档：`人类手册/roles/sop/project-manager.md`（如存在）或后续补充的项目经理 SOP
+  - 参考文档：`人类手册/roles/project-manager.sop.md`（如存在）或后续补充的项目经理 SOP
   - 主要技能：`skills/project-initiation`、后续可扩展“进展汇总/风险管理”等自建 skill
 
 - **会话 B：需求 / 产品**
   - `role_id`: 如 `product-manager` 或 `business-analyst`
   - 主要阶段：需求澄清、PRD 编写与维护
-  - 参考文档：`人类手册/roles/sop/`（产品需求类 SOP 可待补充，可参考 skills/prd-requirements 等）
+  - 参考文档：`人类手册/roles/`（产品需求类 SOP 可待补充，可参考 skills/prd-requirements 等）
   - 主要技能：`skills/prd-requirements`、`skills/prd-review` 等
 
 - **会话 C：架构师**
   - `role_id`: 如 `architect`
   - 主要阶段：架构设计、设计评审、安全/性能/扩展性评估
-  - 参考文档：`人类手册/roles/sop/`（架构师 SOP 可待补充，如存在）
+  - 参考文档：`人类手册/roles/`（架构师 SOP 可待补充，如存在）
   - 主要技能：`skills/architecture-review`、相关设计评审 skill
 
 - **会话 D：开发工程师**
   - `role_id`: 如 `developer` / `backend-developer` / `frontend-developer`
   - 主要阶段：详细设计、编码实现、部分技术方案落地
-  - 参考文档：`人类手册/roles/sop/`（开发类 SOP 可待补充，如存在）
+  - 参考文档：`人类手册/roles/`（开发类 SOP 可待补充，如存在）
   - 主要技能：代码实现类 skills、单元测试 skills 等
 
 - **会话 E：测试 / 质量**
   - `role_id`: 如 `qa-engineer` / `test-engineer`
   - 主要阶段：测试计划、测试用例设计、测试执行与缺陷分析
-  - 参考文档：`人类手册/roles/sop/`（测试类 SOP 可待补充，如存在）
+  - 参考文档：`人类手册/roles/`（测试类 SOP 可待补充，如存在）
   - 主要技能：`skills/devops-cicd` 中与测试/质量相关的部分，自建测试设计 skill 等
 
 - **会话 F（可选）：DevOps / 运维**
   - `role_id`: 如 `devops-engineer` / `sre`
   - 主要阶段：CI/CD 流水线设计与优化、部署发布、运行监控与应急
-  - 参考文档：`人类手册/roles/sop/`（DevOps 类 SOP 可待补充，如存在）
+  - 参考文档：`人类手册/roles/`（DevOps 类 SOP 可待补充，如存在）
   - 主要技能：`skills/devops-cicd` 等
 
 > 实际落地时，可根据 `roles/roles.yaml` 中已有角色，裁剪或增加会话，但建议至少包含“项目总控 + 产品 + 架构 + 测试”四类。

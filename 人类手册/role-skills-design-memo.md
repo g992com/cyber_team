@@ -883,7 +883,7 @@
 
 ### 影响范围（Where）
 - 变更文件：
-  - 重命名/移动：`docs/` → `人类手册/`；`stages/` → `人类手册/stages/`；`roles/sop/` → `人类手册/roles/sop/`；`process/process.md` → `人类手册/process/process.md`；原 `docs/workspace-config` → `人类手册/workspace/workspace-config`。
+  - 重命名/移动：`docs/` → `人类手册/`；`stages/` → `人类手册/stages/`；`roles/sop/` → `人类手册/roles/`；`process/process.md` → `人类手册/process/process.md`；原 `docs/workspace-config` → `人类手册/workspace/workspace-config`。
   - 修改：`README.md`、`.cursor/rules/post-change-project-wide-review.mdc`、`人类手册/role-skills-design-memo.md`、`人类手册/plan/norm-improvement-execution-plan.md`、`人类手册/plan/norm-backlog.md`、`人类手册/plan/norm-improvement-plan.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/process/process.md`、`process/state.yaml`、`skills/project-initiation/SKILL.md`。
 - 受影响的映射/契约/索引：无 manifest 或 phase-role-skill 变更；README 目录结构、规则中的备忘路径、各人类手册内交叉引用已统一。
 
@@ -905,12 +905,12 @@
 
 ### 关键判断（Why）
 - 备忘中 `人类手册/workspace/workspace-setup.md` 与真实路径 `人类手册/workspace/workspace-config/workspace-setup.md` 不一致，属引用悬空，必须改。
-- 人类手册内文档引用规范库 SOP、流程说明时，应统一使用 `人类手册/roles/sop/`、`人类手册/process/process.md`，与当前目录结构一致；执行计划类文档中「涉及文件」应指向实际位置，便于执行时定位。
+- 人类手册内文档引用规范库 SOP、流程说明时，应统一使用 `人类手册/roles/`、`人类手册/process/process.md`，与当前目录结构一致；执行计划类文档中「涉及文件」应指向实际位置，便于执行时定位。
 
 ### 最终方案（What）
 - 将 `人类手册/role-skills-design-memo.md` 中全部 `人类手册/workspace/workspace-setup.md` 改为 `人类手册/workspace/workspace-config/workspace-setup.md`。
-- `人类手册/Cursor-多会话协作落地方案.md`：各角色参考文档由 `roles/sop/xxx.md` 改为 `人类手册/roles/sop/` 并注明可待补充，避免指向不存在的文件名。
-- `人类手册/多智能体蜂群编排落地方案.md`：`roles/sop/*.md` 改为 `人类手册/roles/sop/*.md`。
+- `人类手册/Cursor-多会话协作落地方案.md`：各角色参考文档由 `roles/sop/xxx.md` 改为 `人类手册/roles/` 并注明可待补充，避免指向不存在的文件名。
+- `人类手册/多智能体蜂群编排落地方案.md`：`roles/sop/*.md` 改为 `人类手册/roles/*.sop.md`。
 - `人类手册/plan/norm-improvement-execution-plan.md`：步骤 1、4 中「涉及文件」及动作中的 `process/process.md` 改为 `人类手册/process/process.md`。
 
 ### 影响范围（Where）
@@ -944,10 +944,10 @@
 - **process/exit-criteria.yaml**：顶部注释补充“下一阶段由 tailoring_snapshot 顺序唯一确定、条件满足后直接推进”，并引用 process.md。
 - **process/artifact-metadata-convention.md**：「阶段是否可推进」改为引用 process.md 阶段转换规则，并保留简短提醒（唯一下一阶段、不提供路径选择、用户确认仅例外）。
 - **人类手册/Cursor-多会话协作落地方案.md**：项目经理 pinned prompt 新增第 6 条（确定下一阶段以 tailoring_snapshot 为准、直接推进、不提供路径选择），原 6、7 条顺延为 7、8，并注明与 process.md 一致。
-- **人类手册/roles/sop/sop/project-manager.md**：新增「阶段推进」小节，写明下一阶段由 tailoring_snapshot 唯一确定、直接推进、不提供路径选择，并引用 process.md。
+- **人类手册/roles/project-manager.sop.md**：新增「阶段推进」小节，写明下一阶段由 tailoring_snapshot 唯一确定、直接推进、不提供路径选择，并引用 process.md。
 
 ### 影响范围（Where）
-- 修改：`人类手册/process/process.md`、`process/exit-criteria.yaml`、`process/artifact-metadata-convention.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/roles/sop/sop/project-manager.md`；无新增/删除/重命名。
+- 修改：`人类手册/process/process.md`、`process/exit-criteria.yaml`、`process/artifact-metadata-convention.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/roles/project-manager.sop.md`；无新增/删除/重命名。
 - 受影响的引用：README 已引用 process.md 阶段转换规则，无需改；project-initiation SKILL 中“用户确认后”针对 initiation 出口条件，与本次规则不冲突。
 
 ### 一致性检查（Check）
@@ -977,10 +977,10 @@
 - **process/exit-criteria.yaml**：顶部注释改为“未满足时不得推进；应继续满足条件，或判断无法达成时由阶段活动负责人向项目经理通报（含推荐方案），项目经理再通报用户”，并引用 process.md。
 - **process/artifact-metadata-convention.md**：「阶段是否可推进」删除“（或用户确认）仅用于例外放行”，改为未满足时不得推进及负责人→PM→用户通报链路。
 - **人类手册/Cursor-多会话协作落地方案.md**：项目经理 pinned prompt 第 6 条补充“出口条件未满足时不得推进”及由被阻塞阶段活动负责人向 PM 通报、PM 再向用户通报供选择。
-- **人类手册/roles/sop/sop/project-manager.md**：「阶段推进」小节补充出口条件未满足时不得推进、推荐方案由阶段负责人提出经 PM 通报用户。
+- **人类手册/roles/project-manager.sop.md**：「阶段推进」小节补充出口条件未满足时不得推进、推荐方案由阶段负责人提出经 PM 通报用户。
 
 ### 影响范围（Where）
-- 变更文件：`人类手册/process/process.md`、`process/exit-criteria.yaml`、`process/artifact-metadata-convention.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/roles/sop/sop/project-manager.md`；无新增/删除/重命名。
+- 变更文件：`人类手册/process/process.md`、`process/exit-criteria.yaml`、`process/artifact-metadata-convention.md`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/roles/project-manager.sop.md`；无新增/删除/重命名。
 - 受影响的引用：README 仍引用 process.md 阶段转换规则，无需改；initiation 阶段“以用户确认为准”为该阶段出口条件定义，非“例外放行”，未改。
 
 ### 一致性检查（Check）
@@ -1042,7 +1042,7 @@
 - 方案 B（采用）：在 README、artifact-metadata、落地方案 §3.1 与各角色 pinned prompt 中统一加入角色边界/不得代做；PM 处额外明确「组织评审」含义及无评审会话时的处理。采用原因：兼顾 PM 与评审边界与全局防越界，且符合 post-change 原则。
 
 ### 最终方案（What）
-- 人类手册/roles/sop/sop/project-manager.md：新增「角色边界」小节，明确项目经理不负责撰写评审结论/记录，由对应评审角色完成；多会话/单会话时的处理方式。
+- 人类手册/roles/project-manager.sop.md：新增「角色边界」小节，明确项目经理不负责撰写评审结论/记录，由对应评审角色完成；多会话/单会话时的处理方式。
 - 人类手册/Cursor-多会话协作落地方案.md：PM pinned prompt 中将「组织评审」定义为派发评审任务、回收评审产出、不得亲自撰写；增加「角色边界」一条；§4.2 任务流转建议中明确评审结论与文档由评审角色产出、PM 不代写；§3.1 通用约定增加角色边界第 6 条；§3.2–§3.8 各角色 pinned prompt 均增加「不得代其他角色完成其职责内产出；若属其他角色，应交由该角色会话或项目经理派发」。
 - README「与 Agent 的接口」：增加第 7 条「角色边界」，引用 mapping/phase-role-skill.yaml、roles/roles.yaml（不引用人类手册路径）。
 - process/artifact-metadata-convention.md：责任角色处明确 owner_role 表示负责撰写/维护该文档的角色，其他角色不得代写，应通过派发任务由该角色产出。
@@ -1050,7 +1050,7 @@
 
 ### 影响范围（Where）
 - 变更文件：
-  - 修改：`人类手册/roles/sop/sop/project-manager.md`、`人类手册/Cursor-多会话协作落地方案.md`、`README.md`、`process/artifact-metadata-convention.md`、`人类手册/process/process.md`、`人类手册/role-skills-design-memo.md`。
+  - 修改：`人类手册/roles/sop/project-manager.sop.md`、`人类手册/Cursor-多会话协作落地方案.md`、`README.md`、`process/artifact-metadata-convention.md`、`人类手册/process/process.md`、`人类手册/role-skills-design-memo.md`。
 - 无新增/删除/重命名文件。
 
 ### 一致性检查（Check）
@@ -1081,12 +1081,12 @@
 - **A1+A2**：skills/project-initiation/SKILL.md 新增「角色边界」与「禁止未确认的意图猜测」；规范来源改为引用 skills/_common/role-boundary-and-intent-confirmation.md，移除对人类手册路径的引用。
 - **A4**：新增 skills/_common/role-boundary-and-intent-confirmation.md（角色边界 + 意图/需求确认，适用所有角色）；新增 rules/role-boundary-and-intent-confirmation.md（引用该文档 + 摘要）；prd-requirements、architecture-design、requirements-review、prd-review、architecture-review、test-plan-review、devops-cicd、sre-reliability 各自建 SKILL 内增加对 _common 文档的引用与本角色一句提醒。
 - **A3**：process/phases.yaml、mapping/phase-role-skill.yaml、roles/roles.yaml 顶部注释增加阶段产出与负责角色唯一对应、其他角色不得代做的说明及 _common 文档路径。
-- **B1–B3**：人类手册/roles/sop/sop/project-manager.md 扩展「不负责」为评审类+非评审类、删除「用户可指定代做」、明确无对应角色会话时仅派发与提示、流程由 PM 按规范决定用户不指定、增加禁止未确认的意图猜测；人类手册/process/process.md 补充各阶段正式产出由 mapping 规定角色负责、项目经理不代写；人类手册/process/process.md 新增「意图/需求确认（通用约定，人类侧检查清单）」。
+- **B1–B3**：人类手册/roles/sop/project-manager.sop.md 扩展「不负责」为评审类+非评审类、删除「用户可指定代做」、明确无对应角色会话时仅派发与提示、流程由 PM 按规范决定用户不指定、增加禁止未确认的意图猜测；人类手册/process/process.md 补充各阶段正式产出由 mapping 规定角色负责、项目经理不代写；人类手册/process/process.md 新增「意图/需求确认（通用约定，人类侧检查清单）」。
 - **B4**：意图/需求确认通用约定与各阶段排查要点已写入 process.md 上节。
 
 ### 影响范围（Where）
 - 新增：`skills/_common/role-boundary-and-intent-confirmation.md`、`rules/role-boundary-and-intent-confirmation.md`
-- 修改：`skills/project-initiation/SKILL.md`、`skills/prd-requirements/SKILL.md`、`skills/architecture-design/SKILL.md`、`skills/requirements-review/SKILL.md`、`skills/prd-review/SKILL.md`、`skills/architecture-review/SKILL.md`、`skills/test-plan-review/SKILL.md`、`skills/devops-cicd/SKILL.md`、`skills/sre-reliability/SKILL.md`、`process/phases.yaml`、`mapping/phase-role-skill.yaml`、`roles/roles.yaml`、`人类手册/roles/sop/sop/project-manager.md`、`人类手册/process/process.md`
+- 修改：`skills/project-initiation/SKILL.md`、`skills/prd-requirements/SKILL.md`、`skills/architecture-design/SKILL.md`、`skills/requirements-review/SKILL.md`、`skills/prd-review/SKILL.md`、`skills/architecture-review/SKILL.md`、`skills/test-plan-review/SKILL.md`、`skills/devops-cicd/SKILL.md`、`skills/sre-reliability/SKILL.md`、`process/phases.yaml`、`mapping/phase-role-skill.yaml`、`roles/roles.yaml`、`人类手册/roles/project-manager.sop.md`、`人类手册/process/process.md`
 - 受影响的映射/契约：无；mapping、manifest 未改结构，仅 YAML 注释与 SKILL 引用补充。
 
 ### 一致性检查（Check）

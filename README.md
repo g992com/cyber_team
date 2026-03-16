@@ -9,7 +9,7 @@
 ## 目录结构
 
 - **process/** — 流程与阶段定义；`phases.yaml` 供 Agent 判断当前阶段与顺序；人读的流程说明见 `人类手册/process/process.md`。流程预期产出物规范在此目录：`artifact-metadata-convention.md`（产出物元数据约定）、`project-docs/project-docs-index.yaml`（项目文档索引模板，供业务项目复制使用）。文档发现规则见 **rules/** 下 `project-docs-discovery.md`，供业务项目复制到 `.cursor/rules/`。
-- **roles/** — 角色定义；`roles.yaml` 供 Agent 解析角色与阶段关系；各角色职责说明与 SOP 见 `人类手册/roles/sop/*.md`。
+- **roles/** — 角色定义；`roles.yaml` 供 Agent 解析角色与阶段关系；各角色职责说明与 SOP 见 `人类手册/roles/*.sop.md`。
 -- **stages/** — 按阶段汇总的职责、活动、验收（人读）。【目录已迁移至 `人类手册/stages/`，此处保留历史说明，实际人类手册见下文。】
 - **mapping/** — `phase-role-skill.yaml` 为核心映射，Agent 据此在给定阶段/角色下加载对应 skill。
 - **skills/** — `manifest.yaml` 列出 skill 名称、来源（GitHub 或本地路径）、适用阶段/角色；自建 skill 位于本目录下同名子目录（如 `skills/prd-requirements/`）。
