@@ -47,7 +47,7 @@
 
 ## 应用到业务项目：单仓 + 规范快照
 
-推荐方式为**业务项目单仓**：在业务项目根目录建立 `.cyber_team/` 规范快照（从本规范库复制所需子集并附带 SNAPSHOT.yaml），并将 `.cursor-templates/` 中的规则与 skill 入口复制到业务项目的 `.cursor/`，详见 **`.cyber_team/process/templates-index.md`** 与规范库中的初始化脚本/说明。这样 Cursor 只打开业务项目即可，智能体以本仓 `.cyber_team/` 为规范根、以 `.cursor/rules/` 与 `.cursor/skills/` 为入口。
+推荐方式为**业务项目单仓**：在业务项目根目录建立 `.cyber_team/` 规范快照（从本规范库复制所需子集并附带 SNAPSHOT.yaml），并将 `.cursor-templates/` 中的规则与 skill 入口复制到业务项目的 `.cursor/`，详见 **`人类手册/scripts/templates-index.md`** 与规范库中的初始化脚本/说明。这样 Cursor 只打开业务项目即可，智能体以本仓 `.cyber_team/` 为规范根、以 `.cursor/rules/` 与 `.cursor/skills/` 为入口。
 
 要让智能体在业务项目中**先读 `project-docs-index.yaml` 再按路径读具体文档**，需在业务项目中：
 

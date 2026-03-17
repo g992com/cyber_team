@@ -223,7 +223,7 @@ def main() -> int:
             for rule_src in rules_dir.glob("*.md"):
                 copy2(rule_src, dst_rules / f"{rule_src.stem}.mdc")
 
-    print("完成。单仓模式已配置 .cyber_team 与 .cursor；请按 .cyber_team/process/templates-index.md 在业务项目中继续配置。")
+    print("完成。单仓模式已配置 .cyber_team 与 .cursor；请按 人类手册/scripts/templates-index.md 在业务项目中继续配置。")
     return 0
 
 

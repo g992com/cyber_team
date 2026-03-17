@@ -1369,3 +1369,113 @@
 ### 遗留与后续（Next）
 - stages/、其他 roles/*.sop 未做逐文件 grep，可按需抽查；历史备忘中 `人类手册/workspace/` 的提及为过去时，无需改为「已删除」以免混淆时间线。
 
+---
+
+## 变更备忘（2026-03-17）：任务板操作单一定义（Rule + Skill），Pinned Prompt 仅引用
+
+### 背景/触发（Context）
+- 在实际业务项目中，多会话协作依赖 pinned prompt 提示任务板操作，但多轮对话后易发生“创建任务卡但未更新任务索引”的遗漏。
+- 目标是降低 pinned prompt 的上下文开销，并通过“单一定义 + 引用”减少遗忘与三处不同步风险。
+
+### 关键判断（Why）
+- **约束与步骤应分层**：任务板的“必须/禁止”属于跨角色通用约束，适合放在业务项目 `.cursor/rules/`；具体命令与步骤适合集中到单一 skill，供规则引用。
+- **避免映射膨胀**：不将任务板操作 skill 绑定到 phase-role-skill（否则需要为多阶段、多角色添加映射，维护成本高），而以 rules 驱动“需要时阅读并执行”。
+- **人类手册只做引用与说明**：智能体行为的主杠杆在 `.cursor/rules/` 与 `.cyber_team/skills/*/SKILL.md`，人类手册中的 pinned 模板应收敛为引用，避免重复维护命令清单。
+
+### 备选方案与取舍（Options）
+- 方案 A：继续在各角色 pinned prompt 中内联 `task_board.py list/claim/update/new-card/add` 命令流。未选原因：上下文噪声大、容易丢失或被压缩，且命令变更会导致多处不同步。
+- 方案 B（采用）：新增任务板规则（rule）约束“必须通过脚本”，新增 task-board-usage skill 作为唯一步骤来源，pinned prompt 仅保留一句引用。采用原因：单一定义、跨角色一致、降低遗漏。
+
+### 最终方案（What）
+- 新增任务板规则与模板：
+  - `.cyber_team/rules/task-board-operations.md`
+  - `.cursor-templates/rules/task-board-operations.mdc.tpl`
+- 新增任务板使用 skill（唯一步骤来源）并登记：
+  - `.cyber_team/skills/task-board-usage/SKILL.md`
+  - `.cyber_team/skills/manifest.yaml` 增加 `task-board-usage`（由规则引用驱动，非按阶段/角色自动加载）
+- 收敛人类手册中各角色 pinned prompt 的任务板长段命令为单句引用，并更新“任务板与脚本约定”表述：
+  - `人类手册/Cursor-多会话协作落地方案.md`
+
+### 影响范围（Where）
+- 变更文件：
+  - 新增：`.cyber_team/rules/task-board-operations.md`、`.cursor-templates/rules/task-board-operations.mdc.tpl`、`.cyber_team/skills/task-board-usage/SKILL.md`
+  - 修改：`.cyber_team/skills/manifest.yaml`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/role-skills-design-memo.md`
+  - 删除/重命名：无
+- 受影响的映射/契约/索引（如有）：无（不修改 `phase-role-skill.yaml`；任务板路径契约延续 `scripts/task_board.py` 与 `docs/status/task-index.json`）。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`task-board-usage`、`task-board-operations`、`task_board.py list/claim/update/new-card/add`、`当**业务项目**使用“任务索引表 + 任务卡 + task_board.py”`、`不要直接编辑 task-index.json`
+- 已检查的清单/索引/映射：`.cyber_team/skills/manifest.yaml`、`.cursor-templates/rules/`、`人类手册/Cursor-多会话协作落地方案.md`
+- 已运行的诊断：`git diff --stat`（确认变更边界），未新增可执行代码故未跑测试
+
+### 遗留与后续（Next）
+- 若后续为 `task_board.py` 增加“创建即写索引”的复合命令（如 `create-task`），需在 `task-board-usage` 的“创建新任务”小节补充并将其作为推荐路径，保留 `new-card + add` 作为等价回退流程。
+
+---
+
+## 变更备忘（2026-03-17）：任务板 create-task（JSON 真源）+ claim 就绪校验（面向多智能体）
+
+### 背景/触发（Context）
+- 多会话/多智能体协作下，`new-card` 与 `add` 两步分离会导致“只建卡不入索引”；即使索引存在，也可能出现任务卡仍为占位符模板但被领取执行的风险。
+- 目标：把“创建任务”与“可领取前置条件”机制化到脚本层，减少对 pinned prompt/对话记忆/人工自检的依赖。
+
+### 关键判断（Why）
+- **原子创建优先**：将“写入任务内容 + 写索引”收敛为单一命令，可从机制上消除漏步。
+- **JSON 真源更适合多智能体**：结构化 payload 可做强校验与稳定路由；Markdown 作为渲染视图供人类阅读与跨会话传递上下文，避免双向漂移。
+- **就绪校验应在 claim 前强制**：将“占位符未替换/渲染陈旧”等问题拦在领取前，避免任务被错误执行；校验失败仅拒绝 claim，不引入额外写副作用。
+
+### 备选方案与取舍（Options）
+- 方案 A：仅通过 rules/skill 强调“new-card 后必须 add”“领取前自检占位符”。未选原因：仍依赖人工/对话记忆，难以保证多智能体一致执行。
+- 方案 B（采用）：脚本新增 `create-task`（payload JSON 真源 + 渲染任务卡 + 写索引），并在 `claim` 前强制就绪校验。采用原因：机制化、可验证、可扩展，且与现有锁/原子写入设计一致。
+
+### 最终方案（What）
+- `task_board.py` 新增命令：`create-task`，一次性完成：
+  - 读取/写入 payload（`docs/status/task-cards/<task_id>.json`，真源，规范化输出）
+  - 渲染任务卡（`docs/status/task-cards/<task_id>.md`，渲染视图）
+  - 写入索引（记录 `payload_path`，并沿用 lock + 原子替换）
+- `claim` 增强：在状态机校验前强制检查任务就绪（payload 合法、任务卡无占位符、任务卡不陈旧），失败则拒绝领取且不改索引。
+- 文档同步：
+  - `task-board-usage`：创建任务优先 `create-task`，明确 JSON 真源与渲染视图关系。
+  - 任务板规则/模板与多会话落地方案：推荐使用 `create-task`，并说明 payload 存放约定。
+
+### 影响范围（Where）
+- 变更文件：
+  - 修改：`.cyber_team/process/project-docs/status/task-board/task_board.py`、`.cyber_team/skills/task-board-usage/SKILL.md`、`.cyber_team/rules/task-board-operations.md`、`.cursor-templates/rules/task-board-operations.mdc.tpl`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/role-skills-design-memo.md`
+- 受影响的映射/契约/索引（如有）：
+  - 索引任务记录新增可选字段：`payload_path`
+  - 新增/固定路径契约：`docs/status/task-cards/<task_id>.json`（真源）与 `docs/status/task-cards/<task_id>.md`（渲染）
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`create-task`、`payload_path`、`task-board-usage`、`task_board.py claim`、`docs/status/task-cards/<task_id>.json`
+- 已检查的清单/索引/映射：`.cursor-templates/rules/`、`.cyber_team/rules/`、`.cyber_team/skills/task-board-usage/SKILL.md`、`人类手册/Cursor-多会话协作落地方案.md`
+- 已运行的诊断：`python -m py_compile` 通过；最小验证覆盖 `create-task` 成功路径、占位符 payload 失败路径、claim 成功路径
+
+### 遗留与后续（Next）
+- 可选增强：提供 `rerender-card` 或 `update-payload` 命令，便于 payload 更新后重新渲染 Markdown；并在索引中加入 payload hash/version 以做更强一致性校验。
+
+---
+
+## 变更备忘（2026-03-17）：创建任务卡入口收紧为 create-task（移除 new-card/add）
+
+### 背景/触发（Context）
+- 为进一步降低流程歧义与漏步风险，将“创建任务”的路径收敛为单一入口，避免出现不同角色在不同文档中选择不同创建方式（new-card+add vs create-task）导致执行不一致。
+
+### 关键判断（Why）
+- 创建任务的核心风险来自“多步可选路径”与“人类/智能体自由选择”，收敛为单一入口能从机制上减少遗漏与理解偏差。
+- `create-task` 已覆盖“写 payload（真源）+ 渲染任务卡 + 写索引”的原子能力，保留 `new-card/add` 的收益低于其带来的分歧成本。
+
+### 备选方案与取舍（Options）
+- 方案 A：保留 `new-card + add` 作为兼容路径，并在文档中标注推荐 create-task。未选原因：仍保留歧义入口，且用户明确要求只保留唯一方法。
+- 方案 B（采用）：文档/规则/skill 仅保留 `create-task`，并在脚本中移除 `new-card` 与 `add` 子命令入口。采用原因：唯一入口、降低歧义、减少漏步。
+
+### 最终方案（What）
+- `task_board.py`：移除 `add/new-card` 子命令入口，仅保留 `create-task` 作为创建新任务的方式。
+- `task-board-usage` / 任务板规则 / 人类手册：删除 `new-card + add` 的创建说明，表述为“创建新任务仅允许使用 create-task”。\n
+### 影响范围（Where）
+- 修改：`.cyber_team/process/project-docs/status/task-board/task_board.py`、`.cyber_team/skills/task-board-usage/SKILL.md`、`.cyber_team/rules/task-board-operations.md`、`.cursor-templates/rules/task-board-operations.mdc.tpl`、`人类手册/Cursor-多会话协作落地方案.md`、`人类手册/role-skills-design-memo.md`\n
+### 一致性检查（Check）
+- 全工程搜索关键词：`new-card`、`add --task`、`new-card + add`、`create-task`
+- 已运行的诊断：`python -m py_compile` + 最小验证（确认 `add/new-card` 不再可用，`create-task` 正常）\n
+### 遗留与后续（Next）
+- 若业务项目历史已存在通过 `add` 写入的索引记录，保持兼容（现有记录仍可 list/update/claim）；后续创建统一走 `create-task`。
+

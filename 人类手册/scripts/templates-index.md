@@ -14,3 +14,4 @@
 | `.cursor-templates/rules/role-boundary-and-intent-confirmation.mdc.tpl` 或 `.cyber_team/rules/role-boundary-and-intent-confirmation.md` | 业务项目 `.cursor/rules/` 下（.mdc） | 角色边界与意图/需求确认，执行任何角色时须遵守 |
 
 **说明**：业务项目以本仓 `.cyber_team/` 为规范根（可从规范库复制快照并附带 SNAPSHOT.yaml）；阶段定义、角色、映射等见 `.cyber_team/process/phases.yaml`、`.cyber_team/roles/roles.yaml`、`.cyber_team/mapping/phase-role-skill.yaml`。规则与 skill 入口从规范库 `.cursor-templates/` 复制到业务项目 `.cursor/` 后生效。规范库人类向说明文档见 `人类手册/` 目录（仅供人读，不随规范快照复制）。
+

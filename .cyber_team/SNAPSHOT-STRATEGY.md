@@ -41,7 +41,7 @@ notes: ""                # 可选：裁剪说明、补丁说明等
 2. 从规范库复制上述子集到 `.cyber_team/`（process、roles、mapping、skills、rules、CONVENTIONS）。
 3. 在 `.cyber_team/` 下写入 `SNAPSHOT.yaml`（含 source_repo、source_commit、generated_at）。
 4. 在业务项目根目录创建 `.cursor/rules/`、`.cursor/skills/`，从 `.cursor-templates/` 按上节生成内容。
-5. 按需复制 docs 索引、state 模板、update_state 脚本等（见 `process/templates-index.md` 与现有 setup 脚本）。
+5. 按需复制 docs 索引、state 模板、update_state 脚本等（由初始化脚本完成；本文件不再引用人类手册路径）。
 
 ## 5. 规范库目录说明
 

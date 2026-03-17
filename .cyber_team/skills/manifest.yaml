@@ -99,3 +99,11 @@ skills:
     source: ./sre-reliability
     phase_ids: [operations]
     role_ids: [sre]
+
+  # 自建：任务板（task-index + 任务卡）操作
+  # 说明：该 skill 由业务项目 .cursor/rules 引用驱动，不按阶段/角色自动加载；任何角色在进行任务板操作前按规则阅读并执行。
+  - id: task-board-usage
+    name: task-board-usage
+    source: ./task-board-usage
+    phase_ids: []
+    role_ids: []
