@@ -2,6 +2,8 @@
 
 本文档记录从「各角色 skill 建设」到「团队活动规范 + Agent 驱动」的讨论重点与思路变化，供后续查阅与延续设计时参考。
 
+**当前规范根约定**：规范库已采用**单仓模式**，规范根为 **`.cyber_team/`**（其下为 process/、roles/、mapping/、skills/、rules/ 等）。路径与链接约定见仓库 README 与 [.cyber_team/CONVENTIONS-paths-and-links.md](../.cyber_team/CONVENTIONS-paths-and-links.md)。人类手册内凡描述「规范库内」路径的，均已统一为 `.cyber_team/` 前缀；多根工作区已废弃，不提供模板。
+
 ---
 
 ## 设计思路重要转变点（简表）
@@ -1243,4 +1245,127 @@
 
 ### 遗留与后续（Next）
 - 无。各角色 SKILL 中若缺「意图与规则冲突时」可操作话术，可按需后续补一句与本角色职责相符的示例，不做强制。
+
+---
+
+## 变更备忘（2026-03-16）：单仓对接方案 — `.cyber_team` 快照 + `.cursor-templates` 模板
+
+### 背景/触发（Context）
+- 对接方式从「多根工作区（业务项目 + 规范库）」统一为「业务项目单仓」：规范以 `.cyber_team/` 快照形式存在于业务项目内，规则与 skill 入口从 `.cursor-templates/` 复制到业务项目 `.cursor/`，智能体仅打开业务项目即可工作。
+- 目标：单一对接模式、避免多根误读误写、规范版本可追溯（SNAPSHOT.yaml）。
+
+### 关键判断（Why）
+- 业务项目内以本仓 `.cyber_team/` 为唯一规范根；禁止在 `.cyber_team/` 外重复维护阶段/角色/映射定义。
+- 规范库中模板放在 `.cursor-templates/`，避免被 Cursor 当成本仓规则/技能加载；仅在复制到业务项目 `.cursor/` 后生效。
+- 路径与链接统一为 `.cyber_team/` 前缀及 `spec://` / `[[spec:...]]` 逻辑链接，约定见 `.cyber_team/CONVENTIONS-paths-and-links.md`。
+
+### 备选方案与取舍（Options）
+- 方案 A：继续支持多根工作区兼容。未选原因：用户明确统一为一种对接模式，简化心智与文档。
+- 方案 B（采用）：仅保留单仓 + `.cyber_team` 快照 + `.cursor-templates` 生成 `.cursor`；README/process/templates-index 等以单仓为主、多根为历史方式说明。
+
+### 最终方案（What）
+- 新增 `.cyber_team/CONVENTIONS-paths-and-links.md`（路径与逻辑链接约定）、`.cyber_team/SNAPSHOT-STRATEGY.md`（快照与 SNAPSHOT 格式）、`.cyber_team/PILOT-VERIFICATION.md`（试点验证说明）。
+- 新增 `.cursor-templates/rules/*.mdc.tpl` 与 `.cursor-templates/skills/<id>/SKILL.md` 薄入口模板，内容指向 `.cyber_team/...`。
+- 更新 `.cursor/rules/post-change-project-wide-review.mdc` 第 1 条原则：允许业务项目以 `.cyber_team/` 承载规范快照并禁止其外重复定义；供业务项目复制的规则注明模板位于 `.cursor-templates/rules/`。
+- 更新 README、process/templates-index.md、rules/project-docs-discovery.md：规范根与单仓应用方式；去除或弱化多根工作区为主流表述。
+- 更新 `人类手册/workspace/workspace-config/setup_business_project.py`：支持将 process/roles/mapping/skills 复制到业务项目 `.cyber_team/`、写入 SNAPSHOT.yaml、从 `.cursor-templates` 生成 `.cursor/rules` 与 `.cursor/skills`（默认开启，可用 `--no-snapshot` 仅做传统初始化）。
+- 试点：对 `pilot-business-project/` 执行脚本，验证 `.cyber_team` 与 `.cursor` 结构；`pilot-business-project/` 已加入 `.gitignore`。
+
+### 影响范围（Where）
+- 新增：`.cyber_team/CONVENTIONS-paths-and-links.md`、`.cyber_team/SNAPSHOT-STRATEGY.md`、`.cyber_team/PILOT-VERIFICATION.md`，`.cursor-templates/rules/*.mdc.tpl`、`.cursor-templates/skills/*/SKILL.md`
+- 修改：`.cursor/rules/post-change-project-wide-review.mdc`，`README.md`，`process/templates-index.md`，`rules/project-docs-discovery.md`，`人类手册/workspace/workspace-config/setup_business_project.py`，`.gitignore`
+- 受影响的映射/契约/索引：process/templates-index 中落点表增加 `.cursor-templates` 来源说明
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`.cyber_team`、`.cursor-templates`、`多根工作区`、`SNAPSHOT.yaml`
+- 已检查的清单/索引/映射：README、process/templates-index.md、post-change-project-wide-review.mdc
+- 已运行的诊断：无（脚本已对 pilot-business-project 跑通）
+
+### 遗留与后续（Next）
+- 人类手册中仍有多处「多根工作区」表述（如 Cursor-多会话协作落地方案、workspace-setup），保留为历史方式说明，未在本次修改。
+- 规范库自身尚未将 process/roles/mapping/skills 迁入 `.cyber_team/` 母本目录，当前复制来源仍为仓库根；若后续迁移，需同步更新 setup 脚本中的复制源路径。
+
+---
+
+## 变更备忘（2026-03-17）：规范母本迁入 `.cyber_team/`
+
+### 背景/触发（Context）
+- 按计划将规范库中 process、roles、mapping、skills 迁入 `.cyber_team/`，人类手册保留于仓库根（母本在 `.cyber_team/`，模板在 `.cursor-templates/`）。
+
+### 最终方案（What）
+- 将仓库根下 `process/`、`roles/`、`mapping/`、`skills/` 移动至 `.cyber_team/` 下；人类手册保留于仓库根 `人类手册/`。
+- 更新 `人类手册/workspace/workspace-config/setup_business_project.py`：复制源改为 `norm/.cyber_team/process` 等，索引与 state 路径改为 `norm/.cyber_team/process/...`。
+- 更新 README、`.cyber_team/process/templates-index.md`、`.cursor/rules/post-change-project-wide-review.mdc`、`rules/project-docs-discovery.md`、`rules/role-boundary-and-intent-confirmation.md`、`人类手册/workspace/workspace-config/workspace-setup.md` 中路径为 `.cyber_team/process/`、`人类手册/` 等。
+- 对 `pilot-business-project` 重新运行初始化脚本，确认从 `.cyber_team/` 复制与生成 `.cursor` 正常。
+
+### 影响范围（Where）
+- 移动：`process/` → `.cyber_team/process/`，`roles/` → `.cyber_team/roles/`，`mapping/` → `.cyber_team/mapping/`，`skills/` → `.cyber_team/skills/`。**人类手册** 保留于仓库根 `人类手册/`，不放入 `.cyber_team/`（仅供人读，非智能体依赖规范）。
+- 修改：上述脚本与文档中的路径引用。
+
+### 遗留与后续（Next）
+- **补充（同日）**：人类手册已移回仓库根，不置于 `.cyber_team/` 下。`人类手册/` 内部分文档仍含 `process/` 等旧路径表述，可按需改为 `.cyber_team/process/`；人类手册自身路径保持 `人类手册/`。
+
+---
+
+## 变更备忘（2026-03-17）：第八节全工程回顾 + 脚本迁至人类手册/scripts + 试点 tt_test_cases
+
+### 背景/触发（Context）
+- 按计划执行第八节「落地时的修改后全工程回顾」整轮；将业务项目初始化脚本由人类执行，从 `人类手册/workspace/workspace-config/` 迁至 `人类手册/scripts/`，仅保留单仓模式（多根工作区模式即将废弃）；对试点项目 `D:\my_ai_project\tt_test_cases` 执行初始化验证。
+
+### 关键判断（Why）
+- 脚本由人类在规范库侧执行，放在 `人类手册/scripts/` 更符合「人类手册下给人类用的工具」的定位；单仓为唯一推荐模式，移除 `--no-snapshot` 简化使用。
+
+### 最终方案（What）
+- **第八节回顾**：执行差异边界确认、全工程搜索关键词（`.cursor/specs`、`多根工作区`、`.cyber_team/`、`role-boundary-and-intent-confirmation`、`project-docs-discovery`）、清单/索引/映射检查（`.cyber_team/process/templates-index.md`、manifest、mapping、roles、phases、rules）、契约一致性（规范根 `.cyber_team/`、禁止智能体引用 `人类手册/` 路径）。
+- **脚本迁移**：新增 `人类手册/scripts/setup_business_project.py`（单仓模式唯一入口，移除 `--no-snapshot`）；删除 `人类手册/workspace/workspace-config/setup_business_project.py`。所有引用更新为 `人类手册/scripts/setup_business_project.py`。
+- **templates-index**：修正 process-tailoring 行，规范库无该文件，改为「由项目启动阶段产出，不复制自规范库」。
+- **试点**：对 `D:\my_ai_project\tt_test_cases` 执行 `python 人类手册/scripts/setup_business_project.py D:\my_ai_project\tt_test_cases`，确认 `.cyber_team/` 与 `.cursor/` 生成正常。
+
+### 影响范围（Where）
+- 新增：`人类手册/scripts/setup_business_project.py`
+- 删除：`人类手册/workspace/workspace-config/setup_business_project.py`
+- 修改：`.cyber_team/PILOT-VERIFICATION.md`、`人类手册/workspace/workspace-config/workspace-setup.md`、`.cyber_team/process/templates-index.md`（process-tailoring 行）
+- 试点目录：`D:\my_ai_project\tt_test_cases`（已生成 `.cyber_team/`、`.cursor/`、docs、scripts、state.yaml）
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`.cursor/specs`、`spec://process/`、`多根工作区`、`workspace`、`.cyber_team/`、`role-boundary-and-intent-confirmation`、`project-docs-discovery`
+- 已检查的清单/索引/映射：`.cyber_team/process/templates-index.md`、`.cyber_team/skills/manifest.yaml`、`.cyber_team/mapping/phase-role-skill.yaml`、`.cyber_team/roles/roles.yaml`、`.cyber_team/process/phases.yaml`、`.cyber_team/rules/`（路径与引用一致）
+- 已运行的诊断：初始化脚本在 tt_test_cases 上执行成功
+
+### 遗留与后续（Next）
+- 多根工作区相关文档（如 Cursor-多会话协作落地方案、workspace-setup 中的多根说明）保留为历史参考，不再推荐；新项目一律使用单仓 + `人类手册/scripts/setup_business_project.py`。
+
+---
+
+## 变更备忘（2026-03-16）：人类手册单仓与路径对齐
+
+### 背景/触发（Context）
+- 规范库已按 cyber-team-root-spec-layout 计划切换为单仓模式，规范母本在 `.cyber_team/`。人类手册内仍存在「规范库路径」为无前缀的 `process/`、`roles/`、`mapping/`、`skills/` 及多根工作区、workspace 模板的表述，易导致读者按旧路径或多根方式操作。
+- 目标：人类手册及全工程中凡描述规范库路径的，统一为 `.cyber_team/` 前缀；对接方式改为单仓优先，多根已废弃；方案 B 已选定：删除 `人类手册/workspace/` 并同步更新引用。
+
+### 关键判断（Why）
+- 人类手册仅供人读，但路径统一为 `.cyber_team/` 可与规范库实际结构一致，避免与 Agent 依赖的 .cyber_team 下文件混淆。
+- workspace 保留 vs 删除：已选删除（方案 B），因单仓 + `人类手册/scripts/setup_business_project.py` 为唯一推荐方式，多根模板已无维护价值且易造成悬空引用。
+
+### 备选方案与取舍（Options）
+- 方案 A：保留 人类手册/workspace/，仅标注废弃；未选原因：计划明确选定方案 B，且删除后 README/方案文档已改写，无悬空操作步骤。
+- 方案 B（采用）：删除 `人类手册/workspace/`，README 与 Cursor-多会话 中删除对 workspace-config 的链接，改为「多根已废弃，不提供模板」；人类手册内规范库路径全部加 `.cyber_team/` 前缀。
+
+### 最终方案（What）
+- 人类手册内已更新路径与单仓表述的文件：Cursor-多会话协作落地方案.md、多智能体蜂群编排落地方案.md、process/process.md、roles/project-manager.sop.md、过程改进/项目经理-角色边界与测试用例派发流程.md、role-skills-design.md、role-skill-consistency-check.md、role-skills-design-memo.md（增加当前规范根说明）；plan/ 下赛博包工头系列大纲.md、norm-improvement-plan.md、norm-improvement-execution-plan.md、norm-improvement-execution-plan-已完成.md、norm-backlog.md、阶段推进无例外规则-已实施.md。
+- 删除：`人类手册/workspace/`（含 workspace-config 及模板）。
+- 规范库内 Agent 用文档：`.cyber_team/process/artifact-metadata-convention.md`、`.cyber_team/skills/project-initiation/SKILL.md` 中规范路径统一为 `.cyber_team/...`。
+
+### 影响范围（Where）
+- 修改：上述人类手册文件及 README.md、.cyber_team/process/artifact-metadata-convention.md、.cyber_team/skills/project-initiation/SKILL.md。
+- 删除：`人类手册/workspace/workspace-config/workspace-setup.md`、`人类手册/workspace/workspace-config/cursor-multi-root-workspace.code-workspace.template`，及目录 `人类手册/workspace/`。
+- 受影响的引用：README「历史方式（多根工作区）」段改为「多根已废弃，不提供模板；请使用单仓 + 人类手册/scripts/setup_business_project.py」；Cursor-多会话 第六节部署结构改为单仓、无 workspace 模板引用；role-skills-design-memo 历史条目中出现的 `人类手册/workspace/` 为历史记录，保留不改。
+
+### 一致性检查（Check）
+- 全工程搜索关键词：`process/phases.yaml`、`process/state.yaml`、`roles/roles.yaml`、`mapping/phase-role-skill`、`skills/manifest`（不带 `.cyber_team/` 的规范库路径）、`人类手册/workspace/workspace-config`、`多根工作区`、`workspace-setup`。人类手册与 README 中规范库路径已统一为 `.cyber_team/`；README 与 Cursor-多会话 无悬空 workspace 链接；备忘历史条目保留旧路径不改为约定。
+- 已检查的清单/索引/映射：README、.cyber_team/process/templates-index.md、人类手册/Cursor-多会话协作落地方案.md、人类手册/plan/ 下各文件、.cyber_team/skills/project-initiation/SKILL.md、.cyber_team/process/artifact-metadata-convention.md。
+- 已运行的诊断：无脚本或构建；Markdown 路径与表述一致性已通过 grep 复核。
+
+### 遗留与后续（Next）
+- stages/、其他 roles/*.sop 未做逐文件 grep，可按需抽查；历史备忘中 `人类手册/workspace/` 的提及为过去时，无需改为「已删除」以免混淆时间线。
 

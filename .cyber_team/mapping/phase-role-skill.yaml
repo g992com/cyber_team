@@ -1,0 +1,77 @@
+# 阶段→角色→活动→skill 映射 — Agent 必读，用于自动启用 skill
+# 给定 phase_id（及可选 role_id）可查得应加载的 skill_name；skill_name 与 skills/manifest.yaml 对应
+# 产出归属：各 phase 的正式产出仅由本 mapping 中标注的 role_id 负责，其他角色（含 project-manager）不得代做；例：testing 阶段产出由 qa 负责。详见 .cyber_team/rules/role-boundary-and-intent-confirmation.md
+mappings:
+  - phase_id: initiation
+    role_id: project-manager
+    activity: 项目启动与流程裁剪
+    skill_name: project-initiation
+  - phase_id: requirements
+    role_id: product-requirements
+    activity: 用户故事与验收标准
+    skill_name: user-story
+  - phase_id: requirements
+    role_id: product-requirements
+    activity: PRD/需求文档
+    skill_name: prd-requirements
+  - phase_id: requirements-review
+    role_id: requirements-reviewer
+    activity: 用户故事/验收标准评审
+    skill_name: requirements-review
+  - phase_id: requirements-review
+    role_id: requirements-reviewer
+    activity: PRD/需求文档评审
+    skill_name: prd-review
+  - phase_id: design
+    role_id: architect
+    activity: 架构与 ADR
+    skill_name: architecture-design
+  - phase_id: design
+    role_id: dba
+    activity: 数据模型与迁移
+    skill_name: flyway-migration
+  - phase_id: design-review
+    role_id: design-reviewer
+    activity: 架构/设计/安全设计评审
+    skill_name: architecture-review
+  - phase_id: development
+    role_id: frontend
+    activity: 前端实现
+    skill_name: frontend-design
+  - phase_id: development
+    role_id: backend
+    activity: 后端与 API
+    skill_name: backend-development
+  - phase_id: development
+    role_id: technical-writer
+    activity: 文档
+    skill_name: technical-writer
+  - phase_id: code-review
+    role_id: code-reviewer
+    activity: PR/代码审查
+    skill_name: code-review-expert
+  - phase_id: testing
+    role_id: qa
+    activity: 测试编写与策略
+    skill_name: pytest
+  - phase_id: test-review
+    role_id: test-reviewer
+    activity: 测试计划/用例评审
+    skill_name: test-plan-review
+  - phase_id: deployment
+    role_id: devops
+    activity: CI/CD 与发布
+    skill_name: devops-cicd
+  - phase_id: operations
+    role_id: sre
+    activity: 可靠性、监控、复盘
+    skill_name: sre-reliability
+  # 安全：多阶段，与设计/架构评审、代码评审配合
+  - phase_id: design
+    role_id: security
+    activity: 安全与合规要点
+    skill_name: code-review
+  - phase_id: code-review
+    role_id: code-reviewer
+    activity: 实现层安全
+    skill_name: code-review

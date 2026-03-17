@@ -40,7 +40,7 @@
 
 ## 3. 软件开发流程（阶段定义）
 
-阶段定义（id、name、order、outputs）的**唯一定义**见规范库 **`process/phases.yaml`**；本节不重复列举，Agent 与人工均以该文件为准。以下为对人读的概要说明。
+阶段定义（id、name、order、outputs）的**唯一定义**见规范库 **`.cyber_team/process/phases.yaml`**；本节不重复列举，Agent 与人工均以该文件为准。以下为对人读的概要说明。
 
 规范流程按阶段划分，用于约束 Agent 行为、获得稳定输出；在各阶段下挂载角色、活动与 skill。执行可为单 Agent 连续推进或多 Agent 协作，阶段与角色/skill 的映射需在最终结构化产出中可被 Agent 解析并用于自动启用相应 skill。评审阶段可与主阶段并行或在其后（如需求评审在需求阶段末，代码评审在开发 PR 提交时）。
 
@@ -426,7 +426,7 @@
 最终交付的规范为一组**结构化文件**，需兼顾**人可读**与**Agent 可解析**。以下为建议的目录与文件布局，便于版本维护与后续实现「Agent 按阶段/角色自动启用 skill」。
 
 ```
-规范根目录/
+规范根目录（.cyber_team/）/
 ├── README.md                    # 总览、使用约定、与 Agent 的接口说明
 ├── process/
 │   ├── phases.yaml              # 阶段定义（id、名称、产出、顺序）— Agent 解析
@@ -452,19 +452,19 @@
 ```
 
 **说明**：
-- **process/**：流程与阶段定义；`phases.yaml` 供 Agent 判断当前阶段与顺序。
-- **roles/**：角色定义与详细 SOP/验收；`roles.yaml` 供 Agent 解析角色与阶段关系。
-- **stages/**：按阶段汇总的职责、活动、验收，与人读的流程文档一致。
-- **mapping/**：`phase-role-skill.yaml` 为核心映射，Agent 据此在给定阶段/角色下加载对应 skill。
-- **skills/**：`manifest.yaml` 列出 skill 名称、来源（GitHub 或本地路径）、对应阶段/角色；实际 skill 文件可放在 `.cursor/skills/` 或由 manifest 引用。
+- **.cyber_team/process/**：流程与阶段定义；`phases.yaml` 供 Agent 判断当前阶段与顺序。
+- **.cyber_team/roles/**：角色定义与详细 SOP/验收；`roles.yaml` 供 Agent 解析角色与阶段关系。
+- **stages/**：按阶段汇总的职责、活动、验收，与人读的流程文档一致（可置于人类手册或 .cyber_team 下）。
+- **.cyber_team/mapping/**：`phase-role-skill.yaml` 为核心映射，Agent 据此在给定阶段/角色下加载对应 skill。
+- **.cyber_team/skills/**：`manifest.yaml` 列出 skill 名称、来源（GitHub 或本地路径）、对应阶段/角色；实际 skill 文件可放在 `.cursor/skills/` 或由 manifest 引用。
 
-**与已有 skill 的关系**：本规范**不与已有 skill 合并**，单独形成上述目录结构；项目内已有的 skill（如原 skill 目录下的内容）保持独立，原 skill 目录已更名以区分。规范中的 `skills/` 仅承载本方案选型与自建的 skill，不引用或合并既有目录。
+**与已有 skill 的关系**：本规范**不与已有 skill 合并**，单独形成上述目录结构；项目内已有的 skill（如原 skill 目录下的内容）保持独立，原 skill 目录已更名以区分。规范中的 `.cyber_team/skills/` 仅承载本方案选型与自建的 skill，不引用或合并既有目录。
 
 **自建 skill 落地顺序**：按**软件开发阶段顺序**（第 3 节）依次落地：需求阶段所需自建（如 prd-requirements）→ 需求评审阶段（requirements-review、prd-review 等）→ 架构/设计（architecture-design）→ 设计/架构评审（architecture-review）→ 开发阶段所需已多为采纳 skill，可补缺 → 代码评审、测试已有采纳 → 测试评审（test-plan-review）→ 部署/发布（devops-cicd）→ 运维/复盘（sre-reliability）。同一阶段内自建项可再按依赖或优先级细排。
 
 **规范根目录的放置位置**：规范根目录的**放置位置**由项目/团队约定，例如：当前仓库下的子目录（如 `./team-norms/`）、独立仓库、或与代码库平级的目录。约定后应在 README 或配置中写明，便于 Agent 与人工统一定位。
 
-**进展/状态的表示与存储**：为实现「Agent 决定并记录当前阶段与进展」，需定义**进展/状态的表示方式与存储位置**，供 Agent 读写。建议：将运行态状态文件放在**业务项目仓库**（如根目录 `state.yaml` 或 `.agent/state.yaml`），字段可包含：`current_phase`（当前阶段 id，与 phases.yaml 的 id 一致，建议与第 3 节「英文标识」一致）、`completed_phases`（已完成阶段列表）、`current_role`（当前启用的角色，可选）、`updated_at`（最后更新时间）。规范仓库侧仅提供 schema 与初始化模板（如 `process/state.yaml`），避免在多根工作区中误写到规范库。
+**进展/状态的表示与存储**：为实现「Agent 决定并记录当前阶段与进展」，需定义**进展/状态的表示方式与存储位置**，供 Agent 读写。建议：将运行态状态文件放在**业务项目仓库**（如根目录 `state.yaml` 或 `.agent/state.yaml`），字段可包含：`current_phase`（当前阶段 id，与 phases.yaml 的 id 一致，建议与第 3 节「英文标识」一致）、`completed_phases`（已完成阶段列表）、`current_role`（当前启用的角色，可选）、`updated_at`（最后更新时间）。规范库侧仅提供 schema 与初始化模板（如 `.cyber_team/process/state.yaml`）；单仓模式下业务项目内自带 `.cyber_team` 快照，无需多根工作区。
 
 **阶段转换规则**：何时进入下一阶段（如验收满足、用户确认、产出物就绪等）**待落地时约定**；约定后可在 process 或 README 中写明，供 Agent 与人工一致执行。
 
@@ -472,12 +472,12 @@
 
 | 文件 | 建议字段 | 说明 |
 |------|----------|------|
-| **process/phases.yaml** | `phases`: 列表，每项含 `id`, `name`, `outputs`, `order` | `id` 建议与第 3 节「英文标识」一致（如 requirements, design, code-review），与 mapping 及 state 中 current_phase 一致；`order` 用于阶段顺序与推进判断 |
-| **roles/roles.yaml** | `roles`: 列表，每项含 `id`, `name`, `summary`, `phase_ids` | `phase_ids` 为该角色参与的阶段 id 列表，与 mapping 对应 |
-| **mapping/phase-role-skill.yaml** | `mappings`: 列表，每项含 `phase_id`, `role_id`, `activity`, `skill_id` 或 `skill_name` | 给定 phase_id（及可选 role_id）可查得应加载的 skill；skill_name 与 manifest 对应 |
-| **skills/manifest.yaml** | `skills`: 列表，每项含 `id`/`name`, `source`（GitHub URL 或本地路径）, `phase_ids`/`role_ids` | Agent 根据 mapping 得到的 skill 名/id 在此解析出实际加载路径或引用 |
+| **.cyber_team/process/phases.yaml** | `phases`: 列表，每项含 `id`, `name`, `outputs`, `order` | `id` 建议与第 3 节「英文标识」一致（如 requirements, design, code-review），与 mapping 及 state 中 current_phase 一致；`order` 用于阶段顺序与推进判断 |
+| **.cyber_team/roles/roles.yaml** | `roles`: 列表，每项含 `id`, `name`, `summary`, `phase_ids` | `phase_ids` 为该角色参与的阶段 id 列表，与 mapping 对应 |
+| **.cyber_team/mapping/phase-role-skill.yaml** | `mappings`: 列表，每项含 `phase_id`, `role_id`, `activity`, `skill_id` 或 `skill_name` | 给定 phase_id（及可选 role_id）可查得应加载的 skill；skill_name 与 manifest 对应 |
+| **.cyber_team/skills/manifest.yaml** | `skills`: 列表，每项含 `id`/`name`, `source`（GitHub URL 或本地路径）, `phase_ids`/`role_ids` | Agent 根据 mapping 得到的 skill 名/id 在此解析出实际加载路径或引用 |
 
-**后续落地**：可先产出 `process/phases.yaml`、`mapping/phase-role-skill.yaml`、`skills/manifest.yaml` 及状态文件 schema，再按阶段顺序逐步补全自建 skill；Agent 侧需实现「读取状态文件与 mapping → 决定当前阶段/角色 → 加载 manifest 中对应 skill」的逻辑。
+**后续落地**：可先产出 `.cyber_team/process/phases.yaml`、`.cyber_team/mapping/phase-role-skill.yaml`、`.cyber_team/skills/manifest.yaml` 及状态文件 schema，再按阶段顺序逐步补全自建 skill；Agent 侧需实现「读取状态文件与 mapping → 决定当前阶段/角色 → 加载 manifest 中对应 skill」的逻辑。
 
 ---
 

@@ -1,0 +1,49 @@
+# 软件开发流程阶段定义 — 供 Agent 解析
+# id 与 mapping、state.current_phase 一致；order 用于阶段顺序与推进判断
+# 参考：PMBOK 项目启动与裁剪、ISO/IEC 12207 生命周期与 ISO/IEC/IEEE 16326 项目管理
+# 阶段产出归属：各阶段 outputs 的正式产出仅由 mapping/phase-role-skill.yaml 中规定的 role_id 负责，其他角色不得代为撰写；见 .cyber_team/rules/role-boundary-and-intent-confirmation.md
+phases:
+  - id: initiation
+    name: 项目启动
+    outputs: ["项目计划", "流程裁剪说明", "阶段与活动清单", "可选：项目章程摘要"]
+    order: 0
+  - id: requirements
+    name: 需求
+    outputs: ["用户故事", "PRD", "验收标准", "路线图/Backlog"]
+    order: 1
+  - id: requirements-review
+    name: 需求评审
+    outputs: ["评审结论", "待澄清/须补充项"]
+    order: 2
+  - id: design
+    name: 架构/设计
+    outputs: ["架构设计", "API 设计", "数据库设计", "ADR"]
+    order: 3
+  - id: design-review
+    name: 设计/架构评审
+    outputs: ["设计评审结论", "风险与改进建议"]
+    order: 4
+  - id: development
+    name: 开发
+    outputs: ["代码", "PR", "文档草稿"]
+    order: 5
+  - id: code-review
+    name: 代码评审
+    outputs: ["评审结论（P0–P3 等）", "修改建议"]
+    order: 6
+  - id: testing
+    name: 测试
+    outputs: ["测试计划/用例", "测试结果", "质量报告"]
+    order: 7
+  - id: test-review
+    name: 测试评审
+    outputs: ["测试评审结论", "覆盖度与用例改进建议"]
+    order: 8
+  - id: deployment
+    name: 部署/发布
+    outputs: ["流水线", "发布包", "发布说明"]
+    order: 9
+  - id: operations
+    name: 运维/复盘
+    outputs: ["监控与告警", "故障复盘", "Runbook", "SLO 报告"]
+    order: 10

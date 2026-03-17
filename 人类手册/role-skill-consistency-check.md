@@ -4,7 +4,7 @@
 
 ## 对照表
 
-| 阶段 | 角色 | 活动 | 方案 skill（名称） | 方案类型 | 当前 mapping/manifest | 当前类型 | 一致 |
+| 阶段 | 角色 | 活动 | 方案 skill（名称） | 方案类型 | 当前 .cyber_team/mapping、.cyber_team/skills/manifest | 当前类型 | 一致 |
 |------|------|------|-------------------|----------|------------------------|----------|------|
 | 需求 | 产品经理 | 用户故事与验收标准 | user-story (razbakov) | 引用 | user-story，source 为 GitHub | 引用 | ✅ |
 | 需求 | 产品经理 | PRD/需求文档 | prd-requirements（自建或检索） | 自建 | prd-requirements，source 为 ./prd-requirements | 自建 | ✅ |

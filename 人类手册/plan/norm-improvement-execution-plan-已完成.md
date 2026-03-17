@@ -34,14 +34,14 @@
 
 ## 步骤 2：落实「阶段定义唯一事实来源」
 
-**目标**：规范库内阶段定义的唯一来源为 `process/phases.yaml`；其他文档仅引用并说明「与 process/phases.yaml 一致」，不重复列举阶段 id/order/outputs。
+**目标**：规范库内阶段定义的唯一来源为 `.cyber_team/process/phases.yaml`；其他文档仅引用并说明「与 .cyber_team/process/phases.yaml 一致」，不重复列举阶段 id/order/outputs。
 
 **动作**：
-- 检查 `人类手册/role-skills-design.md`：若存在与 phases 完全一致的阶段表格（id/order/产出等），改为「阶段定义见 `process/phases.yaml`，下表/本节仅作概要或引用说明」，或删除重复表格、改为引用 + 简短说明。
-- 检查其他引用阶段的文档（如 `人类手册/Cursor-多会话协作落地方案.md`、`人类手册/多智能体蜂群编排落地方案.md`、`skills/project-initiation/SKILL.md`）：若有逐条列举阶段列表，改为引用 `process/phases.yaml` 或「与 process/phases.yaml 一致」的说明，不保留可与之冲突的副本。
-- 确认 `process/phases.yaml` 为全工程中**唯一**完整列举 phases 的文件。
+- 检查 `人类手册/role-skills-design.md`：若存在与 phases 完全一致的阶段表格（id/order/产出等），改为「阶段定义见 `.cyber_team/process/phases.yaml`，下表/本节仅作概要或引用说明」，或删除重复表格、改为引用 + 简短说明。
+- 检查其他引用阶段的文档（如 `人类手册/Cursor-多会话协作落地方案.md`、`人类手册/多智能体蜂群编排落地方案.md`、`.cyber_team/skills/project-initiation/SKILL.md`）：若有逐条列举阶段列表，改为引用 `.cyber_team/process/phases.yaml` 或「与 .cyber_team/process/phases.yaml 一致」的说明，不保留可与之冲突的副本。
+- 确认 `.cyber_team/process/phases.yaml` 为全工程中**唯一**完整列举 phases 的文件。
 
-**涉及文件**：`人类手册/role-skills-design.md`、可能涉及 `人类手册/Cursor-多会话协作落地方案.md`、`人类手册/多智能体蜂群编排落地方案.md`、`skills/project-initiation/SKILL.md`、以及任何含阶段列表的文档。
+**涉及文件**：`人类手册/role-skills-design.md`、可能涉及 `人类手册/Cursor-多会话协作落地方案.md`、`人类手册/多智能体蜂群编排落地方案.md`、`.cyber_team/skills/project-initiation/SKILL.md`、以及任何含阶段列表的文档。
 
 **本步完成后 — 全工程回顾**：
 - 差异与影响面：修改引用方式，删除或收缩重复的阶段列举。
@@ -56,11 +56,11 @@
 **目标**：业务项目 state 支持「本项目阶段集合」的存储；project-initiation 明确产出 tailoring_snapshot 与 process-tailoring.md。
 
 **动作**：
-- 在 `process/state.yaml` 中增加 **`tailoring_snapshot`** 字段（建议为列表，如 `tailoring_snapshot: []`），并在文件头注释/schema 说明中注明：本项目要执行的 phase_id 列表，与 `process/phases.yaml` 的 id 一致；顺序即执行顺序；由项目启动阶段产出。
-- 在 `skills/project-initiation/SKILL.md` 的「产出物约定」或「与 state 的衔接」中明确：须输出 **state.tailoring_snapshot**（写入业务项目 state.yaml）及 **docs/process-tailoring.md**（裁剪理由、保留/省略/简化的阶段与活动、适用条件）。不复制 phases 内容到业务项目。
-- 若存在 `process/state.yaml` 的 schema 说明文档（或 README 中 state 说明），同步补充 tailoring_snapshot 的语义与用法。
+- 在 `.cyber_team/process/state.yaml` 中增加 **`tailoring_snapshot`** 字段（建议为列表，如 `tailoring_snapshot: []`），并在文件头注释/schema 说明中注明：本项目要执行的 phase_id 列表，与 `.cyber_team/process/phases.yaml` 的 id 一致；顺序即执行顺序；由项目启动阶段产出。
+- 在 `.cyber_team/skills/project-initiation/SKILL.md` 的「产出物约定」或「与 state 的衔接」中明确：须输出 **state.tailoring_snapshot**（写入业务项目 state.yaml）及 **docs/process-tailoring.md**（裁剪理由、保留/省略/简化的阶段与活动、适用条件）。不复制 phases 内容到业务项目。
+- 若存在 `.cyber_team/process/state.yaml` 的 schema 说明文档（或 README 中 state 说明），同步补充 tailoring_snapshot 的语义与用法。
 
-**涉及文件**：`process/state.yaml`、`skills/project-initiation/SKILL.md`、`README.md`（若含 state 字段说明）。
+**涉及文件**：`.cyber_team/process/state.yaml`、`.cyber_team/skills/project-initiation/SKILL.md`、`README.md`（若含 state 字段说明）。
 
 **本步完成后 — 全工程回顾**：
 - 差异与影响面：state 新增字段；project-initiation 产出约定更新。
@@ -75,11 +75,11 @@
 **目标**：Agent/Orchestrator 可判断当前阶段是否可推进到下一阶段；与 project-docs-index、产出物 status 对齐。
 
 **动作**：
-- 在 `process/` 下新增阶段出口条件描述文件（推荐独立 YAML，如 `process/exit-criteria.yaml` 或等价名称）：按 phase_id 列出出口条件（如：某阶段对应 project-docs-index 中哪些产出物需存在、关键文档 status 需为 approved 等）。结构需可被 Agent 解析（如 phase_id → 条件列表或检查项）。
+- 在 `.cyber_team/process/` 下新增阶段出口条件描述文件（推荐独立 YAML，如 `.cyber_team/process/exit-criteria.yaml` 或等价名称）：按 phase_id 列出出口条件（如：某阶段对应 project-docs-index 中哪些产出物需存在、关键文档 status 需为 approved 等）。结构需可被 Agent 解析（如 phase_id → 条件列表或检查项）。
 - 在 `人类手册/process/process.md` 或 `README.md` 中增加「阶段转换规则」简短说明：何时可进入下一阶段（如：当前阶段出口条件满足、或用户确认）；并引用上述出口条件文件（引用关系，不重复罗列条件细节）。
-- 确保出口条件与 `process/artifact-metadata-convention.md` 的 status、`process/project-docs/project-docs-index.yaml` 的键一致（phase_id、产出物类型）。
+- 确保出口条件与 `.cyber_team/process/artifact-metadata-convention.md` 的 status、`.cyber_team/process/project-docs/project-docs-index.yaml` 的键一致（phase_id、产出物类型）。
 
-**涉及文件**：新增 `process/exit-criteria.yaml`（或约定文件名）；修改 `人类手册/process/process.md` 和/或 `README.md`；必要时在 `process/artifact-metadata-convention.md` 中补充一句「出口条件见 process/exit-criteria.yaml」。
+**涉及文件**：新增 `.cyber_team/process/exit-criteria.yaml`（或约定文件名）；修改 `人类手册/process/process.md` 和/或 `README.md`；必要时在 `.cyber_team/process/artifact-metadata-convention.md` 中补充一句「出口条件见 .cyber_team/process/exit-criteria.yaml」。
 
 **本步完成后 — 全工程回顾**：
 - 差异与影响面：新增出口条件文件；流程说明中增加转换规则与引用。
@@ -94,10 +94,10 @@
 **目标**：便于业务项目初始化时发现需引用的模板及复制目标路径，不复制规范定义本身。
 
 **动作**：
-- 在 `process/` 下新增**模板与清单索引**（如 `process/README.md` 的固定章节，或独立 `process/templates-index.md`）：列出「需在业务项目中创建或初始化的资产」及在规范库中的路径、建议在业务项目中的落点（如 state.yaml → 业务项目根目录；project-docs-index.yaml → 业务项目 docs/；process-tailoring.md → 业务项目 docs/；status 模板 → 业务项目 docs/status/）。每项用「规范库路径 → 业务项目目标」表述，避免在索引中重复模板全文（引用关系）。
+- 在 `.cyber_team/process/` 下新增**模板与清单索引**（如 `.cyber_team/process/README.md` 的固定章节，或独立 `.cyber_team/process/templates-index.md`）：列出「需在业务项目中创建或初始化的资产」及在规范库中的路径、建议在业务项目中的落点（如 state.yaml → 业务项目根目录；project-docs-index.yaml → 业务项目 docs/；process-tailoring.md → 业务项目 docs/；status 模板 → 业务项目 docs/status/）。每项用「规范库路径 → 业务项目目标」表述，避免在索引中重复模板全文（引用关系）。
 - 在 README 或 process 说明中增加一句：业务项目初始化时可参考 `process/` 下的模板与清单索引。
 
-**涉及文件**：新增或修改 `process/README.md` 或 `process/templates-index.md`；可选在 `README.md` 中增加对模板索引的引用。
+**涉及文件**：新增或修改 `.cyber_team/process/README.md` 或 `.cyber_team/process/templates-index.md`；可选在 `README.md` 中增加对模板索引的引用。
 
 **本步完成后 — 全工程回顾**：
 - 差异与影响面：新增索引文档或章节，无规范内容拷贝。

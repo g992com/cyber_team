@@ -8,9 +8,9 @@
 
 | 序号 | 改进项 | 说明 |
 |------|--------|------|
-| 1 | **阶段定义唯一事实来源** | 规范库内阶段定义的唯一来源为 `process/phases.yaml`；`人类手册/role-skills-design.md` 等文档仅引用并说明「与 process/phases.yaml 一致」，不重复列举阶段 id/order/outputs，避免多源不一致。 |
-| 2 | **阶段出口条件（可机读）** | 在 `process/` 下新增阶段出口条件描述（推荐独立 YAML），使 Agent/Orchestrator 能判断「当前阶段是否可推进到下一阶段」。出口条件与 `project-docs-index`、产出物 `status`（如关键文档 approved）及现有 artifact 约定对齐。 |
-| 3 | **产出物/模板可发现** | 保持并显化「先读 project-docs-index 再按路径读文档」的约定；可选在 `process/` 下增加**模板与清单索引**，列出需复制到业务项目的资产及目标路径，便于初始化与发现。 |
+| 1 | **阶段定义唯一事实来源** | 规范库内阶段定义的唯一来源为 `.cyber_team/process/phases.yaml`；`人类手册/role-skills-design.md` 等文档仅引用并说明「与 .cyber_team/process/phases.yaml 一致」，不重复列举阶段 id/order/outputs，避免多源不一致。 |
+| 2 | **阶段出口条件（可机读）** | 在 `.cyber_team/process/` 下新增阶段出口条件描述（推荐独立 YAML），使 Agent/Orchestrator 能判断「当前阶段是否可推进到下一阶段」。出口条件与 `project-docs-index`、产出物 `status`（如关键文档 approved）及现有 artifact 约定对齐。 |
+| 3 | **产出物/模板可发现** | 保持并显化「先读 project-docs-index 再按路径读文档」的约定；可选在 `.cyber_team/process/` 下增加**模板与清单索引**，列出需复制到业务项目的资产及目标路径，便于初始化与发现。 |
 
 以上三项直接支撑：当前阶段 → 该读哪些文档、该谁出手、何时能推进，缺一不可。
 
@@ -25,9 +25,9 @@
 
 ### 2.2 思路
 
-- **规范库**：维护**阶段全集**（即当前 `process/phases.yaml` 的完整生命周期：initiation → … → operations），作为「所有可能阶段」的唯一定义。
+- **规范库**：维护**阶段全集**（即当前 `.cyber_team/process/phases.yaml` 的完整生命周期：initiation → … → operations），作为「所有可能阶段」的唯一定义。
 - **项目经理**：在项目启动阶段，在充分调查和了解用户需求与问题后，从全集中**裁剪**出适合本业务项目的阶段集合（或说工作流程），形成**该业务项目自己的 process**（以裁剪结果的形式存在，而非复制阶段定义）。
-- **业务项目**：通过 **state.yaml 的 `tailoring_snapshot`**（phase_id 列表）表达「本项目要执行的阶段」；配合 **docs/process-tailoring.md** 记录裁剪理由与适用条件。Agent 读取规范库的 phases 后按 tailoring_snapshot 过滤得到「本项目阶段」；角色与 skill 仍从规范库的 mapping/roles 按 phase_id 解析。
+- **业务项目**：通过 **state.yaml 的 `tailoring_snapshot`**（phase_id 列表）表达「本项目要执行的阶段」；配合 **docs/process-tailoring.md** 记录裁剪理由与适用条件。Agent 读取规范库的 phases 后按 tailoring_snapshot 过滤得到「本项目阶段」；角色与 skill 仍从规范库的 `.cyber_team/mapping/`、`.cyber_team/roles/` 按 phase_id 解析。
 
 ### 2.3 采用做法 B（裁剪结果落点）
 
@@ -45,7 +45,7 @@
 **可行性：高**
 
 - 规范库已具备阶段全集；project-initiation 已包含流程裁剪步骤。做法 B 仅需在 state 中增加 tailoring_snapshot 字段、在业务项目 docs 下产出 process-tailoring.md，无需在业务项目内复制 phases 文件。
-- 规范库的 mapping/roles 均按 phase_id 索引；Agent 读规范库 phases → 按 tailoring_snapshot 过滤 → 得到本项目阶段列表，与 state.current_phase、出口条件配合即可推进。技术上可行。
+- 规范库的 `.cyber_team/mapping/`、`.cyber_team/roles/` 均按 phase_id 索引；Agent 读规范库 phases → 按 tailoring_snapshot 过滤 → 得到本项目阶段列表，与 state.current_phase、出口条件配合即可推进。技术上可行。
 
 **有效性：高**
 
@@ -72,9 +72,9 @@
 
 1. 明确并文档化「阶段全集 + 裁剪 → 业务项目 process」的约定：裁剪结果落点已确定为**做法 B**（state.tailoring_snapshot + docs/process-tailoring.md），遵守「任何内容都不会出现多个拷贝」原则。
 2. 落实「阶段定义唯一事实来源」：检查并修正 role-skills-design 等文档对阶段的引用，统一指向 phases.yaml。
-3. 在 process/state.yaml 模板（及 schema 说明）中增加 **tailoring_snapshot** 字段；在 project-initiation 的产出要求中写明须输出 tailoring_snapshot 与 process-tailoring.md。
+3. 在 .cyber_team/process/state.yaml 模板（及 schema 说明）中增加 **tailoring_snapshot** 字段；在 project-initiation 的产出要求中写明须输出 tailoring_snapshot 与 process-tailoring.md。
 4. 新增阶段出口条件（YAML + 与索引/status 的对应），并在 process.md 或 README 中简述阶段转换规则。
-5. 可选：在 process/ 下增加模板与清单索引，便于业务项目初始化。
+5. 可选：在 .cyber_team/process/ 下增加模板与清单索引，便于业务项目初始化。
 
 完成以上后，智能体协作所需的最小必要集即就绪；其余改进按 [norm-backlog.md](norm-backlog.md) 中的待办逐步推进。
 

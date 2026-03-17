@@ -6,7 +6,7 @@
 
 ## 近期进展（更新时请补充日期与摘要）
 
-- **2025-03-12**：按 [规范改进实施计划](norm-improvement-execution-plan.md) 完成步骤 1–5：① 文档化阶段与裁剪约定（做法 B，process/process.md + README）；② 阶段定义唯一事实来源（role-skills-design 第 3 节改为引用 phases.yaml）；③ state 增加 tailoring_snapshot、project-initiation 产出约定、update_state.py 兼容；④ 新增 process/exit-criteria.yaml 与阶段转换规则说明；⑤ 新增 process/templates-index.md。各步已做全工程回顾并沉淀至 人类手册/role-skills-design-memo.md。
+- **2025-03-12**：按 [规范改进实施计划](norm-improvement-execution-plan.md) 完成步骤 1–5：① 文档化阶段与裁剪约定（做法 B，人类手册/process/process.md + README）；② 阶段定义唯一事实来源（role-skills-design 第 3 节改为引用 .cyber_team/process/phases.yaml）；③ state 增加 tailoring_snapshot、project-initiation 产出约定、update_state.py 兼容；④ 新增 .cyber_team/process/exit-criteria.yaml 与阶段转换规则说明；⑤ 新增 .cyber_team/process/templates-index.md。各步已做全工程回顾并沉淀至 人类手册/role-skills-design-memo.md。
 - **2025-03**：明确规范改进策略：仅保留智能体协作必要项；有用项与后置项迁入本待办；确立「阶段全集 → PM 裁剪 → 业务项目 process」的流程设计，并完成可行性与有效性评估（见 [norm-improvement-plan.md](norm-improvement-plan.md)）。
 
 ---
@@ -19,11 +19,11 @@
 |--------|------|--------|
 | **裁剪指南 + 裁剪结果持久化** | 在 `process/` 下增加裁剪指南（可裁剪项、按项目类型的建议）；约定业务项目侧「裁剪结果」的落点（如 `docs/project-phases.yaml` 或 state 中的 `tailoring_snapshot`）。 | P1 |
 | **state 中 blockers/risks 的语义与结构** | 在 state 或 README 中明确「何时写 project_blockers、谁跟进、何时升级」；可选将 project_risks 细化为结构化字段（id、description、category、mitigation、status）。 | P1 |
-| **模板/清单索引** | 在 `process/` 下列出所有可复制到业务项目的资产（state、project-docs-index、status 模板等）及复制目标路径，便于发现与初始化。 | P1 |
+| **模板/清单索引** | 在 `.cyber_team/process/` 下列出所有可复制到业务项目的资产（state、project-docs-index、status 模板等）及复制目标路径，便于发现与初始化。 | P1 |
 | **阶段出口的检查单** | 在阶段出口条件中为关键阶段补充可执行检查单（如 requirements 出口：prd/user_stories 存在且关键 status 为 approved），与出口条件 YAML 一并维护。 | P2 |
 | **规范版本与变更约定** | 为 process 增加 `spec_version` 或 changelog 引用；约定规范变更时更新 memo 或 changelog，便于多版本兼容。 | P2 |
 | **过程度量定义** | 定义 2～4 个度量目标及对应基元/派生度量、数据来源（state、产出物 frontmatter），供后续看板或分析使用。 | P2 |
-| **过程改进说明与改进 backlog** | 过程改进目标、回顾节奏、改进建议的收集与纳入方式；可选 `process/improvement-backlog.md` 跟踪改进项状态。 | P2 |
+| **过程改进说明与改进 backlog** | 过程改进目标、回顾节奏、改进建议的收集与纳入方式；可选 `.cyber_team/process/improvement-backlog.md` 跟踪改进项状态。 | P2 |
 | **基线及已批准产物变更** | 在 artifact 约定中明确「阶段基线」概念及「已 approved 产物的变更需再评审或版本更新」的轻量规则。 | P2 |
 | **需求 ID 与追溯矩阵建议** | PRD/用户故事采用稳定需求 ID；可选在业务项目预留追溯矩阵文档位置（需求 → 设计/测试）。 | P3 |
 | **阶段/产出物 RACI 表** | 按阶段或产出物类型列出 R/A/C/I，与现有 owner_role 互补，供人工与评审使用。 | P3 |
